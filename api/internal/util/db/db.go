@@ -5,6 +5,7 @@ import (
 	"github.com/absentbird/TESC-Farm/internal/labor"
 	"github.com/absentbird/TESC-Farm/internal/sales"
 	"github.com/absentbird/TESC-Farm/internal/util"
+	"github.com/absentbird/TESC-Farm/internal/authentication"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -33,6 +34,12 @@ func ConnectDB(dbconn string) *gorm.DB {
 
 	err = database.AutoMigrate(&sales.Sale{})
 	util.Check(err, "Sales migration error")
+
+	err = database.AutoMigrate(&authentication.User{})
+	util.Check(err, "Authentication migration error")
+
+	err = database.AutoMigrate(&authentication.Token{})
+	util.Check(err, "Authentication migration error")
 
 	// Set global database variable
 	return database

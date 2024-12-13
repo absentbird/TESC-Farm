@@ -5,6 +5,7 @@ import (
 	"github.com/absentbird/TESC-Farm/internal/labor"
 	"github.com/absentbird/TESC-Farm/internal/sales"
 	"github.com/absentbird/TESC-Farm/internal/util"
+	"github.com/absentbird/TESC-Farm/internal/authentication"
 	"github.com/absentbird/TESC-Farm/internal/util/db"
 	"github.com/gin-gonic/gin"
 )
