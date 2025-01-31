@@ -6,10 +6,12 @@
 - [ ] submit proposal
 
 ## In Progress
-- [ ] Finish Proposal
-    - [ ] create timeline document for proposal
+- [ ] purchase components
+- [ ] get permit for solar panels
 
 ## Done
+- [x] Finish Proposal
+- [x] create timeline document for proposal
 - [X] project cover letter
 - [X] project outline
 - [X] bill of materials
