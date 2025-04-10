@@ -62,7 +62,7 @@ func main() {
 	r.GET("/beds/:id", harvest.GetBed)
 	r.GET("/crops", harvest.AllCrops)
 	r.GET("/crop/:id", harvest.GetCrop)
-	r.GET("/crop/:id/preharvests", harvest.GetCropPlantings)
+	r.GET("/crop/:id/plantings", harvest.GetCropPlantings)
 	r.GET("/crop/:id/harvests", harvest.GetCropHarvests)
 	r.GET("/crop/:id/processing", harvest.GetCropProcessing)
 	auth.POST("/crop/:id/update", harvest.UpdateCrop)
