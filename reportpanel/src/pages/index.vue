@@ -1,18 +1,24 @@
 <template>
   <section id="content">
-    <v-containter id="reportGenerator">
+    <v-container id="reportGenerator">
       <v-btn @click="getExcel">Download Excel(.xlsx)</v-btn>
-      <v-list id="csvreportlist">
-        <a class="csvlink" @click="getHours">Hours.csv</a>
-        <download-csv class="hidden" :data="hoursdata" name="hours.csv"></download-csv>
-        <a class="csvlink" @click="getTasks">Tasks.csv</a>
-        <download-csv class="hidden" :data="tasksdata" name="hours.csv"></download-csv>
-        <a class="csvlink" @click="getCrops">Crops.csv</a>
-        <download-csv class="hidden" :data="cropsdata" name="hours.csv"></download-csv>
-      </v-list>
-
+      <ul id="csvreportlist">
+        <li>
+          <a href="hours.csv" class="csvlink" @click="getHours">Hours.csv</a>
+          <download-csv class="hidden" :data="hoursdata" name="hours.csv"></download-csv>
+        </li>
+        <li>
+          <a href="tasks.csv" class="csvlink" @click="getTasks">Tasks.csv</a>
+          <download-csv class="hidden" :data="tasksdata" name="hours.csv"></download-csv>
+        </li>
+        <li>
+          <a href="crops.csv" class="csvlink" @click="getCrops">Crops.csv</a>
+          <download-csv class="hidden" :data="cropsdata" name="hours.csv"></download-csv>
+        </li>
+      </ul>
       <p>{{ errormsg }}</p>
-    </v-containter>
+      <p v-if="loading">Imagine a spinning circle</p>
+    </v-container>
   </section>
 </template>
 
@@ -31,24 +37,25 @@ const getExcel = (e: Event) => {
 
 }
 const getHours = async (e: Event) => {
+  e.preventDefault()
   loading.value = true
   const response = await fetch('https://api.tesc.farm/hours')
   if (!response.ok) {
     errormsg.value = response.statusText
   }
-  hoursdata.value = await response.json().then(data => {
-    return data.map(r => {
-      //      wait for the json and then pipe that json into a function where we map every entry in json into another function
-      return {
-        'id': r.ID,
-        'start': new Date(r.start).toLocaleString(),
-        'hours': r.duration,
-        'task_id': r.task_id,
-        'worker_id': r.worker_id,
-        'notes': r.notes
-      }
-    })
+  console.log(response)
+  const data = await response.json()
+  hoursdata.value = data.map(r => {
+    return {
+      'id': r.ID,
+      'start': new Date(r.start).toLocaleString(),
+      'hours': r.duration,
+      'task_id': r.task_id,
+      'worker_id': r.worker_id,
+      'notes': r.notes
+    }
   })
+  loading.value = false
 }
 
 const getTasks = (e: Event) => { }
