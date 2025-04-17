@@ -1,0 +1,23 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+
+.a {
+    background-color: #a6d96a;
+}
+.b {
+    background-color: #ffffbf;
+}
+.c {
+    background-color: #fdae61;
+}
+.f {
+    background-color: #d7191c;
+}
