@@ -10,13 +10,15 @@
           <v-card-item>
             <br>
             <v-slider
+              class="pa-3"
               v-model="question.score"
-                :min="1"
-                :max="5"
-                step="1"
-                thumb-label
-                :ticks="tickLabels"
-                show-ticks="always"
+              :min="1"
+              :max="5"
+              step="1"
+              thumb-label
+              :ticks="tickLabels"
+              show-ticks="always"
+              tick-size="4"
             ></v-slider>
             <br>
           </v-card-item>
@@ -28,13 +30,13 @@
 </template>
 
 <script lang="ts" setup>
-const tickLables = ref({
-  0: '1',
-  1: '2',
-  2: '3',
-  3: '4',
-  4: '5'
-})
+const tickLabels = {
+  1: 'Disagree',
+  2: '',
+  3: '',
+  4: '',
+  5: 'Agree',
+}
 const question_list : Array<string> = [
     'I think that I would like to use this system frequently.',
     'I found the system unnecessarily complex.',
