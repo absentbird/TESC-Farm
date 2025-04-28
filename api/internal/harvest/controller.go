@@ -8,18 +8,15 @@ import (
 )
 
 // AllAreas godoc
-// @Summary      Lists all areas
-// @Description  Returns list of all area objects
-// @Tags         harvest
-// @Accept       json
-// @Produce      json
-// @Param        Name  Description Use
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       
-// Areas
+//	@Summary		Lists all areas
+//	@Description	Returns list of all area objects
+//	@Tags			harvest
+//	@Accept			json
+//	@Produce		json
+//	@Success		200		{object}	model.Account
+//	@Failure		400		{object}	httputil.HTTPError
+//	@Failure		404		{object}	httputil.HTTPError
+//	@Failure		500		{object}	httputil.HTTPError
 func AllAreas(c *gin.Context) {
 	records := []Area{}
 	if err := util.DB.Find(&records).Error; err != nil {
@@ -30,17 +27,16 @@ func AllAreas(c *gin.Context) {
 }
 
 // GetArea godoc
-// @Summary      Searches for an area by ID and returns it.
-// @Description  Returns Area object by ID.
-// @Tags         harvest
-// @Accept       json
-// @Produce      json
-// @Param        Name Description Use
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       
+//	@Summary		Searches for an area by ID and returns it.
+//	@Description	Returns Area object by ID.
+//	@Tags			harvest
+//	@Accept			json
+//	@Produce		json
+//	@Success		200		{object}	model.Account
+//	@Failure		400		{object}	httputil.HTTPError
+//	@Failure		404		{object}	httputil.HTTPError
+//	@Failure		500		{object}	httputil.HTTPError
+//	@Router
 func GetArea(c *gin.Context) {
 	record := Area{}
 	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
@@ -51,18 +47,17 @@ func GetArea(c *gin.Context) {
 }
 
 // PLACEHOLDER godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
-// Beds
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AllBeds(c *gin.Context) {
 	records := []Bed{}
 	if err := util.DB.Find(&records).Error; err != nil {
@@ -73,17 +68,17 @@ func AllBeds(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetBed(c *gin.Context) {
 	record := Bed{}
 	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
@@ -94,18 +89,17 @@ func GetBed(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
-// Crops
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AllCrops(c *gin.Context) {
 	records := []Crop{}
 	if err := util.DB.Find(&records).Error; err != nil {
@@ -116,17 +110,17 @@ func AllCrops(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetCrop(c *gin.Context) {
 	record := Crop{}
 	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
@@ -137,17 +131,17 @@ func GetCrop(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetCropPlantings(c *gin.Context) {
 	crop := Crop{}
 	if err := util.DB.First(&crop, c.Param("id")).Error; err != nil {
@@ -166,17 +160,17 @@ func GetCropPlantings(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetCropHarvests(c *gin.Context) {
 	crop := Crop{}
 	if err := util.DB.First(&crop, c.Param("id")).Error; err != nil {
@@ -195,17 +189,17 @@ func GetCropHarvests(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetCropProcessing(c *gin.Context) {
 	crop := Crop{}
 	if err := util.DB.First(&crop, c.Param("id")).Error; err != nil {
@@ -224,17 +218,17 @@ func GetCropProcessing(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AddCrop(c *gin.Context) {
 	record := Crop{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -252,17 +246,17 @@ func AddCrop(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func UpdateCrop(c *gin.Context) {
 	record := Crop{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -280,17 +274,17 @@ func UpdateCrop(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func DeleteCrop(c *gin.Context) {
 	record := Crop{}
 	id, err := strconv.Atoi(c.Param("id"))
@@ -304,18 +298,17 @@ func DeleteCrop(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
-// Plantings
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AllPlantings(c *gin.Context) {
 	records := []Planting{}
 	if err := util.DB.Find(&records).Error; err != nil {
@@ -326,17 +319,17 @@ func AllPlantings(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetPlanting(c *gin.Context) {
 	record := Planting{}
 	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
@@ -347,17 +340,17 @@ func GetPlanting(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AddPlanting(c *gin.Context) {
 	record := Planting{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -369,17 +362,17 @@ func AddPlanting(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func UpdatePlanting(c *gin.Context) {
 	record := Planting{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -397,17 +390,17 @@ func UpdatePlanting(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func DeletePlanting(c *gin.Context) {
 	record := Planting{}
 	id, err := strconv.Atoi(c.Param("id"))
@@ -421,18 +414,17 @@ func DeletePlanting(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
-// Harvests
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AllHarvests(c *gin.Context) {
 	records := []Harvest{}
 	if err := util.DB.Find(&records).Error; err != nil {
@@ -443,17 +435,17 @@ func AllHarvests(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetHarvest(c *gin.Context) {
 	record := Harvest{}
 	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
@@ -464,17 +456,17 @@ func GetHarvest(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetHarvestProcessing(c *gin.Context) {
 	h := Harvest{}
 	if err := util.DB.First(&h, c.Param("id")).Error; err != nil {
@@ -488,18 +480,19 @@ func GetHarvestProcessing(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, records)
 }
+
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AddHarvest(c *gin.Context) {
 	record := Harvest{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -511,17 +504,17 @@ func AddHarvest(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func UpdateHarvest(c *gin.Context) {
 	record := Harvest{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -539,17 +532,17 @@ func UpdateHarvest(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func DeleteHarvest(c *gin.Context) {
 	record := Harvest{}
 	id, err := strconv.Atoi(c.Param("id"))
@@ -563,18 +556,17 @@ func DeleteHarvest(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
-// Processing
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AllProcessing(c *gin.Context) {
 	records := []Process{}
 	if err := util.DB.Preload("Product").Preload("Harvest").Preload("Harvest.Crop").Find(&records).Error; err != nil {
@@ -585,17 +577,17 @@ func AllProcessing(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetProcessing(c *gin.Context) {
 	record := Process{}
 	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
@@ -606,17 +598,17 @@ func GetProcessing(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func AddProcessing(c *gin.Context) {
 	record := Process{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -628,17 +620,17 @@ func AddProcessing(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func UpdateProcessing(c *gin.Context) {
 	record := Process{}
 	if err := c.ShouldBindJSON(&record); err != nil {
@@ -656,17 +648,17 @@ func UpdateProcessing(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func DeleteProcessing(c *gin.Context) {
 	record := Process{}
 	id, err := strconv.Atoi(c.Param("id"))
@@ -680,17 +672,17 @@ func DeleteProcessing(c *gin.Context) {
 }
 
 // ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+//	@Summary		Show an account
+//	@Description	get string by ID
+//	@Tags			accounts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Account ID"
+//	@Success		200	{object}	model.Account
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/accounts/{id} [get]
 func GetBinHarvest(c *gin.Context) {
 	records := []Harvest{}
 	if err := util.DB.Order("created_at desc").First(&records, Harvest{Bin: c.Param("bin")}).Error; err != nil {
