@@ -230,8 +230,15 @@ const anumCheck = () => {
     result.value = 'mdi-form-textbox'
   }
 }
-const clockOn = async (taskID: number) => {
-  const data = { barcode: anumber.value, task: taskID }
+// TODO fix timestamp variable, add typing
+const sendPunch = async (taskID: number, timestamp) => {
+  let data = { barcode: anumber.value }
+  if (taskID > 0) {
+    data.task = taskID
+  }
+  if (timestamp) {
+    data.time = timestamp
+  }
   const response = await fetch(import.meta.env.VITE_API + '/hours/punch', { method: 'POST', credentials: 'include', body: JSON.stringify(data) })
   if (!response.ok) {
     flash.value = response.statusText
@@ -240,15 +247,11 @@ const clockOn = async (taskID: number) => {
   }
   updateWorking()
 }
-const clockOff = async () => {
-  const data = { barcode: anumber.value }
-  const response = await fetch(import.meta.env.VITE_API + '/hours/punch', { method: 'POST', credentials: 'include', body: JSON.stringify(data) })
-  if (!response.ok) {
-    flash.value = response.statusText
-    snackbar.value = true
-    console.log(response)
-  }
-  updateWorking()
+const clockOn = (taskID: number) => {
+  sendPunch(taskID)
+}
+const clockOff = () => {
+  sendPunch(0)
 }
 const setHash = async () => {
   const data = { barcode: anumber.value }

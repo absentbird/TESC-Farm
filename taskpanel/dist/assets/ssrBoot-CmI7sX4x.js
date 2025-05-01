@@ -1,1 +1,0 @@
-import{S as t,i as e,h as s,aw as n}from"./index-CKg92haT.js";function i(){const o=t(!1);return e(()=>{window.requestAnimationFrame(()=>{o.value=!0})}),{ssrBootStyles:s(()=>o.value?void 0:{transition:"none !important"}),isBooted:n(o)}}export{i as u};
