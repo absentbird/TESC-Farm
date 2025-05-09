@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This API is responsible for tracking labor, inventory, and productivity for TESC.",
+        "title": "General API for TESC Farm",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {}
+}
