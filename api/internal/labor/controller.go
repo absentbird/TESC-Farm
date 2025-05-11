@@ -244,10 +244,34 @@ func DeleteWorker(c *gin.Context) {
 }
 
 func AddTask(c *gin.Context) {
-	record := Task{}
+	type NewTask struct {
+		Task 
+		CropID uint `json:"crop_id,omitempty"`
+	}
+	record := NewTask{}
 	if err := c.ShouldBindJSON(&record); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 		return
+	}
+	if record.CropID != 0{
+		switch record.Type {
+		case "harvest":
+			h := Harvest{}
+			if err := util.DB.Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, AreaID: record.AreaID}).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
+				return
+			}
+			record.HarvestID = h.ID
+		case "preharvest":
+			ph := Planting{}
+			if err := util.DB.Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, AreaID: record.AreaID}).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
+				return
+			}
+			record.PlantingID = ph.ID
+		case default:
+			c.JSON(http.StatusBadRequest, gin.H{"error:": "Invalid task type"})
+		}
 	}
 	for _, tag := range record.Tags {
 		if err := util.DB.FirstOrCreate(&tag, util.Tag{Name: tag.Name}).Error; err != nil {
