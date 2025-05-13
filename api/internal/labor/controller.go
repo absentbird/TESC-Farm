@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/absentbird/TESC-Farm/internal/harvest"
 	"github.com/absentbird/TESC-Farm/internal/util"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -245,7 +246,7 @@ func DeleteWorker(c *gin.Context) {
 
 func AddTask(c *gin.Context) {
 	type NewTask struct {
-		Task 
+		Task
 		CropID uint `json:"crop_id,omitempty"`
 	}
 	record := NewTask{}
@@ -253,23 +254,23 @@ func AddTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 		return
 	}
-	if record.CropID != 0{
+	if record.CropID != 0 {
 		switch record.Type {
 		case "harvest":
-			h := Harvest{}
-			if err := util.DB.Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, AreaID: record.AreaID}).Error; err != nil {
+			h := harvest.Harvest{}
+			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 				return
 			}
 			record.HarvestID = h.ID
 		case "preharvest":
-			ph := Planting{}
-			if err := util.DB.Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, AreaID: record.AreaID}).Error; err != nil {
+			ph := harvest.Planting{}
+			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 				return
 			}
 			record.PlantingID = ph.ID
-		case default:
+		default:
 			c.JSON(http.StatusBadRequest, gin.H{"error:": "Invalid task type"})
 		}
 	}
