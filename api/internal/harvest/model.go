@@ -61,3 +61,9 @@ type Process struct {
 	Product    *sales.Product `json:"product,omitempty"`
 	ProductID  uint           `json:"product_id"`
 }
+
+type Postharvest struct {
+	gorm.Model
+	Harvest   *Harvest `json:"harvest,omitempty"`
+	HarvestID uint     `json:"harvest_id"`
+}
