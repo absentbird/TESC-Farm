@@ -107,7 +107,7 @@
       class="d-flex flex-row w-100"
     >
       <TaskCard
-        v-for="task in tasklist"
+        v-for="task in arealist"
         :task="task"
         :anumber="anumber"
         :working="workingdata[task.ID]"
@@ -216,6 +216,13 @@ const tasktags = computed(() => {
     }
   }
   return Array.from(tags);
+});
+const arealist = computed(() => {
+  let areas = Array.from(taskdata.value);
+  areas = areas.filter((area) =>
+      area.tags.some((tag) => tag.name ==("Management Unit")),
+    );
+  return areas;
 });
 const tasklist = computed(() => {
   let tasks = Array.from(taskdata.value);

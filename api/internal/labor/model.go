@@ -28,7 +28,8 @@ type Task struct {
 	gorm.Model
 	Name          string               `json:"name"`
 	Description   string               `json:"description"`
-	Type          string               `json:"type"`
+	Type          *TaskType            `json:"type"`
+	TypeID        uint                 `json:"type_id"`
 	Barcode       string               `json:"barcode"`
 	Area          *harvest.Area        `json:"area,omitempty"`
 	AreaID        uint                 `json:"area_id"`
@@ -41,4 +42,9 @@ type Task struct {
 	Postharvest   *harvest.Postharvest `json:"postharvest,omitempty"`
 	PostharvestID uint                 `json:"postharvest_id,omitempty"`
 	Tags          []*util.Tag          `json:"tags,omitempty" gorm:"many2many:task_tags"`
+}
+
+type TaskType struct {
+	gorm.Model
+	Name string `json:"name"`
 }

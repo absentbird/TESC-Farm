@@ -1,10 +1,13 @@
 <template>
     <h1>Task Builder</h1>
+<br/>
+<v-divider></v-divider>
+<br/>
 
     <h2>Choose Area</h2>
     <v-row>
     <v-col v-for="area in areasdata" :key ="area.ID" class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
-    <a class="card-button" :href="'/punch/'+task.ID" @click.prevent="selectArea(area.ID)">
+    <a class="card-button" href="#" @click.prevent="selectArea(area.ID)">
     <v-card class="task-card d-flex flex-column text-center" :class="{'selected': selectedArea == area.ID}"
         variant="tonal" @click="selectArea(area.ID)">
         <v-card-item>
@@ -18,6 +21,9 @@
 </v-col>
 </v-row>
 
+<br/>
+<v-divider></v-divider>
+<br/>
 
     <h2>Choose Crop</h2>
 
@@ -34,6 +40,10 @@
 </v-col>
 </v-row>
 
+<br/>
+<v-divider></v-divider>
+<br/>
+
     <h2>Task Type</h2>
 
     <v-row>
@@ -48,6 +58,10 @@
     </a>
 </v-col>
 </v-row>
+
+<br/>
+<v-divider></v-divider>
+<br/>
 
     <v-btn 
         size="x-large" 
@@ -89,7 +103,7 @@ const taskTypes = ref([
     },
 ])
 
-const areasdata = ref({})
+const areasdata = ref<Array<Area>>({})
 const cropdata = ref<Array<Crop>>({})
 const selectedArea: Ref<number> = ref(0)
 const selectedCrop: Ref<number> = ref(0)
@@ -101,15 +115,19 @@ const flash: Ref<string> = ref('')
     const getAreas = async () => {
     loading.value = true
     try {
-        const response = await fetch(import.meta.env.VITE_API + '/areas')
+        const response = await fetch(import.meta.env.VITE_API + '/tasks')
         if (!response.ok) {
             console.log(response.status)
         }
         areasdata.value = await response.json()
+        areasdata.value = areasdata.value.filter((area) =>
+            area.tags.some((tag) => tag.name =="Management Unit"),
+        );
     } catch (e) {
         console.log(e)
     }
 }
+
 
 const getCrops = async () => {
     loading.value = true
@@ -146,7 +164,7 @@ selectedType.value = typeID
 }
 
 const createTask = async () => {
-    const data = { area_id: selectedArea.value, crop_id: selectedCrop.value, type: selectedType.value }
+    const data = { area_id: selectedArea.value, crop_id: selectedCrop.value, type_id: selectedType.value }
     const response = await fetch(import.meta.env.VITE_API + '/task/new', { method: 'POST', credentials: 'include', body: JSON.stringify(data) })
     if (!response.ok) {
         flash.value = response.statusText

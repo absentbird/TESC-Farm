@@ -255,15 +255,15 @@ func AddTask(c *gin.Context) {
 		return
 	}
 	if record.CropID != 0 {
-		switch record.Type {
-		case "harvest":
+		switch record.TypeID {
+		case 2://harvest 
 			h := harvest.Harvest{}
 			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 				return
 			}
 			record.HarvestID = h.ID
-		case "preharvest":
+		case 1://preharvest
 			ph := harvest.Planting{}
 			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
@@ -300,6 +300,25 @@ func AllTasks(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, records)
+}
+
+func AllTaskTypes(c *gin.Context) {
+	records := []TaskType{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, records)
+}
+
+func AddTaskType(c *gin.Context) {
+	record := TaskType{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
 }
 
 func UpdateTask(c *gin.Context) {
