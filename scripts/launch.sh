@@ -1,19 +1,27 @@
 #!/bin/bash
+n=""
 
 # If run from the scripts directory, go to root:
 if [[ "${PWD##*/}" == "scripts" ]]; then
   cd ..
 fi
 
+# If run from a site directory, launch that site:
+lc=1
+for site in $(nl ../scripts/data/site.list); do
+    if [[ "${PWD##*/}" == $site ]]; then
+        cd ..
+        n=$lc
+    fi
+    lc=$((lc + 1))
+done
+
 echo "Launching development environment"
 
 # Launch the API
 cd api
 go run cmd/farmapi.go &
-while ! nc -z localhost 8000; do
-  echo "Waiting for api to launch..."
-  sleep 1
-done
+sleep 2
 cd ..
 echo "API has launched"
 echo ""
@@ -23,11 +31,11 @@ echo 'Please select from the site list:'
 nl ./scripts/data/site.list
 count=$(wc -l ./scripts/data/site.list | cut -d '.' -f1)
 count="${count//[$'\t\r\n ']}"
-n=""
-while true; do
+while [ -z "$n" ]; do
     read -p 'Select option: ' n
     n="${n//[$'\t\r\n ']}"
     if [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
+        n=""
         break
     fi
 done
