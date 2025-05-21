@@ -8,7 +8,7 @@ fi
 
 # If run from a site directory, launch that site:
 lc=1
-for site in $(nl ../scripts/data/site.list); do
+for site in $(cat ../scripts/data/site.list); do
     if [[ "${PWD##*/}" == $site ]]; then
         cd ..
         n=$lc

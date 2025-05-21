@@ -73,4 +73,15 @@ const anumCheck = (e: event) => {
     e.target.focus();
   }
 };
+const logout = async () => {
+  const response = await fetch(import.meta.env.VITE_API + "/logout", {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    flash.value = response.statusText;
+    snackbar.value = true;
+  } else {
+    router.push("/login");
+  }
+};
 </script>

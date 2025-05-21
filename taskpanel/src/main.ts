@@ -12,10 +12,8 @@ import App from "./App.vue";
 
 // Composables
 import { createApp } from "vue";
-import { apicall } from "@/composables/apicall";
 
 const app = createApp(App);
-app.use(apicall);
 
 registerPlugins(app);
 
