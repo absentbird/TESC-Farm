@@ -61,6 +61,10 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits<{
+  (e: "filter", items: Array): void;
+}>();
+
 const itemTags = computed(() => {
   const tags: Set<string> = new Set();
   for (const item of props.items) {
@@ -99,8 +103,4 @@ watch(itemList, (newVal, oldVal) => {
     emit("filter", itemList);
   }
 });
-
-const emit = defineEmits<{
-  (e: "filter", items: Array): void;
-}>();
 </script>

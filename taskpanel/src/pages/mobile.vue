@@ -1,11 +1,5 @@
 <template>
-  <TaskSelector
-    search
-    :tasks="arealist"
-    :working="workingdata"
-    :selected="selected"
-    @select="selectTask"
-  ></TaskSelector>
+  <TaskSelector search :tasks="arealist" @select="selectTask"></TaskSelector>
 </template>
 
 <script lang="ts" setup>
@@ -23,7 +17,6 @@ const loading: Ref<boolean> = ref(false);
 const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
 const taskdata = ref({});
-const workingdata = ref({});
 
 const arealist = computed(() => {
   let areas = Array.from(taskdata.value);
@@ -36,6 +29,26 @@ const arealist = computed(() => {
 const getTasks = async () => {
   loading.value = true;
   taskdata.value = await apicall("/tasks");
+  loading.value = false;
+};
+
+const updateWorking = async () => {
+  loading.value = true;
+  const jsondata = await apicall("/hours/working");
+  const workingdata = {};
+  taskdata.value.forEach((task) => {
+    workingdata[task.ID] = 0;
+  });
+  jsondata.forEach((punch) => {
+    workingdata[punch.task_id]++;
+    if (punch.worker.barcode == hash.value) {
+      selected.value = punch.task_id;
+    }
+  });
+  taskdata.value.forEach((task) => {
+    task.working = workingdata[task.ID];
+    task.selected = task.ID == selected.value;
+  });
   loading.value = false;
 };
 

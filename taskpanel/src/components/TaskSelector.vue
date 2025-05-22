@@ -16,8 +16,6 @@
       <TaskCard
         v-for="task in tasklist"
         :task="task"
-        :working="workingdata[task.ID]"
-        :selected="selected == task.ID"
         @select="selectTask"
       ></TaskCard>
       <v-col cols="12">
@@ -40,21 +38,24 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  working: {
-    type: Array,
-    required: false,
-  },
-  selected: {
-    type: Number,
-    required: false,
-  },
   search: {
     type: Boolean,
     required: false,
   },
 });
+const emit = defineEmits<{
+  (e: "select", taskID: Number): void;
+}>();
+const taskdata = ref(props.tasks);
+const working = ref(props.working);
+const selected = ref(props.selected);
 
-const tasklist = ref(props.tasks);
+watch(
+  () => props.tasks,
+  () => {
+    taskdata.value = props.tasks;
+  },
+);
 
 const selectTask = (taskID: Number) => {
   if (props.selected == taskID) {
@@ -70,8 +71,4 @@ const selectTask = (taskID: Number) => {
 const filterTasks = (tasks) => {
   tasklist.value = tasks;
 };
-
-const emit = defineEmits<{
-  (e: "select", taskID: Number): void;
-}>();
 </script>
