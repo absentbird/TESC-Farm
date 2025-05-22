@@ -1,5 +1,5 @@
 <template>
-  <v-col class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
+  <v-col v-if="task" class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
     <a
       class="card-button"
       href="/punch"

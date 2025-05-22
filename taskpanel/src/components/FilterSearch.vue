@@ -100,7 +100,7 @@ const itemList = computed(() => {
 
 watch(itemList, (newVal, oldVal) => {
   if (oldVal != newVal) {
-    emit("filter", itemList);
+    emit("filter", itemList.value);
   }
 });
 </script>

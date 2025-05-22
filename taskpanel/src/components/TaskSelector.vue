@@ -8,6 +8,7 @@
       <FilterSearch :items="taskdata" @filter="filterTasks"></FilterSearch>
     </v-row>
     <v-row
+      v-if="tasklist"
       id="main-content"
       align="center"
       justify="center"
@@ -23,7 +24,7 @@
           class="bigbutton"
           :class="{ selected: selected == 0 }"
           variant="tonal"
-          @click="selectTask(0)"
+          @click="$emit('select', 0)"
         >
           Not Tracking Time
         </v-btn>
@@ -46,17 +47,22 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: "select", taskID: Number): void;
 }>();
+
 const taskdata = ref(props.tasks);
 const tasklist = ref(taskdata.value);
+const selected = computed(() => {
+  const stask = Array.from(tasklist.value).find((task) => task.selected);
+  return stask ? stask.ID : 0;
+});
 
-watch(
-  () => props.tasks,
-  () => {
-    taskdata.value = props.tasks;
-  },
-);
+watch(props, () => {
+  taskdata.value = props.tasks;
+});
 
 const selectTask = (taskID: Number) => {
+  if (taskID == selected.value) {
+    return;
+  }
   if (taskID > 0) {
     emit("select", taskID);
   } else {
@@ -67,6 +73,4 @@ const selectTask = (taskID: Number) => {
 const filterTasks = (tasks) => {
   tasklist.value = tasks;
 };
-
-console.log(props.tasks);
 </script>
