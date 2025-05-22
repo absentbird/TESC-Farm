@@ -5,7 +5,7 @@
       id="filters"
       class="align-self-start d-flex w-100 flex-grow-0"
     >
-      <FilterSearch :items="tasks" @filter="filterTasks"></FilterSearch>
+      <FilterSearch :items="taskdata" @filter="filterTasks"></FilterSearch>
     </v-row>
     <v-row
       id="main-content"
@@ -47,8 +47,7 @@ const emit = defineEmits<{
   (e: "select", taskID: Number): void;
 }>();
 const taskdata = ref(props.tasks);
-const working = ref(props.working);
-const selected = ref(props.selected);
+const tasklist = ref(taskdata.value);
 
 watch(
   () => props.tasks,
@@ -58,9 +57,6 @@ watch(
 );
 
 const selectTask = (taskID: Number) => {
-  if (props.selected == taskID) {
-    return;
-  }
   if (taskID > 0) {
     emit("select", taskID);
   } else {
@@ -71,4 +67,6 @@ const selectTask = (taskID: Number) => {
 const filterTasks = (tasks) => {
   tasklist.value = tasks;
 };
+
+console.log(props.tasks);
 </script>

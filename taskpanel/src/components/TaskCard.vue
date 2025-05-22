@@ -2,19 +2,20 @@
   <v-col class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
     <a
       class="card-button"
-      :href="'/punch/' + task.ID"
+      href="/punch"
       @click.prevent="$emit('select', task.ID)"
     >
       <v-card
         class="task-card d-flex flex-column text-center"
-        :class="{ selected: selected }"
+        :class="{ selected: task.selected }"
         variant="tonal"
         @click="$emit('select', task.ID)"
       >
         <v-card-item>
           <v-card-title>{{ task.name }}</v-card-title>
-          <v-card-subtitle v-if="working">
-            {{ working }} {{ working > 1 ? "People" : "Person" }} working
+          <v-card-subtitle v-if="task.working">
+            {{ task.working }}
+            {{ task.working > 1 ? "People" : "Person" }} working
           </v-card-subtitle>
         </v-card-item>
         <v-card-text>
@@ -31,23 +32,16 @@ interface Task {
   name: string;
   description: string;
   tags: string[];
+  working: number;
+  selected: boolean;
 }
 const props = defineProps({
   task: {
     type: Object as PropType<Task>,
     required: true,
   },
-  working: {
-    type: Number,
-    required: false,
-  },
-  selected: {
-    type: Boolean,
-    required: false,
-  },
 });
 const emit = defineEmits<{
   (e: "select", id: number): void;
 }>();
 </script>
-
