@@ -9,7 +9,6 @@
         class="task-card d-flex flex-column text-center"
         :class="{ selected: task.selected }"
         variant="tonal"
-        @click="$emit('select', task.ID)"
       >
         <v-card-item>
           <v-card-title>{{ task.name }}</v-card-title>

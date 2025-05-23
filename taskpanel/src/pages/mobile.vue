@@ -56,9 +56,9 @@ const setHash = async () => {
   console.log(hash.value);
 };
 
-const selectTask = (taskID: number) => {
+const selectTask = async (taskID: number) => {
   selected.value = taskID;
-  apicall("/hours/punch", { anum: anumber, task: taskID });
+  await apicall("/hours/punch", { anum: anumber, task: taskID });
   updateWorking();
 };
 

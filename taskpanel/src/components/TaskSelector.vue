@@ -17,7 +17,7 @@
       <TaskCard
         v-for="task in tasklist"
         :task="task"
-        @select="selectTask"
+        @select="$emit('select', task.ID)"
       ></TaskCard>
       <v-col cols="12">
         <v-btn
@@ -58,17 +58,6 @@ const selected = computed(() => {
 watch(props, () => {
   taskdata.value = props.tasks;
 });
-
-const selectTask = (taskID: Number) => {
-  if (taskID == selected.value) {
-    return;
-  }
-  if (taskID > 0) {
-    emit("select", taskID);
-  } else {
-    emit("select", 0);
-  }
-};
 
 const filterTasks = (tasks) => {
   tasklist.value = tasks;
