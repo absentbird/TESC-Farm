@@ -8,7 +8,6 @@
       <FilterSearch :items="taskdata" @filter="filterTasks"></FilterSearch>
     </v-row>
     <v-row
-      v-if="tasklist"
       id="main-content"
       align="center"
       justify="center"
@@ -49,8 +48,11 @@ const emit = defineEmits<{
 }>();
 
 const taskdata = ref(props.tasks);
-const tasklist = ref(taskdata.value);
+const tasklist = ref([]);
 const selected = computed(() => {
+  if (tasklist.value.length == 0) {
+    return -1;
+  }
   const stask = Array.from(tasklist.value).find((task) => task.selected);
   return stask ? stask.ID : 0;
 });
