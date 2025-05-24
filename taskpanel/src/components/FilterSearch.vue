@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="9" sm="4" md="7">
+  <v-col cols="12" sm="6" md="8">
     <v-text-field
       id="search"
       v-model="search"
@@ -7,20 +7,6 @@
       label="Search"
       hint="Search for items by name or description"
     ></v-text-field>
-  </v-col>
-  <v-col cols="3" class="mt-2 d-flex d-sm-none">
-    <v-btn variant="tonal">
-      <v-icon>mdi-cog</v-icon>
-      <v-menu activator="parent">
-        <v-list>
-          <v-list-item
-            v-for="setting in userSettings"
-            :title="setting.title"
-            @click="setting.action"
-          ></v-list-item>
-        </v-list>
-      </v-menu>
-    </v-btn>
   </v-col>
   <v-col cols="6" sm="3" md="2">
     <v-combobox
@@ -35,16 +21,11 @@
   <v-col cols="6" sm="3" md="2" class="d-flex align-self-start">
     <v-switch
       v-if="focus"
-      label="Show All"
       inset
+      label="Show All"
       color="secondary"
       v-model="showall"
     ></v-switch>
-  </v-col>
-  <v-col cols="1" class="mt-2 d-none d-sm-flex">
-    <v-btn variant="tonal">
-      <v-icon>mdi-cog</v-icon>
-    </v-btn>
   </v-col>
 </template>
 

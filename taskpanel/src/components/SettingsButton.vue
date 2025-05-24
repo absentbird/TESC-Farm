@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="editanum" :persistent="!anumber">
+  <v-dialog v-model="editAnum" :persistent="!anumber">
     <v-card class="ma-auto w-100" max-width="400" prepend-icon="mdi-settings">
       <v-card-title>Edit A#</v-card-title>
       <v-card-subtitle>Set your A# to track tasks</v-card-subtitle>
@@ -20,7 +20,7 @@
           class="ms-auto"
           text="Close"
           v-if="anumber"
-          @click="editanum = false"
+          @click="editAnum = false"
         ></v-btn>
         <v-spacer></v-spacer>
         <v-btn class="ms-auto" text="Save" @click="submitAnum"></v-btn>
@@ -42,21 +42,29 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <v-menu>
-    <v-list>
-      <v-list-item
-        v-for="setting in userSettings"
-        :title="setting.title"
-        @click="setting.action"
-      ></v-list-item>
-    </v-list>
-  </v-menu>
+  <v-btn variant="tonal">
+    <v-icon>mdi-cog</v-icon>
+    <v-menu activator="parent">
+      <v-list>
+        <v-list-item
+          v-for="setting in userSettings"
+          :title="setting.title"
+          @click="setting.action"
+        ></v-list-item>
+      </v-list>
+    </v-menu>
+  </v-btn>
 </template>
 
 <script lang="ts" setup>
+import router from "@/router";
+
+const route = useRoute();
 const anumber: Ref<string> = ref("");
 const anum = useTemplateRef("anum");
 const hash: Ref<string> = ref("");
+const editAnum: Ref<boolean> = ref(false);
+const confirmPunchOut: Ref<boolean> = ref(false);
 
 const logout = async () => {
   const response = await fetch(import.meta.env.VITE_API + "/logout", {
@@ -121,7 +129,7 @@ const settings = ref([
   {
     title: "Edit A#",
     action: () => {
-      editanum.value = true;
+      editAnum.value = true;
     },
     users: ["worker", "admin"],
   },
@@ -143,7 +151,7 @@ const userSettings = computed(() => {
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
   if (!anumber.value) {
-    editanum.value = true;
+    editAnum.value = true;
   } else {
     anumCheck();
     setHash();

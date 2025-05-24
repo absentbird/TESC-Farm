@@ -1,11 +1,15 @@
 <template>
-  <v-container fluid class="taskpanel fill-height d-flex flex-column">
+  <v-container fluid class="taskpanel d-flex flex-column">
     <v-row
       v-if="search"
       id="filters"
       class="align-self-start d-flex w-100 flex-grow-0"
     >
-      <FilterSearch :items="taskdata" @filter="filterTasks"></FilterSearch>
+      <FilterSearch
+        :items="taskdata"
+        :focus="focus"
+        @filter="filterTasks"
+      ></FilterSearch>
     </v-row>
     <v-row
       id="main-content"
@@ -37,6 +41,10 @@ const props = defineProps({
   tasks: {
     type: Array,
     required: true,
+  },
+  focus: {
+    type: Array,
+    required: false,
   },
   search: {
     type: Boolean,
