@@ -58,8 +58,11 @@
 
 <script lang="ts" setup>
 import router from "@/router";
+import { useTheme } from "vuetify";
 
 const route = useRoute();
+const theme = useTheme();
+
 const anumber: Ref<string> = ref("");
 const anum = useTemplateRef("anum");
 const hash: Ref<string> = ref("");
@@ -125,6 +128,12 @@ const setHash = async () => {
   hash.value = jsondata.barcode;
 };
 
+const toggleTheme = () => {
+  const themeval = theme.global.current.value.dark ? "light" : "dark";
+  theme.global.name.value = themeval;
+  localStorage.setItem("theme", themeval);
+};
+
 const settings = ref([
   {
     title: "Edit A#",
@@ -139,6 +148,11 @@ const settings = ref([
       confirmPunchOut.value = true;
     },
     users: ["admin"],
+  },
+  {
+    title: "Light/Dark Mode",
+    action: toggleTheme,
+    users: ["worker", "admin"],
   },
   { title: "Logout", action: logout, users: ["worker", "admin"] },
 ]);

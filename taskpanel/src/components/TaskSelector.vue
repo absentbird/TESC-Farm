@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid class="taskpanel d-flex flex-column">
+  <v-container fluid class="taskpanel d-flex flex-column align-center">
     <v-row
       v-if="search"
       id="filters"
-      class="align-self-start d-flex w-100 flex-grow-0"
+      class="align-center d-flex w-100 flex-grow-0"
     >
       <FilterSearch
         :items="taskdata"

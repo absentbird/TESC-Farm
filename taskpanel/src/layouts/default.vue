@@ -4,11 +4,11 @@
   >
   <v-main>
     <v-container fluid>
-      <v-row>
+      <v-row class="pr-4 pl-4 pt-2">
         <v-col>
           <h1>Project Tracker</h1>
         </v-col>
-        <v-col cols="3" md="1" align="right">
+        <v-col cols="3" sm="2" md="1" align="right">
           <SettingsButton></SettingsButton>
         </v-col>
       </v-row>
