@@ -48,7 +48,7 @@ const emit = defineEmits<{
 }>();
 
 const taskdata = ref(props.tasks);
-const tasklist = ref([]);
+const tasklist = ref(props.tasks);
 const selected = computed(() => {
   if (tasklist.value.length == 0) {
     return -1;
@@ -59,6 +59,9 @@ const selected = computed(() => {
 
 watch(props, () => {
   taskdata.value = props.tasks;
+  if (!props.search) {
+    tasklist.value = props.tasks;
+  }
 });
 
 const filterTasks = (tasks) => {

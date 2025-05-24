@@ -1,10 +1,23 @@
 <template>
-  <TaskSelector search :tasks="arealist" @select="selectTask"></TaskSelector>
+  <TaskSelector
+    v-if="!area"
+    :tasks="arealist"
+    @select="selectArea"
+  ></TaskSelector>
+  <TaskSelector
+    v-if="area"
+    search
+    :tasks="tasklist"
+    :focus="test"
+    @select="selectTask"
+  ></TaskSelector>
 </template>
 
 <script lang="ts" setup>
 import { apicall } from "@/composables/apicall";
 import router from "@/router";
+import focusFilter from "@/assets/tasklist.js";
+const test = ref(Array.from(focusFilter));
 
 definePage({
   meta: {
@@ -19,6 +32,8 @@ const hash: Ref<string> = ref("");
 const anumber: Ref<string> = ref("");
 const taskdata: Ref<Array> = ref(Array());
 const arealist: Ref<Array> = ref(Array());
+const tasklist: Ref<Array> = ref(Array());
+const area: Ref<String> = ref(0);
 
 const updateWorking = async () => {
   loading.value = true;
@@ -57,7 +72,13 @@ const getTasks = async () => {
 const setHash = async () => {
   const worker = await apicall("/worker/lookup", { barcode: anumber.value });
   hash.value = worker.barcode;
-  console.log(hash.value);
+};
+
+const selectArea = async (areaID: number) => {
+  let tasks = taskdata.value.filter((task) => focusFilter.includes(task.ID));
+  tasks.sort((a, b) => focusFilter.indexOf(a.ID) - focusFilter.indexOf(b.ID));
+  area.value = areaID;
+  tasklist.value = tasks;
 };
 
 const selectTask = async (taskID: number) => {

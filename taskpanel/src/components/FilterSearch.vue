@@ -34,6 +34,7 @@
   </v-col>
   <v-col cols="6" sm="3" md="2" class="d-flex align-self-start">
     <v-switch
+      v-if="focus"
       label="Show All"
       inset
       color="secondary"
@@ -48,8 +49,6 @@
 </template>
 
 <script lang="ts" setup>
-import focusFilter from "@/assets/tasklist.js";
-
 const search: Ref<string> = ref("");
 const showall: Ref<boolean> = ref(false);
 const selectedTags: Ref<Array<string>> = ref([]);
@@ -58,6 +57,10 @@ const props = defineProps({
   items: {
     type: Array,
     required: true,
+  },
+  focus: {
+    type: Array,
+    required: false,
   },
 });
 
@@ -77,9 +80,9 @@ const itemTags = computed(() => {
 
 const itemList = computed(() => {
   let items = props.items;
-  if (!showall.value) {
-    items = items.filter((item) => focusFilter.includes(item.ID));
-    items.sort((a, b) => focusFilter.indexOf(a.ID) - focusFilter.indexOf(b.ID));
+  if (props.focus && !showall.value) {
+    items = items.filter((item) => props.focus.includes(item.ID));
+    items.sort((a, b) => props.focus.indexOf(a.ID) - props.focus.indexOf(b.ID));
   } else {
     items.sort((a, b) => a.name.localeCompare(b.name));
   }
@@ -102,5 +105,9 @@ watch(itemList, (newVal, oldVal) => {
   if (oldVal != newVal) {
     emit("filter", itemList.value);
   }
+});
+
+onMounted(() => {
+  emit("filter", itemList.value);
 });
 </script>
