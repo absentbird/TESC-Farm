@@ -84,7 +84,6 @@
 </template>
 
 <script lang="ts" setup>
-apicall();
 import focusFilter from "@/assets/tasklist.ts";
 definePage({
   meta: {
@@ -191,23 +190,6 @@ const updateWorking = async () => {
     console.log(e);
   } finally {
     loading.value = false;
-  }
-};
-const submitAnum = () => {
-  if (anumber.value == "") {
-    return;
-  }
-  if (selected.value == -1) {
-    clockOff(anumber.value);
-  } else {
-    clockOn(anumber.value, selected.value);
-  }
-  anumber.value = "";
-};
-const anumCheck = (e: event) => {
-  if (anumber.value.length > 8) {
-    submitAnum();
-    e.target.focus();
   }
 };
 const clockOn = async (anum: string, taskID: number) => {

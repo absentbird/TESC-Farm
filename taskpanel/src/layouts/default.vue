@@ -1,143 +1,22 @@
 <template>
-  <a href="#main-content" class="screen-reader-text skip-to-main-content-link">Skip to main content</a>
-  <v-main> 
-      <v-container fluid id="taskpanel" class="fill-height d-flex flex-column">
-    <v-dialog v-model="editanum" :persistent="!anumber">
-      <v-card class="ma-auto w-100" max-width="400" prepend-icon="mdi-settings">
-        <v-card-title>Edit A#</v-card-title>
-        <v-card-subtitle>Set your A# to track tasks</v-card-subtitle>
-        <v-card-item>
-          <v-text-field
-            id="anum"
-            ref="anum"
-            :prepend-icon="result"
-            v-model="anumber"
-            @input="anumCheck"
-            @keyup.enter="submitAnum"
-            hint="Enter the A# from your student ID"
-            label="A#"
-          ></v-text-field>
-        </v-card-item>
-        <v-card-actions>
-          <v-btn
-            class="ms-auto"
-            text="Close"
-            v-if="anumber"
-            @click="editanum = false"
-          ></v-btn>
-          <v-spacer></v-spacer>
-          <v-btn class="ms-auto" text="Save" @click="submitAnum"></v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="confirmPunchOut">
-      <v-card class="ma-auto w-100" max-width="400" prepend-icon="mdi-settings">
-        <v-card-title>Punch Out All Active Workers?</v-card-title>
-        <v-card-subtitle>Are you Sure?</v-card-subtitle>
-        <v-card-actions>
-          <v-btn
-            class="ms-auto"
-            text="Cancel"
-            @click="confirmPunchOut = false"
-          ></v-btn>
-          <v-spacer></v-spacer>
-          <v-btn class="ms-auto" text="Confirm" @click="punchOutAll"></v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-row id="filters" class="align-self-start d-flex w-100 flex-grow-0">
-      <v-col cols="9" sm="4" md="7">
-        <v-text-field
-          id="search"
-          v-model="search"
-          clearable
-          label="Search"
-          hint="Search for tasks by name or description"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="3" class="mt-2 d-flex d-sm-none">
-        <v-btn variant="tonal">
-          <v-icon>mdi-cog</v-icon>
-          <v-menu activator="parent">
-            <v-list>
-              <v-list-item
-                v-for="setting in userSettings"
-                :title="setting.title"
-                @click="setting.action"
-              ></v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-      </v-col>
-      <v-col cols="6" sm="3" md="2">
-        <v-combobox
-          clearable
-          chips
-          multiple
-          label="Tags"
-          v-model="selectedTags"
-          :items="taskTags"
-        ></v-combobox>
-      </v-col>
-      <v-col cols="6" sm="3" md="2" class="d-flex align-self-start">
-        <v-switch
-          label="Show All"
-          inset
-          color="secondary"
-          v-model="showall"
-        ></v-switch>
-      </v-col>
-      <v-col cols="1" class="mt-2 d-none d-sm-flex">
-        <v-btn variant="tonal">
-          <v-icon>mdi-cog</v-icon>
-          <v-menu activator="parent">
-            <v-list>
-              <v-list-item
-                v-for="setting in userSettings"
-                :title="setting.title"
-                @click="setting.action"
-              ></v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row
-      id="main-content"
-      align="center"
-      justify="center"
-      class="d-flex flex-row w-100"
-    >
-    <!-- Router View -->
-    <keepAlive>
-      <RouterView v-slot="{ Component }">
-        <KeepAlive>
-          <component :is="Component" @data-updated="updateWorking" @available-tags="getTags" @select="(taskID: number) => selected = taskID" :anumber="anumber" 
-          :showall="showall" :selected="selected" :search="search" :workingdata="workingdata"/>
-        </KeepAlive>
-      </RouterView>
-    </keepAlive>
-
-    <v-col cols="12">
-        <v-btn
-          class="bigbutton"
-          :class="{ selected: selected == 0 }"
-          variant="tonal"
-          @click="selectTask(0)"
-        >
-          Not Tracking Time
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
-  <v-snackbar
-    v-model="snackbar"
-    timeout="2000"
-    location="top"
-    :color="snackcolor"
+  <a href="#main-content" class="screen-reader-text skip-to-main-content-link"
+    >Skip to main content</a
   >
-    {{ flash }}
-  </v-snackbar>
+  <v-main>
+    <SettingsButton>
+      <v-btn variant="tonal">
+        <v-icon>mdi-cog</v-icon>
+      </v-btn>
+    </SettingsButton>
+    <RouterView></RouterView>
+    <v-snackbar
+      v-model="snackbar"
+      timeout="2000"
+      location="top"
+      :color="snackcolor"
+    >
+      {{ flash }}
+    </v-snackbar>
   </v-main>
 </template>
 
@@ -226,7 +105,6 @@ const clockOff = async () => {
   updateWorking();
 };
 
-
 const logout = async () => {
   const response = await fetch(import.meta.env.VITE_API + "/logout", {
     credentials: "include",
@@ -312,8 +190,7 @@ const settings = ref([
 
 const getTags = (tags: Array<string>) => {
   taskTags.value = tags;
-}
-
+};
 
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
@@ -324,8 +201,4 @@ onMounted(() => {
     setHash();
   }
 });
-
-
-
-
 </script>

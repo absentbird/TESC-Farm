@@ -1,17 +1,23 @@
 <template>
-      <TaskCard
-        v-for="task in arealist"
-        :task="task"
-        :anumber="anumber"
-        :working="workingdata[task.ID]"
-        :selected="selected == task.ID"
-        @select="$emit('select', task.ID)"
-      ></TaskCard>
+  <TaskSelector
+    v-if="!area"
+    :tasks="arealist"
+    @select="selectArea"
+  ></TaskSelector>
+  <TaskSelector
+    v-if="area"
+    search
+    :tasks="tasklist"
+    :focus="test"
+    @select="selectTask"
+  ></TaskSelector>
 </template>
 
 <script lang="ts" setup>
-import focusFilter from "@/assets/tasklist.js";
+import { apicall } from "@/composables/apicall";
 import router from "@/router";
+import focusFilter from "@/assets/tasklist.js";
+const test = ref(Array.from(focusFilter));
 
 definePage({
   meta: {
@@ -19,131 +25,80 @@ definePage({
   },
 });
 
-const props = defineProps({
-anumber: {
-    type: String,
-    required: true
-},
-showall: {
-    type: Boolean,
-    required: false
-},
-search: {
-    type: String,
-    required: false
-},
-selected: {
-    type: Number,
-    required: false
-},
-workingdata: {
-    type: Object,
-    required: true
-}
-});
-
-
-
 const route = useRoute();
 const loading: Ref<boolean> = ref(false);
-const showall: Ref<boolean> = ref(false);
-const selectedTags: Ref<Array<string>> = ref([]);
-const search: Ref<string> = ref("");
-const anumber: Ref<string> = ref("");
-const hash: Ref<string> = ref("");
 const selected: Ref<number> = ref(0);
-const taskdata = ref({});
-const workingdata = ref({});
-const emit = defineEmits<{
-  (e: 'available-tags', tags: Array<string>): void, 
-  (e: 'select', id: number): void,
-  (e: 'data-updated', data: Object): void
-}>();
+const hash: Ref<string> = ref("");
+const anumber: Ref<string> = ref("");
+const taskdata: Ref<Array> = ref(Array());
+const arealist: Ref<Array> = ref(Array());
+const tasklist: Ref<Array> = ref(Array());
+const area: Ref<String> = ref(0);
 
-const logout = async () => {
-  const response = await fetch(import.meta.env.VITE_API + "/logout", {
-    credentials: "include",
+const updateWorking = async () => {
+  loading.value = true;
+  const jsondata = Array.from(await apicall("/hours/working"));
+  const workingdata = {};
+  taskdata.value.forEach((task) => {
+    workingdata[task.ID] = 0;
   });
-  if (!response.ok) {
-    flash.value = response.statusText;
-    snackbar.value = true;
-  } else {
-    router.push("/login");
-  }
+  jsondata.forEach((punch) => {
+    workingdata[punch.task_id]++;
+    if (punch.worker.barcode == hash.value) {
+      selected.value = punch.task_id;
+    }
+  });
+  taskdata.value.forEach((task) => {
+    task.working = workingdata[task.ID];
+    task.selected = task.ID == selected.value;
+  });
+  updateAreas();
+  loading.value = false;
 };
-watch(props, () => {
-  search.value = props.search;
-  showall.value = props.showall;
-  selected.value = props.selected;
-  anumber.value = props.anumber;
-  workingdata.value = props.workingdata;
-})
 
-const arealist = computed(() => {
-  let areas = Array.from(taskdata.value);
-  areas = areas.filter((area) =>
-      area.tags.some((tag) => tag.name ==("Management Unit")),
-    );
-  if (!showall.value) {
-    areas = areas.filter((area) => focusFilter.includes(area.ID));
-    areas.sort((a, b) => focusFilter.indexOf(a.ID) - focusFilter.indexOf(b.ID));
-  } else {
-    areas.sort((a, b) => a.name.localeCompare(b.name));
-  }
-  if (selectedTags.value.length > 0) {
-    areas = areas.filter((area) =>
-      area.tags.some((tag) => selectedTags.value.includes(tag.name)),
-    );
-  }
-  if (search.value) {
-    areas = areas.filter((area) =>
-    (area.name + area.description)
-      .toUpperCase()
-      .includes(search.value.toUpperCase()),
-    );
-  }
-  return areas;
-});
-
+const updateAreas = () => {
+  arealist.value = taskdata.value.filter((area) =>
+    area.tags.some((tag) => tag.name == "Management Unit"),
+  );
+};
 
 const getTasks = async () => {
   loading.value = true;
-  try {
-    const response = await fetch(import.meta.env.VITE_API + "/tasks");
-    if (!response.ok) {
-      console.log(response.status);
-    }
-    taskdata.value = await response.json();
-  } catch (e) {
-    console.log(e);
-  } finally {
-    emit('data-updated', taskdata.value);
-  }
+  taskdata.value = Array.from(await apicall("/tasks"));
+  updateWorking();
+  loading.value = false;
 };
 
+const setHash = async () => {
+  const worker = await apicall("/worker/lookup", { barcode: anumber.value });
+  hash.value = worker.barcode;
+};
 
-const taskTags = computed(() => {
-  const tags: Set<string> = new Set();
-    console.log(Array.from(taskdata.value));
-  for (const task of Array.from(taskdata.value)) {
-    for (const tag of task.tags) {
-      tags.add(tag.name);
-    }
+const selectArea = async (areaID: number) => {
+  let tasks = taskdata.value.filter((task) => focusFilter.includes(task.ID));
+  tasks.sort((a, b) => focusFilter.indexOf(a.ID) - focusFilter.indexOf(b.ID));
+  area.value = areaID;
+  tasklist.value = tasks;
+};
+
+const selectTask = async (taskID: number) => {
+  if (selected.value == taskID) {
+    return;
   }
-  return Array.from(tags);
-});
-
-
-
+  selected.value = taskID;
+  await apicall("/hours/punch", { anum: anumber, task: taskID });
+  updateWorking();
+};
 
 onBeforeMount(() => {
+  setHash();
   getTasks();
-})
+});
 
 let intervalID;
 onMounted(() => {
-  emit('available-tags', taskTags.value);
-  intervalID = setInterval(emit('data-updated', taskdata.value), 60000);
+  anumber.value = localStorage.getItem("anumber");
+  intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {
   clearInterval(intervalID);
