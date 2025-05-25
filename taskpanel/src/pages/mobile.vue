@@ -1,5 +1,6 @@
 <template>
   <TaskSelector v-if="!area" :tasks="arealist" @select="selectArea"></TaskSelector>
+  <v-btn v-if="area" @click="area = 0" variant="tonal" class="ml-7">Back to Areas</v-btn>
   <TaskSelector v-if="area" search :tasks="tasklist" :focus="test" @select="selectTask"></TaskSelector>
 </template>
 
