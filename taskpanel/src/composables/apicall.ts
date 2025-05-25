@@ -14,7 +14,10 @@ export async function apicall(url: String | any, options: Object = {}) {
         jsondata = await response.json();
       }
     } else {
-      const response = await fetch(import.meta.env.VITE_API + urlval);
+      const response = await fetch(import.meta.env.VITE_API + urlval, {
+        method: "GET",
+        credentials: "include",
+      });
       if (!response.ok) {
         console.log(response.status);
       } else {
