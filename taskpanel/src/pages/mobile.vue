@@ -1,48 +1,38 @@
 <template>
-  <TaskSelector
-    v-if="!area"
-    :tasks="arealist"
-    @select="selectArea"
-  ></TaskSelector>
-  <TaskSelector
-    v-if="area"
-    search
-    :tasks="tasklist"
-    :focus="test"
-    @select="selectTask"
-  ></TaskSelector>
+  <TaskSelector v-if="!area" :tasks="arealist" @select="selectArea"></TaskSelector>
+  <TaskSelector v-if="area" search :tasks="tasklist" :focus="test" @select="selectTask"></TaskSelector>
 </template>
 
 <script lang="ts" setup>
 import { apicall } from "@/composables/apicall";
-import router from "@/router";
+import type { Tag, Task, Worker, Punch } from "@/types/apiinterfaces.ts"
 import focusFilter from "@/assets/tasklist.js";
 const test = ref(Array.from(focusFilter));
-
+//Page Meta Information
 definePage({
   meta: {
     requiresAuth: "true",
   },
 });
-
+//Refs
 const route = useRoute();
 const loading: Ref<boolean> = ref(false);
 const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
-const anumber: Ref<string> = ref("");
-const taskdata: Ref<Array> = ref(Array());
-const arealist: Ref<Array> = ref(Array());
-const tasklist: Ref<Array> = ref(Array());
-const area: Ref<String> = ref(0);
+const anumber: Ref<string | any> = ref("");
+const taskdata: Ref<Array<Task>> = ref(Array());
+const arealist: Ref<Array<Task>> = ref(Array());
+const tasklist: Ref<Array<Task>> = ref(Array());
+const area: Ref<number> = ref(0);
 
 const updateWorking = async () => {
   loading.value = true;
-  const jsondata = Array.from(await apicall("/hours/working"));
-  const workingdata = {};
+  const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
+  const workingdata: number[] = [];
   taskdata.value.forEach((task) => {
     workingdata[task.ID] = 0;
   });
-  jsondata.forEach((punch) => {
+  jsondata.forEach((punch: Punch) => {
     workingdata[punch.task_id]++;
     if (punch.worker.barcode == hash.value) {
       selected.value = punch.task_id;
@@ -95,7 +85,7 @@ onBeforeMount(() => {
   getTasks();
 });
 
-let intervalID;
+let intervalID: number;
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
   intervalID = setInterval(updateWorking, 60000);

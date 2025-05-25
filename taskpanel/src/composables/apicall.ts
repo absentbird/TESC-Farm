@@ -1,8 +1,9 @@
-export async function apicall(url: String, options: Object) {
+export async function apicall(url: String | any, options: Object = {}) {
   let jsondata: any = {};
+  const urlval: String = toValue(url)
   try {
-    if (options) {
-      const response = await fetch(import.meta.env.VITE_API + url, {
+    if (Object.keys(options).length != 0) {
+      const response = await fetch(import.meta.env.VITE_API + urlval, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(options),
@@ -13,7 +14,7 @@ export async function apicall(url: String, options: Object) {
         jsondata = await response.json();
       }
     } else {
-      const response = await fetch(import.meta.env.VITE_API + url);
+      const response = await fetch(import.meta.env.VITE_API + urlval);
       if (!response.ok) {
         console.log(response.status);
       } else {

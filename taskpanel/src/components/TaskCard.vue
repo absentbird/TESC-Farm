@@ -1,15 +1,7 @@
 <template>
   <v-col v-if="task" class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
-    <a
-      class="card-button"
-      href="/punch"
-      @click.prevent="$emit('select', task.ID)"
-    >
-      <v-card
-        class="task-card d-flex flex-column text-center"
-        :class="{ selected: task.selected }"
-        variant="tonal"
-      >
+    <a class="card-button" href="/punch" @click.prevent="$emit('select', task.ID)">
+      <v-card class="task-card d-flex flex-column text-center" :class="{ selected: task.selected }" variant="tonal">
         <v-card-item>
           <v-card-title>{{ task.name }}</v-card-title>
           <v-card-subtitle v-if="task.working">
@@ -26,14 +18,7 @@
 </template>
 
 <script setup lang="ts">
-interface Task {
-  ID: number;
-  name: string;
-  description: string;
-  tags: string[];
-  working: number;
-  selected: boolean;
-}
+import type { Task } from "@/types/apiinterfaces"
 const props = defineProps({
   task: {
     type: Object as PropType<Task>,
