@@ -256,14 +256,14 @@ func AddTask(c *gin.Context) {
 	}
 	if record.CropID != 0 {
 		switch record.TypeID {
-		case 2://harvest 
+		case 2: //harvest
 			h := harvest.Harvest{}
 			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 				return
 			}
 			record.HarvestID = h.ID
-		case 1://preharvest
+		case 1: //preharvest
 			ph := harvest.Planting{}
 			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})

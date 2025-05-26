@@ -74,6 +74,7 @@ func main() {
 	// Harvest endpoints
 	r.GET("/areas", harvest.AllAreas)
 	r.GET("/areas/:id", harvest.GetArea)
+	auth.POST("/area/new", harvest.AddArea)
 	r.GET("/beds", harvest.AllBeds)
 	r.GET("/beds/:id", harvest.GetBed)
 	r.GET("/crops", harvest.AllCrops)
