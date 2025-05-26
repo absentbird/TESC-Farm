@@ -254,6 +254,7 @@ func AddTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 		return
 	}
+	task := record.Task
 	if record.CropID != 0 {
 		switch record.TypeID {
 		case 2: //harvest
@@ -262,26 +263,26 @@ func AddTask(c *gin.Context) {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 				return
 			}
-			record.HarvestID = h.ID
+			task.HarvestID = h.ID
 		case 1: //preharvest
 			ph := harvest.Planting{}
 			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 				return
 			}
-			record.PlantingID = ph.ID
+			task.PlantingID = ph.ID
 		default:
 			c.JSON(http.StatusBadRequest, gin.H{"error:": "Invalid task type"})
 		}
 	}
-	for _, tag := range record.Tags {
+	for _, tag := range task.Tags {
 		if err := util.DB.FirstOrCreate(&tag, util.Tag{Name: tag.Name}).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 			return
 		}
 	}
-	util.DB.Create(&record)
-	c.JSON(http.StatusOK, record)
+	util.DB.Create(&task)
+	c.JSON(http.StatusOK, task)
 }
 
 func GetTask(c *gin.Context) {
