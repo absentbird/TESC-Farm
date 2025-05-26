@@ -7,10 +7,10 @@
         <v-text-field
           id="anum"
           ref="anum"
-          :prepend-icon="result"
+          :prepend-icon="anumicon"
           v-model="anumber"
           @input="anumCheck"
-          @keyup.enter="submitAnum"
+          @keyup.enter="updateAnum"
           hint="Enter the A# from your student ID"
           label="A#"
         ></v-text-field>
@@ -23,7 +23,7 @@
           @click="editAnum = false"
         ></v-btn>
         <v-spacer></v-spacer>
-        <v-btn class="ms-auto" text="Save" @click="submitAnum"></v-btn>
+        <v-btn class="ms-auto" text="Save" @click="updateAnum"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -59,11 +59,13 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { useTheme } from "vuetify";
+import { apicall } from "@/composables/apicall.ts"
 
 const route = useRoute();
 const theme = useTheme();
 
 const anumber: Ref<string> = ref("");
+const anumicon: Ref<string> = ref("mdi-form-textbox")
 const anum = useTemplateRef("anum");
 const hash: Ref<string> = ref("");
 const editAnum: Ref<boolean> = ref(false);
@@ -82,49 +84,13 @@ const logout = async () => {
 };
 
 const punchOutAll = async () => {
-  const response = await fetch(
-    import.meta.env.VITE_API + "/hours/punchoutall",
-    { credentials: "include" },
-  );
-  if (!response.ok) {
-    flash.value = response.statusText;
-    snackbar.value = true;
-  }
-  updateWorking();
+  await apicall("/hours/punchoutall")
   confirmPunchOut.value = false;
-  selected.value = 0;
-};
-
-const submitAnum = () => {
-  if (anumber.value == "") {
-    return;
-  }
-  if (selected.value == -1) {
-    clockOff(anumber.value);
-  } else {
-    clockOn(anumber.value, selected.value);
-  }
-  anumber.value = "";
-};
-
-const anumCheck = (e: event) => {
-  if (anumber.value.length > 8) {
-    submitAnum();
-    e.target.focus();
-  }
+  location.reload();
 };
 
 const setHash = async () => {
-  const data = { barcode: anumber.value };
-  const response = await fetch(import.meta.env.VITE_API + "/worker/lookup", {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-  if (!response.ok) {
-    console.log(response);
-  }
-  const jsondata = await response.json();
+  const jsondata = await apicall("/worker/lookup", { barcode: anumber.value })
   hash.value = jsondata.barcode;
 };
 
@@ -152,15 +118,38 @@ const settings = ref([
   {
     title: "Light/Dark Mode",
     action: toggleTheme,
-    users: ["worker", "admin"],
+    users: ["worker", "admin", "all"],
   },
   { title: "Logout", action: logout, users: ["worker", "admin"] },
 ]);
 
 const userSettings = computed(() => {
   const userStatus: string = route.meta.userstatus;
-  return settings.value.filter((setting) => setting.users.includes(userStatus));
+  return settings.value.filter((setting) => (setting.users.includes(userStatus) || setting.users.includes("all")))
 });
+
+const updateAnum = () => {
+  if (anumber.value == "") {
+    return;
+  }
+  localStorage.setItem("anumber", anumber.value);
+  editAnum.value = false;
+  setHash();
+};
+
+const anumCheck = () => {
+  if (
+    anumber.value.length == 9 &&
+    anumber.value[0] == "A" &&
+    !isNaN(Number(anumber.value.substring(1)))
+  ) {
+    anumicon.value = "mdi-check-circle";
+  } else {
+    anumicon.value = "mdi-form-textbox";
+  }
+};
+
+
 
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
