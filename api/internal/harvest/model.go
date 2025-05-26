@@ -10,7 +10,6 @@ type Area struct {
 	gorm.Model
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Use         string `json:"use"`
 }
 
 type Bed struct {

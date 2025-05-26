@@ -11,7 +11,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <RouterView></RouterView>
+    <RouterView />
     <v-snackbar v-model="snackbar" timeout="2000" location="top" :color="snackcolor">
       {{ flash }}
     </v-snackbar>

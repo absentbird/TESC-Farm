@@ -4,24 +4,11 @@
       <v-card-title>Edit A#</v-card-title>
       <v-card-subtitle>Set your A# to track tasks</v-card-subtitle>
       <v-card-item>
-        <v-text-field
-          id="anum"
-          ref="anum"
-          :prepend-icon="anumicon"
-          v-model="anumber"
-          @input="anumCheck"
-          @keyup.enter="updateAnum"
-          hint="Enter the A# from your student ID"
-          label="A#"
-        ></v-text-field>
+        <v-text-field id="anum" ref="anum" :prepend-icon="anumicon" v-model="anumber" @input="anumCheck"
+          @keyup.enter="updateAnum" hint="Enter the A# from your student ID" label="A#"></v-text-field>
       </v-card-item>
       <v-card-actions>
-        <v-btn
-          class="ms-auto"
-          text="Close"
-          v-if="anumber"
-          @click="editAnum = false"
-        ></v-btn>
+        <v-btn class="ms-auto" text="Close" v-if="anumber" @click="editAnum = false"></v-btn>
         <v-spacer></v-spacer>
         <v-btn class="ms-auto" text="Save" @click="updateAnum"></v-btn>
       </v-card-actions>
@@ -32,11 +19,7 @@
       <v-card-title>Punch Out All Active Workers?</v-card-title>
       <v-card-subtitle>Are you Sure?</v-card-subtitle>
       <v-card-actions>
-        <v-btn
-          class="ms-auto"
-          text="Cancel"
-          @click="confirmPunchOut = false"
-        ></v-btn>
+        <v-btn class="ms-auto" text="Cancel" @click="confirmPunchOut = false"></v-btn>
         <v-spacer></v-spacer>
         <v-btn class="ms-auto" text="Confirm" @click="punchOutAll"></v-btn>
       </v-card-actions>
@@ -46,11 +29,7 @@
     <v-icon>mdi-cog</v-icon>
     <v-menu activator="parent">
       <v-list>
-        <v-list-item
-          v-for="setting in userSettings"
-          :title="setting.title"
-          @click="setting.action"
-        ></v-list-item>
+        <v-list-item v-for="setting in userSettings" :title="setting.title" @click="setting.action"></v-list-item>
       </v-list>
     </v-menu>
   </v-btn>
@@ -59,7 +38,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { useTheme } from "vuetify";
-import { apicall } from "@/composables/apicall.ts"
+import { apicall } from "@/composables/apicall.js"
 
 const route = useRoute();
 const theme = useTheme();
@@ -124,7 +103,7 @@ const settings = ref([
 ]);
 
 const userSettings = computed(() => {
-  const userStatus: string = route.meta.userstatus;
+  const userStatus: string | any = route.meta.userstatus;
   return settings.value.filter((setting) => (setting.users.includes(userStatus) || setting.users.includes("all")))
 });
 

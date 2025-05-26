@@ -5,6 +5,19 @@
     </v-row>
     <v-row id="main-content" align="center" justify="center" class="d-flex flex-row w-100">
       <TaskCard v-for="task in tasklist" :task="task" @select="$emit('select', task.ID)"></TaskCard>
+      <v-col v-if="newItem" class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
+        <!-- New Item for admins -->
+        <a class="card-button" :href="newItem">
+          <v-card class="task-card d-flex flex-column text-center" variant="tonal">
+            <v-card-item>
+              <v-card-title>New</v-card-title>
+            </v-card-item>
+            <v-card-text>
+              Create a new item
+            </v-card-text>
+          </v-card>
+        </a>
+      </v-col>
       <v-col cols="12">
         <v-btn class="bigbutton" :class="{ selected: selected == 0 }" variant="tonal" @click="$emit('select', 0)">
           Not Tracking Time
@@ -15,27 +28,31 @@
 </template>
 
 <script lang="ts" setup>
-import type { Tag, Task, Worker, Punch } from "@/types/apiinterfaces.ts"
+import type { Task, Area } from "@/types/apiinterfaces.ts"
 const props = defineProps({
   tasks: {
-    type: Array<Task>,
+    type: Array<Task | Area>,
     required: true,
   },
   focus: {
-    type: Array,
+    type: Array<number>,
     required: false,
   },
   search: {
     type: Boolean,
     required: false,
   },
+  newItem: {
+    type: String,
+    required: false,
+  },
 });
 const emit = defineEmits<{
   (e: "select", taskID: number): void;
 }>();
-
-const taskdata: Ref<Array<Task>> = ref(props.tasks);
-const tasklist: Ref<Array<Task>> = ref(props.tasks);
+const router = useRouter();
+const taskdata: Ref<Array<Task | Area>> = ref(props.tasks);
+const tasklist: Ref<Array<Task | Area>> = ref(props.tasks);
 const selected: ComputedRef<number> = computed(() => {
   if (tasklist.value.length == 0) {
     return -1;

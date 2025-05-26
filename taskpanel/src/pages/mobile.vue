@@ -1,28 +1,32 @@
 <template>
-  <TaskSelector v-if="!area" :tasks="arealist" @select="selectArea"></TaskSelector>
+  <v-row>
+    <TaskSelector v-if="!area" :tasks="arealist" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+      @select="selectArea"></TaskSelector>
+  </v-row>
+
   <v-btn v-if="area" @click="area = 0" variant="tonal" class="ml-7">Back to Areas</v-btn>
-  <TaskSelector v-if="area" search :tasks="tasklist" :focus="test" @select="selectTask"></TaskSelector>
+  <TaskSelector v-if="area" search :tasks="tasklist" @select="selectTask"
+    :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder' : ''"></TaskSelector>
+
 </template>
 
 <script lang="ts" setup>
 import { apicall } from "@/composables/apicall";
-import type { Tag, Task, Worker, Punch } from "@/types/apiinterfaces.ts"
-import focusFilter from "@/assets/tasklist.js";
-const test = ref(Array.from(focusFilter));
+import type { Area, Task, Punch } from "@/types/apiinterfaces.ts"
 //Page Meta Information
 definePage({
   meta: {
     requiresAuth: "true",
   },
 });
+const router = useRouter();
 //Refs
-const route = useRoute();
 const loading: Ref<boolean> = ref(false);
 const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const taskdata: Ref<Array<Task>> = ref(Array());
-const arealist: Ref<Array<Task>> = ref(Array());
+const arealist: Ref<Array<Area>> = ref(Array());
 const tasklist: Ref<Array<Task>> = ref(Array());
 const area: Ref<number> = ref(0);
 
@@ -47,10 +51,8 @@ const updateWorking = async () => {
   loading.value = false;
 };
 
-const updateAreas = () => {
-  arealist.value = taskdata.value.filter((area) =>
-    area.tags.some((tag) => tag.name == "Management Unit"),
-  );
+const updateAreas = async () => {
+  arealist.value = await apicall("/areas") as Area[]
 };
 
 const getTasks = async () => {
@@ -66,10 +68,9 @@ const setHash = async () => {
 };
 
 const selectArea = async (areaID: number) => {
-  let tasks = taskdata.value.filter((task) => focusFilter.includes(task.ID));
-  tasks.sort((a, b) => focusFilter.indexOf(a.ID) - focusFilter.indexOf(b.ID));
   area.value = areaID;
-  tasklist.value = tasks;
+  let areaTasks = taskdata.value.filter((task) => task.area_id == area.value)
+  tasklist.value = areaTasks;
 };
 
 const selectTask = async (taskID: number) => {

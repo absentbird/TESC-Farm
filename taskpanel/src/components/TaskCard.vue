@@ -18,10 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Task } from "@/types/apiinterfaces"
+import type { Task, Area } from "@/types/apiinterfaces"
 const props = defineProps({
   task: {
-    type: Object as PropType<Task>,
+    type: Object as PropType<Task | Area>,
     required: true,
   },
 });
