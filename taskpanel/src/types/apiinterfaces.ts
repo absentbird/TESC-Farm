@@ -49,5 +49,11 @@ export interface Crop {
   crop_id: number;
   bed_id: number;
   notes: string;
+  selected: boolean;
+}
+export interface TaskType {
+  ID: number;
+  name: string;
+  selected: boolean;
 }
 

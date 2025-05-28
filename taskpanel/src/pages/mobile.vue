@@ -1,12 +1,12 @@
 <template>
   <v-row>
-    <TaskSelector v-if="!area" :tasks="arealist" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
-      @select="selectArea"></TaskSelector>
+    <CardSelector v-if="!area" :items="arealist" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+      :timeTracking="true" @select="selectArea"></CardSelector>
   </v-row>
 
   <v-btn v-if="area" @click="area = 0" variant="tonal" class="ml-7">Back to Areas</v-btn>
-  <TaskSelector v-if="area" search :tasks="tasklist" @select="selectTask"
-    :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder' : ''"></TaskSelector>
+  <CardSelector v-if="area" search :items="tasklist" @select="selectTask"
+    :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder' : ''" :timeTracking="true"></CardSelector>
 
 </template>
 

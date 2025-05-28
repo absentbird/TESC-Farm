@@ -19,7 +19,8 @@
         </a>
       </v-col>
       <v-col cols="12">
-        <v-btn class="bigbutton" :class="{ selected: selected == 0 }" variant="tonal" @click="$emit('select', 0)">
+        <v-btn v-if="timeTracking" class="bigbutton" :class="{ selected: selected == 0 }" variant="tonal"
+          @click="$emit('select', 0)">
           Not Tracking Time
         </v-btn>
       </v-col>
@@ -30,8 +31,8 @@
 <script lang="ts" setup>
 import type { Task, Area } from "@/types/apiinterfaces.ts"
 const props = defineProps({
-  tasks: {
-    type: Array<Task | Area>,
+  items: {
+    type: Array<any>,
     required: true,
   },
   focus: {
@@ -46,25 +47,29 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  timeTracking: {
+    type: Boolean,
+    required: true,
+  },
 });
 const emit = defineEmits<{
   (e: "select", taskID: number): void;
 }>();
 const router = useRouter();
-const taskdata: Ref<Array<Task | Area>> = ref(props.tasks);
-const tasklist: Ref<Array<Task | Area>> = ref(props.tasks);
+const taskdata: Ref<Array<Task | Area>> = ref(props.items);
+const tasklist: Ref<Array<Task | Area>> = ref(props.items);
 const selected: ComputedRef<number> = computed(() => {
-  if (tasklist.value.length == 0) {
+  if (tasklist?.value.length == 0) {
     return -1;
   }
-  const stask = Array.from(tasklist.value).find((task) => task.selected);
+  const stask = tasklist.value.find((task) => task.selected);
   return stask ? stask.ID : 0;
 });
 
 watch(props, () => {
-  taskdata.value = props.tasks;
+  taskdata.value = props.items;
   if (!props.search) {
-    tasklist.value = props.tasks;
+    tasklist.value = props.items;
   }
 });
 

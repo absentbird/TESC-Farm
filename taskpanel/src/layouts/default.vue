@@ -4,7 +4,7 @@
     <v-container fluid>
       <v-row class="pr-4 pl-4 pt-2">
         <v-col>
-          <h1>Project and Labor Tracker</h1>
+          <h1>Project and Labor Traaaaaaacker</h1>
         </v-col>
         <v-col cols="3" sm="2" md="1" align="right">
           <SettingsButton></SettingsButton>
