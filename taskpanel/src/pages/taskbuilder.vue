@@ -5,8 +5,12 @@
   <br />
   <h2>Choose Area</h2>
   <v-row>
-    <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
-      :timeTracking="false" @select="selectArea"></CardSelector>
+    <CardSelector
+      :items="areaList"
+      :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+      :timeTracking="false"
+      @select="selectArea"
+    ></CardSelector>
   </v-row>
 
   <br />
@@ -16,8 +20,13 @@
   <h2>Choose Crop</h2>
 
   <v-row>
-    <CardSelector search :items="cropList" :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
-      :timeTracking="false" @select="selectCrop"></CardSelector>
+    <CardSelector
+      search
+      :items="cropList"
+      :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
+      :timeTracking="false"
+      @select="selectCrop"
+    ></CardSelector>
   </v-row>
 
   <br />
@@ -27,7 +36,12 @@
   <h2>Task Type</h2>
 
   <v-row>
-    <CardSelector :items="typeList" :newItem="''" :timeTracking="false" @select="selectType"></CardSelector>
+    <CardSelector
+      :items="typeList"
+      :newItem="''"
+      :timeTracking="false"
+      @select="selectType"
+    ></CardSelector>
   </v-row>
 
   <br />
@@ -40,105 +54,100 @@
 </template>
 
 <script setup lang="ts">
-import type { Area, Crop, TaskType } from "@/types/apiinterfaces"
-import { apicall } from "@/composables/apicall"
+import type { Area, Crop, TaskType } from "@/types/apiinterfaces";
+import { apicall } from "@/composables/apicall";
 definePage({
   meta: {
     requiresAuth: "true",
   },
 });
-const router = useRouter()
-const areaData = ref<Array<Area>>([])
-const cropData = ref<Array<Crop>>([])
-const typeData = ref<Array<TaskType>>([])
-const selectedArea: Ref<number> = ref(0)
-const selectedCrop: Ref<number> = ref(0)
-const selectedType: Ref<number> = ref(0)
+const router = useRouter();
+const route = useRoute();
+const areaData = ref<Array<Area>>([]);
+const cropData = ref<Array<Crop>>([]);
+const typeData = ref<Array<TaskType>>([]);
+const selectedArea: Ref<number> = ref(0);
+const selectedCrop: Ref<number> = ref(0);
+const selectedType: Ref<number> = ref(0);
+
+if (route.query.area) {
+  selectedArea.value = Number(route.query.area);
+}
 
 const areaList = computed(() => {
   return areaData.value.map((area: Area) => {
-    if (area.ID == selectedArea.value) {
-      area.selected = true;
-    } else {
-      area.selected = false;
-    }
-    return area
-  })
-})
+    area.selected = area.ID == selectedArea.value;
+    return area;
+  });
+});
 
 const cropList = computed(() => {
   return cropData.value.map((crop: Crop) => {
-    if (crop.ID == selectedCrop.value) {
-      crop.selected = true;
-    } else {
-      crop.selected = false;
-    }
-    return crop
-  })
-})
+    crop.selected = crop.ID == selectedCrop.value;
+    return crop;
+  });
+});
 
 const typeList = computed(() => {
   return typeData.value.map((type: TaskType) => {
-    if (type.ID == selectedType.value) {
-      type.selected = true;
-    } else {
-      type.selected = false;
-    }
-    return type
-  })
-})
-
+    type.selected = type.ID == selectedType.value;
+    return type;
+  });
+});
 
 const getAreas = async () => {
-  areaData.value = await apicall("/areas") as Area[];
-}
+  areaData.value = (await apicall("/areas")) as Area[];
+};
 
 const getCrops = async () => {
-  cropData.value = await apicall("/crops") as Crop[];
-}
+  cropData.value = (await apicall("/crops")) as Crop[];
+};
 
 const getTypes = async () => {
-  typeData.value = await apicall("/tasktypes") as TaskType[];
-}
+  typeData.value = (await apicall("/tasktypes")) as TaskType[];
+};
 
 const selectArea = (areaID: number) => {
   if (selectedArea.value == areaID) {
-    return
+    return;
   }
-  selectedArea.value = areaID
-}
+  selectedArea.value = areaID;
+  router.push({ query: { area: areaID } });
+};
 
 const selectCrop = (cropID: number) => {
   if (selectedCrop.value == cropID) {
-    return
+    return;
   }
-  selectedCrop.value = cropID
-}
+  selectedCrop.value = cropID;
+};
 
 const selectType = (typeID: number) => {
   if (selectedType.value == typeID) {
-    return
+    return;
   }
-  selectedType.value = typeID
-}
+  selectedType.value = typeID;
+};
 
 const createTask = async () => {
-
   const data = {
     area_id: selectedArea.value,
     crop_id: selectedCrop.value,
     type_id: selectedType.value,
-    name: cropData.value.find(crop => crop.ID == selectedCrop.value)?.name,
-    description: typeData.value.find(type => type.ID == selectedType.value)?.name + ' ' + cropData.value.find(crop => crop.ID == selectedCrop.value)?.name,
-  }
-  await apicall("/task/new", data)
-  selectedArea.value, selectedCrop.value, selectedType.value = -1;
+    name: cropData.value.find((crop) => crop.ID == selectedCrop.value)?.name,
+    description:
+      typeData.value.find((type) => type.ID == selectedType.value)?.name +
+      " " +
+      cropData.value.find((crop) => crop.ID == selectedCrop.value)?.name,
+  };
+  await apicall("/task/new", data);
+  selectedArea.value, selectedCrop.value, (selectedType.value = -1);
   router.back();
-}
+};
 
 onMounted(() => {
-  getAreas()
-  getCrops()
-  getTypes()
-})
+  getAreas();
+  getCrops();
+  getTypes();
+});
 </script>

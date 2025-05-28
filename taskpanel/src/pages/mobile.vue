@@ -1,18 +1,33 @@
 <template>
   <v-row>
-    <CardSelector v-if="!area" :items="arealist" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
-      :timeTracking="true" @select="selectArea"></CardSelector>
+    <CardSelector
+      v-if="!area"
+      :items="areaList"
+      :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+      :timeTracking="true"
+      @select="selectArea"
+    ></CardSelector>
   </v-row>
 
-  <v-btn v-if="area" @click="area = 0" variant="tonal" class="ml-7">Back to Areas</v-btn>
-  <CardSelector v-if="area" search :items="tasklist" @select="selectTask"
-    :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder' : ''" :timeTracking="true"></CardSelector>
-
+  <v-btn v-if="area" @click="area = 0" variant="tonal" class="ml-7"
+    >Back to Areas</v-btn
+  >
+  <CardSelector
+    v-if="area"
+    search
+    :items="tasklist"
+    @select="selectTask"
+    :newItem="
+      $route.meta.userstatus == 'admin' ? '/taskbuilder?area=' + area : ''
+    "
+    :timeTracking="true"
+    :selected="selected"
+  ></CardSelector>
 </template>
 
 <script lang="ts" setup>
 import { apicall } from "@/composables/apicall";
-import type { Area, Task, Punch } from "@/types/apiinterfaces.ts"
+import type { Area, Task, Punch } from "@/types/apiinterfaces.ts";
 //Page Meta Information
 definePage({
   meta: {
@@ -26,33 +41,44 @@ const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const taskdata: Ref<Array<Task>> = ref(Array());
-const arealist: Ref<Array<Area>> = ref(Array());
+const areaList: Ref<Array<Area>> = ref(Array());
 const tasklist: Ref<Array<Task>> = ref(Array());
 const area: Ref<number> = ref(0);
 
 const updateWorking = async () => {
   loading.value = true;
+  updateAreas();
   const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
-  const workingdata: number[] = [];
+  const workingData: { number: number } = {};
+  const areaWorking: { number: number } = {};
   taskdata.value.forEach((task) => {
-    workingdata[task.ID] = 0;
+    workingData[task.ID] = 0;
+    areaWorking[task.area_id] = 0;
   });
   jsondata.forEach((punch: Punch) => {
-    workingdata[punch.task_id]++;
+    workingData[punch.task_id]++;
+    areaWorking[punch.task.area_id]++;
     if (punch.worker.barcode == hash.value) {
       selected.value = punch.task_id;
     }
   });
   taskdata.value.forEach((task) => {
-    task.working = workingdata[task.ID];
+    task.working = workingData[task.ID];
     task.selected = task.ID == selected.value;
+    if (task.selected) {
+      areaList.value.forEach((area) => {
+        area.selected = area.ID == task.area_id;
+      });
+    }
   });
-  updateAreas();
+  areaList.value.forEach((area) => {
+    area.working = areaWorking[area.ID];
+  });
   loading.value = false;
 };
 
 const updateAreas = async () => {
-  arealist.value = await apicall("/areas") as Area[]
+  areaList.value = (await apicall("/areas")) as Area[];
 };
 
 const getTasks = async () => {
@@ -68,8 +94,14 @@ const setHash = async () => {
 };
 
 const selectArea = async (areaID: number) => {
+  if (areaID == 0) {
+    selected.value = 0;
+    await apicall("/hours/punch", { anum: anumber });
+    updateWorking();
+    return;
+  }
   area.value = areaID;
-  let areaTasks = taskdata.value.filter((task) => task.area_id == area.value)
+  let areaTasks = taskdata.value.filter((task) => task.area_id == area.value);
   tasklist.value = areaTasks;
 };
 
