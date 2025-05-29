@@ -2,16 +2,18 @@ export interface Tag {
   ID: number;
   name: string;
 }
-export interface Task {
+export interface Item {
   ID: number;
   name: string;
   description: string;
+  working: number;
+  selected: boolean;
+  tags: Tag[];
+}
+export interface Task extends Item {
   type: string;
   barcode: string;
   area_id: number;
-  tags: Tag[];
-  working: number;
-  selected: boolean;
 }
 export interface Worker {
   ID: number;
@@ -27,12 +29,8 @@ export interface Punch {
   worker_id: number;
   notes: string;
 }
-export interface Area {
-  ID: number;
-  name: string;
+export interface Area extends Item {
   description?: string;
-  working: number;
-  selected: boolean;
 }
 export interface Bed {
   ID: number;
@@ -56,4 +54,3 @@ export interface TaskType {
   name: string;
   selected: boolean;
 }
-

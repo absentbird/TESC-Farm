@@ -1,7 +1,11 @@
 <template>
   <v-row>
-    <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/area/builder' : ''"
-      :timeTracking="true" @select="selectArea"></CardSelector>
+    <CardSelector
+      tracking
+      :items="areaList"
+      :newItem="isAdmin ? '/area/builder' : ''"
+      @select="selectArea"
+    ></CardSelector>
   </v-row>
 </template>
 
@@ -27,6 +31,10 @@ const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const areaList: Ref<Array<Area>> = ref(Array());
+
+const isAdmin: Ref<boolean> = computed(() => {
+  return route.meta.userstatus == "admin";
+});
 
 // Functions
 const updateWorking = async () => {
@@ -66,7 +74,7 @@ const selectArea = async (areaID: number) => {
     updateWorking();
     return;
   }
-  router.push('/area/' + String(areaID));
+  router.push("/area/" + String(areaID));
 };
 
 // Setup

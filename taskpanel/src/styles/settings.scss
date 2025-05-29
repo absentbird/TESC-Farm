@@ -20,7 +20,7 @@ body {
   font-family: sans-serif;
 }
 
-.taskpanel.withfloat {
+#taskpanel.withfloat {
   padding-bottom: 142px;
 }
 
@@ -60,7 +60,7 @@ body {
 }
 
 .v-btn.bigbutton.selected,
-.task-card.selected {
+.item-card.selected {
   color: #eee;
   background-color: #466860;
 }

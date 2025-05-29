@@ -1,8 +1,14 @@
 <template>
-  <v-btn @click="router.push('/area')" variant="tonal" class="ml-7">Back to
-    Areas</v-btn>
-  <CardSelector search :items="taskList" @select="selectTask" :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder?area=' + area : ''
-    " :timeTracking="true" :selected="selected"></CardSelector>
+  <v-btn @click="router.push('/area')" variant="tonal" class="ml-7"
+    >Back to Areas</v-btn
+  >
+  <CardSelector
+    search
+    tracking
+    :items="taskList"
+    @select="selectTask"
+    :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
+  ></CardSelector>
 </template>
 
 <script lang="ts" setup>
@@ -29,13 +35,17 @@ const anumber: Ref<string | any> = ref("");
 const taskData: Ref<Array<Task>> = ref(Array());
 const area: Ref<number> = ref(route.params.id);
 
-const taskList = computed(() => {
+const taskList: Ref<Array<Task>> = computed(() => {
   return taskData.value.filter((task) => task.area_id == route.params.id);
+});
+const isAdmin: Ref<boolean> = computed(() => {
+  return route.meta.userstatus == "admin";
 });
 
 // Functions
 const updateWorking = async () => {
   loading.value = true;
+  selected.value = 0;
   const jsonData: Array<Punch> = Array.from(await apicall("/hours/working"));
   const workingData: { number: number } = {};
   taskData.value.forEach((task) => {
@@ -52,12 +62,11 @@ const updateWorking = async () => {
     task.selected = task.ID == selected.value;
   });
   loading.value = false;
-  console.log(selected.value)
 };
 
 const getTasks = async () => {
   loading.value = true;
-  taskData.value = Array.from(await apicall("/tasks"));
+  taskData.value = Array.from(await apicall("/tasks")) as Task[];
   updateWorking();
   loading.value = false;
 };

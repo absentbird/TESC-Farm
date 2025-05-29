@@ -43,8 +43,8 @@
           </v-card>
         </a>
       </v-col>
-      <v-col cols="12" v-if="stoptracking">
-        <v-btn 
+      <v-col cols="12" v-if="tracking">
+        <v-btn
           class="bigbutton"
           :class="{ selected: selected == 0 }"
           variant="tonal"
@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Task, Area } from "@/types/apiinterfaces.ts";
+import type { Item } from "@/types/apiinterfaces.ts";
 const props = defineProps({
   items: {
     type: Array<any>,
@@ -68,15 +68,15 @@ const props = defineProps({
     type: Array<number>,
     required: false,
   },
-  search: {
-    type: Boolean,
-    required: false,
-  },
   newItem: {
     type: String,
     required: false,
   },
-  stoptracking: {
+  search: {
+    type: Boolean,
+    required: false,
+  },
+  tracking: {
     type: Boolean,
     required: false,
   },
@@ -86,9 +86,13 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
-const itemData: Ref<Array<Task | Area>> = ref(props.items);
-const itemList: Ref<Array<Task | Area>> = ref(props.items);
-const selected: Ref<number> = ref(props.selected);
+const itemData: Ref<Array<Item>> = ref(props.items);
+const itemList: Ref<Array<Item>> = ref(props.items);
+
+const selected: Ref<number> = computed(() => {
+  const i = itemData.value.find((item) => item.selected);
+  return i ? i.ID : 0;
+});
 
 watch(props, () => {
   itemData.value = props.items;
@@ -97,7 +101,7 @@ watch(props, () => {
   }
 });
 
-const filterItems = (items: Array<Task | Area>) => {
+const filterItems = (items: Array<Item>) => {
   itemList.value = items;
 };
 </script>

@@ -1,7 +1,15 @@
 <template>
   <v-col v-if="item" class="d-flex flex-column" cols="12" sm="4" md="3" lg="2">
-    <a class="card-button" href="select" @click.prevent="$emit('select', item.ID)">
-      <v-card class="item-card d-flex flex-column text-center" :class="{ selected: item.selected }" variant="tonal">
+    <a
+      class="card-button"
+      href="select"
+      @click.prevent="$emit('select', item.ID)"
+    >
+      <v-card
+        class="item-card d-flex flex-column text-center"
+        :class="{ selected: item.selected }"
+        variant="tonal"
+      >
         <v-card-item>
           <v-card-title>{{ item.name }}</v-card-title>
           <v-card-subtitle v-if="item.working">
@@ -18,7 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Item, Area } from "@/types/apiinterfaces"
+import type { Item } from "@/types/apiinterfaces";
+
 const props = defineProps({
   item: {
     type: Object as PropType<Item | Area>,
@@ -28,4 +37,10 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: "select", id: number): void;
 }>();
+
+const item: Ref<Item> = ref(props.item);
+
+watch(props, () => {
+  item.value = props.item;
+});
 </script>
