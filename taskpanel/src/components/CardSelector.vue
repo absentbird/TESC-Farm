@@ -72,6 +72,10 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  selected: {
+    type: Number,
+    required: false,
+  },
   search: {
     type: Boolean,
     required: false,
@@ -90,6 +94,9 @@ const itemData: Ref<Array<Item>> = ref(props.items);
 const itemList: Ref<Array<Item>> = ref(props.items);
 
 const selected: Ref<number> = computed(() => {
+  if (props.selected) {
+    return props.selected;
+  }
   const i = itemData.value.find((item) => item.selected);
   return i ? i.ID : 0;
 });

@@ -1,4 +1,5 @@
 <template>
+  <h2 class="pl-8">{{ areaName }}</h2>
   <v-btn @click="router.push('/area')" variant="tonal" class="ml-7"
     >Back to Areas</v-btn
   >
@@ -8,6 +9,7 @@
     :items="taskList"
     @select="selectTask"
     :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
+    :selected="selected"
   ></CardSelector>
 </template>
 
@@ -40,6 +42,13 @@ const taskList: Ref<Array<Task>> = computed(() => {
 });
 const isAdmin: Ref<boolean> = computed(() => {
   return route.meta.userstatus == "admin";
+});
+const areaName: Ref<boolean> = computed(() => {
+  const t1 = taskList.value.find((task) => task.area);
+  if (t1) {
+    return t1.area.name;
+  }
+  return "Area #" + String(area.value);
 });
 
 // Functions
