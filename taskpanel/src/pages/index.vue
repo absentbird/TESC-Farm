@@ -39,14 +39,14 @@
       justify="center"
       class="d-flex flex-row w-100"
     >
-      <TaskCard
+      <ItemCard
         v-for="task in tasklist"
         :task="task"
         :anumber="anumber"
         :working="workingdata[task.ID]"
         :selected="selected == task.ID"
         @select="selectTask"
-      ></TaskCard>
+      ></ItemCard>
       <v-col cols="12">
         <v-btn
           class="bigbutton"

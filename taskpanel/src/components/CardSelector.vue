@@ -6,9 +6,9 @@
       class="align-center d-flex w-100 flex-grow-0"
     >
       <FilterSearch
-        :items="taskdata"
+        :items="itemData"
         :focus="focus"
-        @filter="filterTasks"
+        @filter="filterItems"
       ></FilterSearch>
     </v-row>
     <v-row
@@ -17,11 +17,11 @@
       justify="center"
       class="d-flex flex-row w-100"
     >
-      <TaskCard
-        v-for="task in tasklist"
-        :task="task"
-        @select="$emit('select', task.ID)"
-      ></TaskCard>
+      <ItemCard
+        v-for="item in itemList"
+        :item="item"
+        @select="$emit('select', item.ID)"
+      ></ItemCard>
       <v-col
         v-if="newItem"
         class="d-flex flex-column"
@@ -33,7 +33,7 @@
         <!-- New Item for admins -->
         <a class="card-button" :href="newItem">
           <v-card
-            class="task-card d-flex flex-column text-center"
+            class="item-card d-flex flex-column text-center"
             variant="tonal"
           >
             <v-card-item>
@@ -81,36 +81,24 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  selected: {
-    type: Number,
-    required: false,
-  },
 });
 const emit = defineEmits<{
-  (e: "select", taskID: number): void;
+  (e: "select", itemID: number): void;
 }>();
+
 const router = useRouter();
-const taskdata: Ref<Array<Task | Area>> = ref(props.items);
-const tasklist: Ref<Array<Task | Area>> = ref(props.items);
-const selected: ComputedRef<number> = computed(() => {
-  if (props.selected) {
-    return props.selected;
-  }
-  if (tasklist?.value.length == 0) {
-    return -1;
-  }
-  const stask = tasklist.value.find((task) => task.selected);
-  return stask ? stask.ID : 0;
-});
+const itemData: Ref<Array<Task | Area>> = ref(props.items);
+const itemList: Ref<Array<Task | Area>> = ref(props.items);
+const selected: Ref<number> = ref(props.selected);
 
 watch(props, () => {
-  taskdata.value = props.items;
+  itemData.value = props.items;
   if (!props.search) {
-    tasklist.value = props.items;
+    itemList.value = props.items;
   }
 });
 
-const filterTasks = (tasks: Array<Task>) => {
-  tasklist.value = tasks;
+const filterItems = (items: Array<Task | Area>) => {
+  itemList.value = items;
 };
 </script>
