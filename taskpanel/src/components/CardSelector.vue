@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="taskpanel d-flex flex-column align-center">
+  <v-container fluid class="d-flex flex-column align-center">
     <v-row
       v-if="search"
       id="filters"
@@ -43,9 +43,8 @@
           </v-card>
         </a>
       </v-col>
-      <v-col cols="12">
-        <v-btn
-          v-if="timeTracking"
+      <v-col cols="12" v-if="stoptracking">
+        <v-btn 
           class="bigbutton"
           :class="{ selected: selected == 0 }"
           variant="tonal"
@@ -77,9 +76,9 @@ const props = defineProps({
     type: String,
     required: false,
   },
-  timeTracking: {
+  stoptracking: {
     type: Boolean,
-    required: true,
+    required: false,
   },
 });
 const emit = defineEmits<{

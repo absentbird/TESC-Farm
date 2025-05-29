@@ -1,13 +1,5 @@
 <template>
-  <v-row>
-    <CardSelector v-if="!area" :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
-      :timeTracking="true" @select="selectArea"></CardSelector>
-  </v-row>
-
-  <v-btn v-if="area" @click="router.push({ query: { area: 0 } })" variant="tonal" class="ml-7">Back to
-    Areas</v-btn>
-  <CardSelector v-if="area" search :items="tasklist" @select="selectTask" :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder?area=' + area : ''
-    " :timeTracking="true" :selected="selected"></CardSelector>
+  <CardSelector search stoptracking :items="taskList" @select="selectTask" :selected="selected"></CardSelector>
 </template>
 
 <script lang="ts" setup>
