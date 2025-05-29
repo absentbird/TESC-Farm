@@ -5,12 +5,8 @@
   <br />
   <h2>Choose Area</h2>
   <v-row>
-    <CardSelector
-      :items="areaList"
-      :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
-      :timeTracking="false"
-      @select="selectArea"
-    ></CardSelector>
+    <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+      :timeTracking="false" @select="selectArea"></CardSelector>
   </v-row>
 
   <br />
@@ -20,13 +16,8 @@
   <h2>Choose Crop</h2>
 
   <v-row>
-    <CardSelector
-      search
-      :items="cropList"
-      :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
-      :timeTracking="false"
-      @select="selectCrop"
-    ></CardSelector>
+    <CardSelector search :items="cropList" :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
+      :timeTracking="false" @select="selectCrop"></CardSelector>
   </v-row>
 
   <br />
@@ -36,12 +27,7 @@
   <h2>Task Type</h2>
 
   <v-row>
-    <CardSelector
-      :items="typeList"
-      :newItem="''"
-      :timeTracking="false"
-      @select="selectType"
-    ></CardSelector>
+    <CardSelector :items="typeList" :newItem="''" :timeTracking="false" @select="selectType"></CardSelector>
   </v-row>
 
   <br />
@@ -112,7 +98,7 @@ const selectArea = (areaID: number) => {
     return;
   }
   selectedArea.value = areaID;
-  router.push({ query: { area: areaID } });
+  router.replace({ query: { area: areaID } });
 };
 
 const selectCrop = (cropID: number) => {

@@ -1,28 +1,13 @@
 <template>
   <v-row>
-    <CardSelector
-      v-if="!area"
-      :items="areaList"
-      :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
-      :timeTracking="true"
-      @select="selectArea"
-    ></CardSelector>
+    <CardSelector v-if="!area" :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+      :timeTracking="true" @select="selectArea"></CardSelector>
   </v-row>
 
-  <v-btn v-if="area" @click="area = 0" variant="tonal" class="ml-7"
-    >Back to Areas</v-btn
-  >
-  <CardSelector
-    v-if="area"
-    search
-    :items="tasklist"
-    @select="selectTask"
-    :newItem="
-      $route.meta.userstatus == 'admin' ? '/taskbuilder?area=' + area : ''
-    "
-    :timeTracking="true"
-    :selected="selected"
-  ></CardSelector>
+  <v-btn v-if="area" @click="router.push({ query: { area: 0 } })" variant="tonal" class="ml-7">Back to
+    Areas</v-btn>
+  <CardSelector v-if="area" search :items="tasklist" @select="selectTask" :newItem="$route.meta.userstatus == 'admin' ? '/taskbuilder?area=' + area : ''
+    " :timeTracking="true" :selected="selected"></CardSelector>
 </template>
 
 <script lang="ts" setup>
@@ -35,6 +20,7 @@ definePage({
   },
 });
 const router = useRouter();
+const route = useRoute();
 //Refs
 const loading: Ref<boolean> = ref(false);
 const selected: Ref<number> = ref(0);
@@ -44,6 +30,13 @@ const taskdata: Ref<Array<Task>> = ref(Array());
 const areaList: Ref<Array<Area>> = ref(Array());
 const tasklist: Ref<Array<Task>> = ref(Array());
 const area: Ref<number> = ref(0);
+
+watch(
+  () => route.query.area,
+  newArea => {
+    area.value = Number(newArea)
+  }
+)
 
 const updateWorking = async () => {
   loading.value = true;
@@ -103,6 +96,8 @@ const selectArea = async (areaID: number) => {
   area.value = areaID;
   let areaTasks = taskdata.value.filter((task) => task.area_id == area.value);
   tasklist.value = areaTasks;
+  router.push({ query: { area: areaID } });
+
 };
 
 const selectTask = async (taskID: number) => {
