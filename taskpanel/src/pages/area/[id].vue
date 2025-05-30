@@ -4,7 +4,6 @@
     >Back to Areas</v-btn
   >
   <CardSelector
-    search
     tracking
     :items="taskList"
     @select="selectTask"
@@ -16,7 +15,7 @@
 <script lang="ts" setup>
 // Imports
 import { apicall } from "@/composables/apicall";
-import type { Area, Task, Punch } from "@/types/apiinterfaces.ts";
+import type { Task, Punch } from "@/types/apibinds";
 
 // Meta Information
 definePage({

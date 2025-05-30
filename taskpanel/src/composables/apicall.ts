@@ -30,3 +30,5 @@ export async function apicall(url: String | any, options: Object = {}) {
     return jsondata;
   }
 }
+
+export default apicall

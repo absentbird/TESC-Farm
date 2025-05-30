@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Item } from "@/types/apiinterfaces.ts";
+import type { Item } from "@/types/apibinds";
 const props = defineProps({
   items: {
     type: Array<any>,

@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Item } from "@/types/apiinterfaces";
+import type { Item } from "@/types/apibinds";
 
 const props = defineProps({
   item: {

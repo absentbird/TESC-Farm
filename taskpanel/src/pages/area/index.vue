@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 // Imports
 import { apicall } from "@/composables/apicall";
-import type { Area, Task, Punch } from "@/types/apiinterfaces.ts";
+import type { Area, Punch } from "@/types/apibinds";
 
 // Meta Information
 definePage({

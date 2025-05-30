@@ -1,4 +1,6 @@
 <template>
+  <div id="main-content" class="pl-8 pr-8 pb-8">
+  <v-btn variant="tonal" @click="router.push('/area')" class="mb-8">Go to Areas</v-btn>
   <v-form ref="form">
     <h2>Area Name:</h2>
     <v-text-field required label="Name" v-model="areaName" autofocus @keyup.enter="createArea"></v-text-field>
@@ -6,11 +8,12 @@
     <v-text-field label="Description" v-model="areaDesc" @keyup.enter="createArea"></v-text-field>
     <v-btn variant="tonal" @click="createArea">Create Area</v-btn>
   </v-form>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { apicall } from '@/composables/apicall'
-const router = useRouter()
+const router = useRouter();
 const form = ref()
 const areaName: Ref<string> = ref("")
 const areaDesc: Ref<string> = ref("")

@@ -1,11 +1,13 @@
 <template>
+  <div id="main-content" class="pa-8 pt-0">
   <h1>Task Builder</h1>
+  <v-btn variant="tonal" class="mb-8" @click="router.push('/area/' + selectedArea)">Back to Area</v-btn>
   <br />
   <v-divider></v-divider>
   <br />
   <h2>Choose Area</h2>
   <v-row>
-    <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/areabuilder' : ''"
+    <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/area/builder' : ''"
       :timeTracking="false" @select="selectArea"></CardSelector>
   </v-row>
 
@@ -37,10 +39,11 @@
   <v-btn size="x-large" variant="tonal" @click="createTask">
     Create Task
   </v-btn>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { Area, Crop, TaskType } from "@/types/apiinterfaces";
+import type { Area, Crop, TaskType } from "@/types/apibinds";
 import { apicall } from "@/composables/apicall";
 definePage({
   meta: {
@@ -128,7 +131,7 @@ const createTask = async () => {
   };
   await apicall("/task/new", data);
   selectedArea.value, selectedCrop.value, (selectedType.value = -1);
-  router.back();
+  router.push('/area/' + selectedArea)
 };
 
 onMounted(() => {
