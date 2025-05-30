@@ -1,13 +1,30 @@
 <template>
-  <v-col cols="12" sm="6" md="8">
-    <v-text-field id="search" v-model="search" clearable label="Search"
-      hint="Search for items by name or description"></v-text-field>
+  <v-col cols="12" sm="auto">
+    <v-text-field
+      id="search"
+      v-model="search"
+      clearable
+      label="Search"
+      hint="Search for items by name or description"
+    ></v-text-field>
   </v-col>
   <v-col v-if="itemTags" cols="6" sm="3" md="2">
-    <v-combobox clearable chips multiple label="Tags" v-model="selectedTags" :items="itemTags"></v-combobox>
+    <v-combobox
+      clearable
+      chips
+      multiple
+      label="Tags"
+      v-model="selectedTags"
+      :items="itemTags"
+    ></v-combobox>
   </v-col>
   <v-col v-if="focus" cols="6" sm="3" md="2" class="d-flex align-self-start">
-    <v-switch inset label="Show All" color="secondary" v-model="showall"></v-switch>
+    <v-switch
+      inset
+      label="Show All"
+      color="secondary"
+      v-model="showall"
+    ></v-switch>
   </v-col>
 </template>
 
@@ -35,7 +52,7 @@ const itemTags = computed(() => {
   const tags: Set<string> = new Set();
   for (const item of props.items) {
     if (!item.tags) {
-      continue
+      continue;
     }
     for (const tag of item.tags) {
       tags.add(tag.name);

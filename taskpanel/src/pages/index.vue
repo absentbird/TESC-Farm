@@ -1,5 +1,12 @@
 <template>
-  <CardSelector search tracking withfloat :items="taskData" :focus="focusFilter" @select="selectTask" :selected="selected"></CardSelector>
+  <CardSelector
+    search
+    tracking
+    withfloat
+    :items="taskData"
+    :focus="focusFilter"
+    @select="selectTask"
+  ></CardSelector>
   <div id="anumfloat" class="align-self-end" v-if="selected">
     <v-text-field
       id="anum"
@@ -19,8 +26,8 @@
 <script lang="ts" setup>
 // Imports
 import focusFilter from "@/assets/tasklist";
-import apicall from "@/composables/apicall"
-import type { Task } from "@/types/apibinds"
+import apicall from "@/composables/apicall";
+import type { Task } from "@/types/apibinds";
 
 definePage({
   meta: {
@@ -31,7 +38,7 @@ definePage({
 const selected: Ref<number> = ref(0);
 const anumber: Ref<string> = ref("");
 const taskData: Ref<Array<Task>> = ref(Array());
-const result: Ref<string> = ref("")
+const result: Ref<string> = ref("");
 
 const anum = useTemplateRef("anum");
 
@@ -47,9 +54,9 @@ const selectedName = computed(() => {
 
 const selectTask = (taskID: number) => {
   selected.value = taskID;
-  if (taskID == 0) {
-    return;
-  }
+  taskData.value.forEach((task) => {
+    task.selected = task.ID == selected.value;
+  });
   nextTick(() => {
     anum.value?.focus();
   });
@@ -77,7 +84,6 @@ const updateWorking = async () => {
     task.selected = task.ID == selected.value;
   });
 };
-
 
 const clockOn = async (anum: string, taskID: number) => {
   await apicall("/hours/punch", { barcode: anum, task: taskID });
