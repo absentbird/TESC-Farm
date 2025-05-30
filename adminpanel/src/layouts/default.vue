@@ -3,16 +3,16 @@ import { ref } from 'vue'
 const drawer = ref(true)
 const items = ref([
   {
-    title: 'Dashboard',
+    title: 'Crops',
     prependIcon: 'mdi-view-dashboard-outline',
     link: true,
     to: '/',
   },
   {
-    title: 'Team',
+    title: 'Hours',
     prependIcon: 'mdi-account-group',
     link: true,
-    to: '/team',
+    to: '/hours',
   },
   {
     title: 'Projects',

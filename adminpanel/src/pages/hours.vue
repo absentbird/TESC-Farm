@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import hours from '@/assets/hours.json'
+import hours from '@/assets/hours.json' 
 
 definePage({
   meta: {
