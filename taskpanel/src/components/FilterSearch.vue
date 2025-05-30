@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="12" sm="auto">
+  <v-col cols="12" sm="6" md="8">
     <v-text-field
       id="search"
       v-model="search"
