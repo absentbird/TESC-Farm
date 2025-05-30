@@ -2,26 +2,11 @@
   <v-container>
     <h1>Worker Login</h1>
     <p class="error">{{ error }}</p>
-    <v-text-field
-      id="username"
-      v-model="username"
-      hint="Enter the name of your account"
-      label="Username"
-      name="username"
-      :rules="[rules.required]"
-    ></v-text-field>
-    <v-text-field
-      v-model="password"
-      :append-icon="showpw ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[rules.required, rules.min]"
-      :type="showpw ? 'text' : 'password'"
-      hint="At least 8 characters"
-      label="Password"
-      name="password"
-      counter
-      @click:append="showpw = !showpw"
-      @keyup.enter="login"
-    ></v-text-field>
+    <v-text-field id="username" v-model="username" hint="Enter the name of your account" label="Username"
+      name="username" :rules="[rules.required]"></v-text-field>
+    <v-text-field v-model="password" :append-icon="showpw ? 'mdi-eye' : 'mdi-eye-off'"
+      :rules="[rules.required, rules.min]" :type="showpw ? 'text' : 'password'" hint="At least 8 characters"
+      label="Password" name="password" counter @click:append="showpw = !showpw" @keyup.enter="login"></v-text-field>
     <v-btn @click="login" variant="tonal">Sign In</v-btn>
   </v-container>
 </template>
@@ -52,7 +37,7 @@ const login = async () => {
     return;
   }
   apicall("/login", { username: username.value, password: password.value });
-  router.push({ path: "/mobile" });
+  router.push({ path: "/area" });
 };
 
 onMounted(() => {
