@@ -1,44 +1,63 @@
 <template>
   <div id="main-content" class="pa-8 pt-0">
-  <h1>Task Builder</h1>
-  <v-btn variant="tonal" class="mb-8" @click="router.push('/area/' + selectedArea)">Back to Area</v-btn>
-  <br />
-  <v-divider></v-divider>
-  <br />
-  <h2>Choose Area</h2>
-  <v-row>
-    <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/area/builder' : ''"
-      :timeTracking="false" @select="selectArea"></CardSelector>
-  </v-row>
+    <h1>Task Builder</h1>
+    <v-btn
+      variant="tonal"
+      class="mb-8"
+      @click="router.push('/area/' + selectedArea)"
+      >Back to Area</v-btn
+    >
+    <br />
+    <v-divider></v-divider>
+    <br />
+    <h2>Choose Area</h2>
+    <v-row>
+      <CardSelector
+        :items="areaList"
+        :newItem="$route.meta.userstatus == 'admin' ? '/area/builder' : ''"
+        :timeTracking="false"
+        @select="selectArea"
+      ></CardSelector>
+    </v-row>
 
-  <br />
-  <v-divider></v-divider>
-  <br />
+    <br />
+    <v-divider></v-divider>
+    <br />
 
-  <h2>Choose Crop</h2>
+    <h2>Choose Crop</h2>
 
-  <v-row>
-    <CardSelector search :items="cropList" :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
-      :timeTracking="false" @select="selectCrop"></CardSelector>
-  </v-row>
+    <v-row>
+      <CardSelector
+        search
+        :items="cropList"
+        :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
+        :timeTracking="false"
+        @select="selectCrop"
+      ></CardSelector>
+    </v-row>
 
-  <br />
-  <v-divider></v-divider>
-  <br />
+    <br />
+    <v-divider></v-divider>
+    <br />
 
-  <h2>Task Type</h2>
+    <h2>Task Type</h2>
 
-  <v-row>
-    <CardSelector :items="typeList" :newItem="''" :timeTracking="false" @select="selectType"></CardSelector>
-  </v-row>
+    <v-row>
+      <CardSelector
+        :items="typeList"
+        :newItem="''"
+        :timeTracking="false"
+        @select="selectType"
+      ></CardSelector>
+    </v-row>
 
-  <br />
-  <v-divider></v-divider>
-  <br />
+    <br />
+    <v-divider></v-divider>
+    <br />
 
-  <v-btn size="x-large" variant="tonal" @click="createTask">
-    Create Task
-  </v-btn>
+    <v-btn size="x-large" variant="tonal" @click="createTask">
+      Create Task
+    </v-btn>
   </div>
 </template>
 
@@ -131,7 +150,7 @@ const createTask = async () => {
   };
   await apicall("/task/new", data);
   selectedArea.value, selectedCrop.value, (selectedType.value = -1);
-  router.push('/area/' + selectedArea)
+  router.push("/area/" + selectedArea.value);
 };
 
 onMounted(() => {
