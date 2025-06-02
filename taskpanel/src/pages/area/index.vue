@@ -1,11 +1,12 @@
 <template>
-  <H2 class="pl-8">Areas</H2>
+  <h2 class="pl-8">Areas</h2>
   <v-row>
     <CardSelector
       tracking
       :items="areaList"
       :newItem="isAdmin ? '/area/builder' : ''"
       @select="selectArea"
+      :selected="selected"
     >
     </CardSelector>
   </v-row>
@@ -29,7 +30,7 @@ const route = useRoute();
 
 // Refs
 const loading: Ref<boolean> = ref(false);
-const selected: Ref<number> = ref(0);
+const selected: Ref<number> = ref(-1);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const areaList: Ref<Array<Area>> = ref(Array());

@@ -36,7 +36,7 @@ if (route.name === "/area/[id]") {
 
 //Refs
 const loading: Ref<boolean> = ref(false);
-const selected: Ref<number> = ref(0);
+const selected: Ref<number> = ref(-1);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const taskData: Ref<Array<Task>> = ref(Array());
@@ -88,7 +88,6 @@ const getTasks = async () => {
 const setHash = async () => {
   const worker = await apicall("/worker/lookup", { barcode: anumber.value });
   hash.value = worker.barcode;
-  console.log(worker.barcode);
 };
 
 const selectTask = async (taskID: number) => {

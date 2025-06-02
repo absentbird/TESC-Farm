@@ -85,7 +85,6 @@ const punchOutAll = async () => {
 const setHash = async () => {
   const jsondata = await apicall("/worker/lookup", { barcode: anumber.value });
   hash.value = jsondata.barcode;
-  console.log(hash.value);
 };
 
 const toggleTheme = () => {
@@ -148,7 +147,6 @@ const anumCheck = () => {
 
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
-  console.log("SETTINGS:" + anumber.value);
   if (!anumber.value) {
     editAnum.value = true;
   } else {
