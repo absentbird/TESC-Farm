@@ -1,8 +1,14 @@
 <template>
   <h2 class="pl-8">Areas</h2>
   <v-row>
-    <CardSelector tracking :items="areaList" :newItem="isAdmin ? '/area/builder' : ''" @select="selectArea"
-      :selected="selected">
+    <CardSelector
+      v-if="!loading"
+      tracking
+      :items="areaList"
+      :newItem="isAdmin ? '/area/builder' : ''"
+      @select="selectArea"
+      :selected="selected"
+    >
     </CardSelector>
   </v-row>
 </template>
@@ -24,7 +30,7 @@ const router = useRouter();
 const route = useRoute();
 
 // Refs
-const loading: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(true);
 const selected: Ref<number> = ref(-1);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");

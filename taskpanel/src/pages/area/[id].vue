@@ -4,6 +4,7 @@
     >Back to Areas</v-btn
   >
   <CardSelector
+    v-if="!loading"
     tracking
     :items="taskList"
     @select="selectTask"
@@ -35,7 +36,7 @@ if (route.name === "/area/[id]") {
 }
 
 //Refs
-const loading: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(true);
 const selected: Ref<number> = ref(-1);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
@@ -79,10 +80,8 @@ const updateWorking = async () => {
 };
 
 const getTasks = async () => {
-  loading.value = true;
   taskData.value = Array.from(await apicall("/tasks")) as Task[];
   updateWorking();
-  loading.value = false;
 };
 
 const setHash = async () => {
