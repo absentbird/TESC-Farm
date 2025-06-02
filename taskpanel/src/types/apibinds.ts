@@ -40,15 +40,11 @@ export interface Bed {
   area_id: number;
   notes: string;
 }
-export interface Crop {
-  ID: number;
-  name: string;
+export interface Crop extends Item {
   variety: string;
-  tags: Tag[];
   crop_id: number;
   bed_id: number;
   notes: string;
-  selected: boolean;
 }
 export interface TaskType {
   ID: number;

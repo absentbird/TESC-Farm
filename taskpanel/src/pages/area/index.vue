@@ -1,4 +1,5 @@
 <template>
+  <H2 class="pl-8">Areas</H2>
   <v-row>
     <CardSelector
       tracking
