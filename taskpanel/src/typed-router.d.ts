@@ -22,6 +22,7 @@ declare module 'vue-router/auto-routes' {
     '/area/': RouteRecordInfo<'/area/', '/area', Record<never, never>, Record<never, never>>,
     '/area/[id]': RouteRecordInfo<'/area/[id]', '/area/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/area/builder': RouteRecordInfo<'/area/builder', '/area/builder', Record<never, never>, Record<never, never>>,
+    '/cropbuilder': RouteRecordInfo<'/cropbuilder', '/cropbuilder', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/mobile': RouteRecordInfo<'/mobile', '/mobile', Record<never, never>, Record<never, never>>,
     '/taskbuilder': RouteRecordInfo<'/taskbuilder', '/taskbuilder', Record<never, never>, Record<never, never>>,

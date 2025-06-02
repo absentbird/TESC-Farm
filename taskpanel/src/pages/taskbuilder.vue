@@ -1,23 +1,14 @@
 <template>
   <div id="main-content" class="pa-8 pt-0">
     <h1>Task Builder</h1>
-    <v-btn
-      variant="tonal"
-      class="mb-8"
-      @click="router.push('/area/' + selectedArea)"
-      >Back to Area</v-btn
-    >
+    <v-btn variant="tonal" class="mb-8" @click="router.push('/area/' + selectedArea)">Back to Area</v-btn>
     <br />
     <v-divider></v-divider>
     <br />
     <h2>Choose Area</h2>
     <v-row>
-      <CardSelector
-        :items="areaList"
-        :newItem="$route.meta.userstatus == 'admin' ? '/area/builder' : ''"
-        :timeTracking="false"
-        @select="selectArea"
-      ></CardSelector>
+      <CardSelector :items="areaList" :newItem="$route.meta.userstatus == 'admin' ? '/area/builder' : ''"
+        :timeTracking="false" @select="selectArea"></CardSelector>
     </v-row>
 
     <br />
@@ -27,13 +18,8 @@
     <h2>Choose Crop</h2>
 
     <v-row>
-      <CardSelector
-        search
-        :items="cropList"
-        :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
-        :timeTracking="false"
-        @select="selectCrop"
-      ></CardSelector>
+      <CardSelector search :items="cropList" :newItem="$route.meta.userstatus == 'admin' ? '/cropbuilder' : ''"
+        :timeTracking="false" @select="selectCrop"></CardSelector>
     </v-row>
 
     <br />
@@ -43,12 +29,7 @@
     <h2>Task Type</h2>
 
     <v-row>
-      <CardSelector
-        :items="typeList"
-        :newItem="''"
-        :timeTracking="false"
-        @select="selectType"
-      ></CardSelector>
+      <CardSelector :items="typeList" :newItem="''" :timeTracking="false" @select="selectType"></CardSelector>
     </v-row>
 
     <br />
@@ -92,6 +73,7 @@ const areaList = computed(() => {
 const cropList = computed(() => {
   return cropData.value.map((crop: Crop) => {
     crop.selected = crop.ID == selectedCrop.value;
+    crop.description = crop.variety
     return crop;
   });
 });
@@ -138,11 +120,15 @@ const selectType = (typeID: number) => {
 };
 
 const createTask = async () => {
+  const crop = cropData.value.find((crop) => crop.ID == selectedCrop.value)
+  if (!crop) {
+    return;
+  }
   const data = {
     area_id: selectedArea.value,
     crop_id: selectedCrop.value,
     type_id: selectedType.value,
-    name: cropData.value.find((crop) => crop.ID == selectedCrop.value)?.name,
+    name: crop.variety ? crop.name + ', ' + crop?.variety : crop.name,
     description:
       typeData.value.find((type) => type.ID == selectedType.value)?.name +
       " " +
