@@ -10,9 +10,13 @@ export interface Item {
   selected: boolean;
   tags: Tag[];
 }
+export interface Area extends Item {
+  beds: Bed[]
+}
 export interface Task extends Item {
   type: string;
   barcode: string;
+  area: Area;
   area_id: number;
 }
 export interface Worker {
@@ -28,9 +32,6 @@ export interface Punch {
   worker: Worker;
   worker_id: number;
   notes: string;
-}
-export interface Area extends Item {
-  description?: string;
 }
 export interface Bed {
   ID: number;

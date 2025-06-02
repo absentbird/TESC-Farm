@@ -1,15 +1,8 @@
 <template>
   <h2 class="pl-8">{{ areaName }}</h2>
-  <v-btn @click="router.push('/area')" variant="tonal" class="ml-7"
-    >Back to Areas</v-btn
-  >
-  <CardSelector
-    tracking
-    :items="taskList"
-    @select="selectTask"
-    :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
-    :selected="selected"
-  ></CardSelector>
+  <v-btn @click="router.push('/area')" variant="tonal" class="ml-7">Back to Areas</v-btn>
+  <CardSelector tracking :items="taskList" @select="selectTask" :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
+    :selected="selected"></CardSelector>
 </template>
 
 <script lang="ts" setup>
@@ -27,6 +20,12 @@ definePage({
 // Routing
 const router = useRouter();
 const route = useRoute();
+let areaID = 0
+if (route.name === '/area/[id]') {
+  areaID = Number(route.params.id)
+} else {
+  areaID = 0
+}
 
 //Refs
 const loading: Ref<boolean> = ref(false);
@@ -34,15 +33,15 @@ const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const taskData: Ref<Array<Task>> = ref(Array());
-const area: Ref<number> = ref(route.params.id);
+const area: Ref<number> = ref(areaID);
 
-const taskList: Ref<Array<Task>> = computed(() => {
-  return taskData.value.filter((task) => task.area_id == route.params.id);
+const taskList = computed(() => {
+  return taskData.value.filter((task) => task.area_id == area.value);
 });
-const isAdmin: Ref<boolean> = computed(() => {
+const isAdmin = computed(() => {
   return route.meta.userstatus == "admin";
 });
-const areaName: Ref<boolean> = computed(() => {
+const areaName = computed(() => {
   const t1 = taskList.value.find((task) => task.area);
   if (t1) {
     return t1.area.name;
@@ -55,7 +54,7 @@ const updateWorking = async () => {
   loading.value = true;
   selected.value = 0;
   const jsonData: Array<Punch> = Array.from(await apicall("/hours/working"));
-  const workingData: { number: number } = {};
+  const workingData: { [index: number]: number } = {};
   taskData.value.forEach((task) => {
     workingData[task.ID] = 0;
   });

@@ -1,11 +1,7 @@
 <template>
   <v-row>
-    <CardSelector
-      tracking
-      :items="areaList"
-      :newItem="isAdmin ? '/area/builder' : ''"
-      @select="selectArea"
-    ></CardSelector>
+    <CardSelector tracking :items="areaList" :newItem="isAdmin ? '/area/builder' : ''" @select="selectArea">
+    </CardSelector>
   </v-row>
 </template>
 
@@ -40,7 +36,7 @@ const isAdmin: Ref<boolean> = computed(() => {
 const updateWorking = async () => {
   loading.value = true;
   const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
-  const areaWorking: { number: number } = {};
+  const areaWorking: { [index: number]: number } = {};
   areaList.value.forEach((area) => {
     areaWorking[area.ID] = 0;
   });
@@ -75,6 +71,7 @@ const selectArea = async (areaID: number) => {
     return;
   }
   router.push("/area/" + String(areaID));
+  router.push({ name: '/area/[id]', params: { id: areaID } });
 };
 
 // Setup
