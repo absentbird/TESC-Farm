@@ -1,8 +1,15 @@
 <template>
   <h2 class="pl-8">{{ areaName }}</h2>
-  <v-btn @click="router.push('/area')" variant="tonal" class="ml-7">Back to Areas</v-btn>
-  <CardSelector tracking :items="taskList" @select="selectTask" :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
-    :selected="selected"></CardSelector>
+  <v-btn @click="router.push('/area')" variant="tonal" class="ml-7"
+    >Back to Areas</v-btn
+  >
+  <CardSelector
+    tracking
+    :items="taskList"
+    @select="selectTask"
+    :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
+    :selected="selected"
+  ></CardSelector>
 </template>
 
 <script lang="ts" setup>
@@ -20,11 +27,11 @@ definePage({
 // Routing
 const router = useRouter();
 const route = useRoute();
-let areaID = 0
-if (route.name === '/area/[id]') {
-  areaID = Number(route.params.id)
+let areaID = 0;
+if (route.name === "/area/[id]") {
+  areaID = Number(route.params.id);
 } else {
-  areaID = 0
+  areaID = 0;
 }
 
 //Refs
@@ -81,24 +88,25 @@ const getTasks = async () => {
 const setHash = async () => {
   const worker = await apicall("/worker/lookup", { barcode: anumber.value });
   hash.value = worker.barcode;
+  console.log(worker.barcode);
 };
 
 const selectTask = async (taskID: number) => {
   if (selected.value == taskID) {
     return;
   }
-  await apicall("/hours/punch", { anum: anumber, task: taskID });
+  await apicall("/hours/punch", { barcode: anumber.value, task: taskID });
   updateWorking();
 };
 
 onBeforeMount(() => {
+  anumber.value = localStorage.getItem("anumber");
   setHash();
   getTasks();
 });
 
 let intervalID: number;
 onMounted(() => {
-  anumber.value = localStorage.getItem("anumber");
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {

@@ -1,6 +1,11 @@
 <template>
   <v-row>
-    <CardSelector tracking :items="areaList" :newItem="isAdmin ? '/area/builder' : ''" @select="selectArea">
+    <CardSelector
+      tracking
+      :items="areaList"
+      :newItem="isAdmin ? '/area/builder' : ''"
+      @select="selectArea"
+    >
     </CardSelector>
   </v-row>
 </template>
@@ -66,23 +71,23 @@ const setHash = async () => {
 const selectArea = async (areaID: number) => {
   if (areaID == 0) {
     selected.value = 0;
-    await apicall("/hours/punch", { anum: anumber.value });
+    await apicall("/hours/punch", { barcode: anumber.value });
     updateWorking();
     return;
   }
   router.push("/area/" + String(areaID));
-  router.push({ name: '/area/[id]', params: { id: areaID } });
+  router.push({ name: "/area/[id]", params: { id: areaID } });
 };
 
 // Setup
 onBeforeMount(() => {
+  anumber.value = localStorage.getItem("anumber");
   setHash();
   getAreas();
 });
 
 let intervalID: number;
 onMounted(() => {
-  anumber.value = localStorage.getItem("anumber");
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {
