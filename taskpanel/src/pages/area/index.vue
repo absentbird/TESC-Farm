@@ -1,13 +1,8 @@
 <template>
   <h2 class="pl-8">Areas</h2>
   <v-row>
-    <CardSelector
-      tracking
-      :items="areaList"
-      :newItem="isAdmin ? '/area/builder' : ''"
-      @select="selectArea"
-      :selected="selected"
-    >
+    <CardSelector tracking :items="areaList" :newItem="isAdmin ? '/area/builder' : ''" @select="selectArea"
+      :selected="selected">
     </CardSelector>
   </v-row>
 </template>
@@ -42,6 +37,7 @@ const isAdmin: Ref<boolean> = computed(() => {
 // Functions
 const updateWorking = async () => {
   loading.value = true;
+  selected.value = 0;
   const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
   const areaWorking: { [index: number]: number } = {};
   areaList.value.forEach((area) => {
