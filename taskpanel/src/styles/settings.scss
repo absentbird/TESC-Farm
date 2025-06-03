@@ -59,6 +59,19 @@ body {
   font-family: sans-serif;
 }
 
+.user-choice {
+
+}
+
+.v-btn.bigbutton.personal {
+  background-color: user-choice;
+}
+
+.v-btn.bigbutton:hover {
+  color: white;
+  background-color: #cc5500;
+}
+
 .v-btn.bigbutton.selected,
 .item-card.selected {
   color: #eee;
@@ -73,6 +86,11 @@ body {
 .card-button {
   text-decoration: none;
   color: rgb(var(--v-theme-on-background));
+}
+
+.card-button:hover {
+  color: white;
+  background-color: #cc5500;
 }
 
 .skip-to-main-content-link {
