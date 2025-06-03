@@ -8,6 +8,7 @@
     tracking
     :items="taskList"
     @select="selectTask"
+    @delete="deleteTask"
     :newItem="isAdmin ? '/taskbuilder?area=' + area : ''"
     :selected="selected"
   ></CardSelector>
@@ -95,6 +96,11 @@ const selectTask = async (taskID: number) => {
   }
   await apicall("/hours/punch", { barcode: anumber.value, task: taskID });
   updateWorking();
+};
+
+const deleteTask = async (taskID: number) => {
+  await apicall("/task/" + String(taskID) + "/delete", { id: taskID });
+  getTasks();
 };
 
 onBeforeMount(() => {

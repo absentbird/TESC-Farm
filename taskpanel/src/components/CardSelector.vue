@@ -19,6 +19,7 @@
     >
       <ItemCard
         v-for="item in itemList"
+        @contextmenu.prevent="contextMenu($event, item.ID)"
         :item="item"
         @select="$emit('select', item.ID)"
       ></ItemCard>
@@ -54,6 +55,11 @@
         </v-btn>
       </v-col>
     </v-row>
+    <v-menu v-model="showMenu" locationStrategy="connected" :target="cursor">
+      <v-list>
+        <v-list-item @click="$emit('delete', active)">Delete</v-list-item>
+      </v-list>
+    </v-menu>
   </v-container>
 </template>
 
@@ -87,11 +93,13 @@ const props = defineProps({
 });
 const emit = defineEmits<{
   (e: "select", itemID: number): void;
+  (e: "delete", itemID: number): void;
 }>();
 
 const router = useRouter();
 const itemData: Ref<Array<Item>> = ref(props.items);
 const itemList: Ref<Array<Item>> = ref(props.items);
+const active: Ref<number> = ref(0);
 
 const selected: Ref<number> = computed(() => {
   if (props.selected) {
@@ -100,6 +108,14 @@ const selected: Ref<number> = computed(() => {
   const i = itemData.value.find((item) => item.selected);
   return i ? i.ID : 0;
 });
+
+const showMenu: Ref<boolean> = ref(false);
+const cursor: Ref<Array<number>> = ref(Array());
+const contextMenu = (e: event, itemID: number) => {
+  showMenu.value = true;
+  cursor.value = [e.clientX, e.clientY];
+  active.value = itemID;
+};
 
 watch(props, () => {
   itemData.value = props.items;
