@@ -15,9 +15,10 @@ const items = ref([
     to: '/hours',
   },
   {
-    title: 'Projects',
+    title: 'Tasks',
     prependIcon: 'mdi-briefcase-outline',
     link: true,
+    to: '/tasks',
   },
   {
     title: 'Calendar',
