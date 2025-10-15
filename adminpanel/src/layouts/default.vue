@@ -60,7 +60,7 @@ const items = ref([
       flat
     >
       <v-app-bar-nav-icon
-        v-if="$vuetify.display.smAndDown"
+        v-if="$vuetify.display.mdAndDown"
         @click="drawer = !drawer"
       />
       <slot name="search" />
