@@ -28,7 +28,7 @@
   <v-row>
     <v-col cols=12 md=6>
       <h2>Why does Evergreen need a server?</h2>
-      <p>To host services like this one; projects such as the Systems of Data &amp; The Organic Farm a server is essential.</p>
+      <p>To host services like this one; for projects such as Systems of Data &amp; Organic Farming a server is essential.</p>
       <h3>Requirements</h3>
       <p>The computer science department needs a server to manage, store, and process data, and to provide services to other computers. It needs a minimum of two CPU cores at 1Ghz or faster (AMD64, ARM64, or RISC-V architecture), 2GB of memory, and 8GB of storage. Of course additional power and memory would be wonderful, and could enable much more robust services, but that's the bare minimum needed to restore service.</p>
       <h3>Limitations of Codespaces</h3>
