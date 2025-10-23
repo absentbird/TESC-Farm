@@ -1,7 +1,7 @@
 <template>
   <v-container id="maincontent" class="fluid">
   <h2>This service is unavailable due to a server outage at The Evergreen State College</h2>
-  <p>The service you are attempting to access requires hosting to function. The Evergreen State College has declined to provide any solution to this requirement, which means this system is currently unusable. Once the college solves this issue service will be restored.</p>
+  <p>The service you are attempting to access requires hosting to function. The Evergreen State College has declined to provide any solution to this requirement, which means this system is currently unusable. Once the college solves this issue, service will be restored.</p>
   <v-row v-masonry class="my-8">
     <v-col cols=12 sm=6 md=4>
       <h3>Why did this happen?</h3>
@@ -13,7 +13,7 @@
       <h3>How can service be restored?</h3>
       <p>There's a innumerable number of potential configurations, but they all fall into essentially two categories: on-site or in the cloud.</p>
       <h4>On-Campus Development Server</h4>
-      <p>By locating the server on campus there's immediate cost savings as well as recurring monthly cost savings. We already have plenty of hardware to build a viable system, all we need is permission. With a marginal investment we could buy a full rack of surplus servers if we wanted. On the other hand, on-premises systems require physical security and occasional maintenance.</p>
+      <p>By locating the server on campus there's immediate cost savings as well as recurring monthly cost savings. We already have plenty of hardware to build a viable system, so all we need is permission. With a marginal investment we could buy a full rack of surplus servers if we wanted. On the other hand, on-premises systems require physical security and occasional maintenance.</p>
       <h4>Ethical Cloud Server</h4>
       <p>By locating the server in the cloud we could benefit from guaranteed uptime and availability, as well as removing any hardware considerations from the equation. Ethical hosting solutions use renewable energy to power the server and waste no water in cooling it. The downside is that powerful servers can be expensive to rent, and affordable servers often come with limitations on compute and memory.</p>
     </v-col>
@@ -25,24 +25,31 @@
       <v-btn color="primary" class="rounded-xl mt-4" @click="petition = true">Sign the petition</v-btn>
     </v-col>
   </v-row>
-  <v-row class="my-8">
-    <v-col cols=12 sm=6>
+  <v-row>
+    <v-col cols=12 md=6>
       <h2>Why does Evergreen need a server?</h2>
-      <p>To host services like this one. For projects such as the Systems of Data &amp; The Organic Farm a server is essential.</p>
+      <p>To host services like this one; projects such as the Systems of Data &amp; The Organic Farm a server is essential.</p>
       <h3>Requirements</h3>
       <p>The computer science department needs a server to manage, store, and process data, and to provide services to other computers. It needs a minimum of two CPU cores at 1Ghz or faster (AMD64, ARM64, or RISC-V architecture), 2GB of memory, and 8GB of storage. Of course additional power and memory would be wonderful, and could enable much more robust services, but that's the bare minimum needed to restore service.</p>
-      <h3>Additional benefits of a server</h3>
-      <p></p>
       <h3>Limitations of Codespaces</h3>
-      <p>In leue</p>
-      <a href="problems-with-microsoft" @click.prevent="microsoft = true">problems with Microsoft</a>
+      <p>In lieu of a server the administration has suggested GitHub Codespaces. There are several issues with this:</p>
+      <ul class="mb-4">
+        <li>The monthly free credits are not enough to finish coursework, requiring students to pay Microsoft. Instead of Evergreen paying a marginal hosting fee, they want every computer science student to pay monthly fees instead.</li>
+        <li>The virtual environments on Codespaces are underpowered and buggy.</li>
+        <li><a href="problems-with-microsoft" @click.prevent="microsoft = true">Microsoft is problematic</a></li>
+        <li>And most importantly: <strong>Codespaces cannot host the services we need</strong>. It's only good for doing schoolwork in a laggy browser window that feeds everything you do to Chat GPT.</li>
+      </ul>
+      <h3>Additional benefits of a server</h3>
+      <p>With our own server we would have substantially more freedom, allowing different professors to host a variety of services.</p>
+      <p>A professor teaching cybersecurity could set up a development environment with simulated network infrastructure; a professor teaching parallel and distributed computing could set up an experiment networking class computers into a cluster; a professor teaching Linux could have the class log in over SSH.</p>
+
     </v-col>
-    <v-col cols=12 sm=6>
+    <v-col cols=12 md=6>
       <h2>How can I help?</h2>
       <h3>Faculty</h3>
       <p>If this issue concerns you please reach out to other faculty and/or contacts in the IT department. Since input from students is being discouraged, you may be our only hope at finding a realistic path forwards.</p>
       <h3>Students</h3>
-      <p>The administration has said they are not seeking student input on this situation, but it's still a good idea to try. Talk to your professors, <a href="sign-petition" @click.prevent="petition = true">sign the petition</a>, discuss the situation with other students, share this page.</p>
+      <p>The administration has said they are not seeking student input on this situation, but it's still a good idea to try. Talk to your professors, <a href="petition" @click.prevent="petition = true">sign the petition</a>, discuss the situation with other students, share this page.</p>
       <h3>Press</h3>
       <p>Getting the word out about this situation is vital to its timely resolution. If you have any sort of platform or audience, the students of Evergreen would appreciate your assistance in covering it.</p>
     </v-col>
@@ -51,7 +58,7 @@
   <ul>
     <li><a href="/Petition for On-Campus Development Server.pdf">Student petition for an on-campus development server</a></li>
     <li><a href="/Cloud Provider Comparison.pdf">Comparison of cloud hosting providers</a></li>
-    <li><a href="sign-petition" @click.prevent="petition = true">Online petition form</a></li>
+    <li><a href="-petition" @click.prevent="petition = true">Online petition form</a></li>
   </ul>
   <p class="mt-8">Contact <a href="mailto:shawn.bird@evergreen.edu">shawn.bird@evergreen.edu</a> with questions or comments regarding this site and the ongoing server situation.</p>
   <v-dialog v-model="petition" max-width="600">
@@ -74,7 +81,7 @@ and development tasks.
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
-        <PetitionForm/>
+        <PetitionForm @submitted="signed" />
       </v-container>
     </v-card>
   </v-dialog>
@@ -86,9 +93,24 @@ and development tasks.
     </v-card>
   </v-dialog>
   </v-container>
+  <v-snackbar
+      v-model="success"
+      :timeout="5000"
+      color="success"
+      location="top"
+      rounded="pill"
+  >
+    <h4>Petition Signed</h4>
+    Thank you for your support!
+  </v-snackbar>
 </template>
 
 <script lang="ts" setup>
 const petition = ref(false);
 const microsoft = ref(false);
+const success = ref(false);
+function signed() {
+  petition.value = false;
+  success.value = true;
+}
 </script>

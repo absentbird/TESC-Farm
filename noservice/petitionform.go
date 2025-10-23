@@ -1,10 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	_ "github.com/mattn/go-sqlite3"
-	"http"
 	"log"
+	"net/http"
 )
 
 var db *sql.DB
@@ -23,7 +24,7 @@ func main() {
 	}
 	defer db.Close()
 	http.HandleFunc("/sign-petition", handleSigning)
-	fmt.Println("Listening for petitions on port 8076...")
+	log.Println("Listening for petitions on port 8076...")
 	log.Fatal(http.ListenAndServe(":8076", nil))
 }
 
@@ -44,7 +45,7 @@ func handleSigning(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error decoding JSON: %v", err)
 		return
 	}
-	err = db.Exec("INSERT INTO signatures (name, email, comment) VALUES (?, ?, ?)", sig.name, sig.email, sig.comment)
+	_, err = db.Exec("INSERT INTO signatures (name, email, comment) VALUES (?, ?, ?)", sig.Name, sig.Email, sig.Comment)
 	if err != nil {
 		http.Error(w, "Error recording signature", http.StatusInternalServerError)
 		log.Printf("Error recording signature: %v", err)

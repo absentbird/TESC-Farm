@@ -19,8 +19,8 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/petition': RouteRecordInfo<'/petition', '/petition', Record<never, never>, Record<never, never>>,
     '/problems-with-microsoft': RouteRecordInfo<'/problems-with-microsoft', '/problems-with-microsoft', Record<never, never>, Record<never, never>>,
-    '/sign-petition': RouteRecordInfo<'/sign-petition', '/sign-petition', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -38,12 +38,12 @@ declare module 'vue-router/auto-routes' {
       routes: '/'
       views: never
     }
-    'src/pages/problems-with-microsoft.vue': {
-      routes: '/problems-with-microsoft'
+    'src/pages/petition.vue': {
+      routes: '/petition'
       views: never
     }
-    'src/pages/sign-petition.vue': {
-      routes: '/sign-petition'
+    'src/pages/problems-with-microsoft.vue': {
+      routes: '/problems-with-microsoft'
       views: never
     }
   }

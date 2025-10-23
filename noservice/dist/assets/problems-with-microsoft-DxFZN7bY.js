@@ -1,1 +1,0 @@
-import{_ as t}from"./MicrosoftSins-I07j21kB.js";import{_ as n}from"./tag-7bHABDFM.js";import{g as r}from"./VContainer-9F9ULZmI.js";import{ah as e,o as c,w as s,a}from"./index-Ew0SpQ_t.js";const _={};function i(m,f){const o=t;return c(),e(r,{id:"maincontent"},{default:s(()=>[a(o)]),_:1})}const h=n(_,[["render",i]]);export{h as default};
