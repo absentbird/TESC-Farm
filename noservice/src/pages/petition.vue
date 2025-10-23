@@ -12,6 +12,14 @@
     <div class="my-8">
       <a href="/Petition for On-Campus Development Server.pdf">Download full petition</a>
     </div>
-    <PetitionForm />
+    <PetitionForm @submitted="gohome" />
   </v-container>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const gohome = () => {
+  router.push('/');
+}
+</script>
