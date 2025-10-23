@@ -24,8 +24,8 @@ func main() {
 	}
 	defer db.Close()
 	http.HandleFunc("/sign-petition", handleSigning)
-	log.Println("Listening for petitions on port 8076...")
-	log.Fatal(http.ListenAndServe(":8076", nil))
+	log.Println("Listening for petitions on port 8075...")
+	log.Fatal(http.ListenAndServe(":8075", nil))
 }
 
 func handleSigning(w http.ResponseWriter, r *http.Request) {
