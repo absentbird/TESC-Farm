@@ -11,7 +11,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    MicrosoftSins: typeof import('./components/MicrosoftSins.vue')['default']
+    PetitionForm: typeof import('./components/PetitionForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SiteFooter: typeof import('./components/SiteFooter.vue')['default']

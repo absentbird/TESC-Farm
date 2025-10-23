@@ -1,0 +1,8 @@
+DROP TABLE signatures;
+CREATE TABLE IF NOT EXISTS signatures (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    comment TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);

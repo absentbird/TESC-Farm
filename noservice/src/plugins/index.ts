@@ -8,6 +8,7 @@
 import vuetify from './vuetify'
 import pinia from '../stores'
 import router from '../router'
+import { VueMasonryPlugin } from "vue-masonry";
 
 // Types
 import type { App } from 'vue'
@@ -17,4 +18,5 @@ export function registerPlugins (app: App) {
     .use(vuetify)
     .use(router)
     .use(pinia)
+    .use(VueMasonryPlugin)
 }
