@@ -11,7 +11,7 @@
     </v-col>
     <v-col cols=12 sm=6 md=4>
       <h3>How can service be restored?</h3>
-      <p>There's a innumerable number of potential configurations, but they all fall into essentially two categories: on-site or in the cloud.</p>
+      <p>There's an innumerable number of potential configurations, but they all fall into essentially two categories: on-site or in the cloud.</p>
       <h4>On-Campus Development Server</h4>
       <p>By locating the server on campus there's immediate cost savings as well as recurring monthly cost savings. We already have plenty of hardware to build a viable system, so all we need is permission. With a marginal investment we could buy a full rack of surplus servers if we wanted. On the other hand, on-premises systems require physical security and occasional maintenance.</p>
       <h4>Ethical Cloud Server</h4>
