@@ -77,6 +77,5 @@ func AuthTest(c *gin.Context) {
 	if !exists {
 		status = "unauthorized"
 	}
-
 	c.JSON(http.StatusOK, gin.H{"status": status})
 }

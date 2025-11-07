@@ -342,6 +342,9 @@ const clockOn = async (taskID: number) => {
     snackbar.value = true;
     console.log(response);
   }
+  if (hash.value == "") {
+    setHash();
+  }
   updateWorking();
 };
 const clockOff = async () => {
@@ -377,8 +380,6 @@ onMounted(() => {
   if (!anumber.value) {
     anumber.value = Math.floor(Math.random() * 1000000000);
     localStorage.setItem("anumber", anumber.value);
-    editanum.value = false;
-    setHash();
   } else {
     anumCheck();
     setHash();
