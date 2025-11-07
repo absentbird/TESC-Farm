@@ -1,0 +1,7 @@
+Host: "127.0.0.1"
+Internal_Port: "8078"
+Database_Connection: "$PRODDBCONN"
+Worker_Token: "$WORKERTOKEN"
+Worker_Hash: "$WORKERHASH"
+Admin_Token: "$ADMINTOKEN"
+Admin_Hash: "$ADMINHASH"
