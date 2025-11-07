@@ -375,7 +375,10 @@ let intervalID;
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
   if (!anumber.value) {
-    editanum.value = true;
+    anumber.value = Math.floor(Math.random() * 1000000000);
+    localStorage.setItem("anumber", anumber.value);
+    editanum.value = false;
+    setHash();
   } else {
     anumCheck();
     setHash();
