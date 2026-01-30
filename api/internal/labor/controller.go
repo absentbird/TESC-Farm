@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"github.com/absentbird/TESC-Farm/internal/util"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
@@ -190,8 +191,9 @@ func AddWorker(c *gin.Context) {
 		return
 	}
 	//Hashes A number
-	hashed_a_num := hashANum(record.Barcode)
-	record.Barcode = hashed_a_num
+	//hashed_a_num := hashANum(record.Barcode)
+	record.Barcode = uuid.New()
+	while
 	util.DB.Create(&record)
 	c.JSON(http.StatusOK, record)
 }
