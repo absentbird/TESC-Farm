@@ -1,0 +1,24 @@
+{
+  "name": "vue-masonry",
+  "description": "masonry layout for vue.js",
+  "version": "0.10.16",
+  "main": "index.js",
+  "authors": [
+    "Mikhail Kuznetcov"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "masonry",
+    "layout",
+    "vue",
+    "vue.js"
+  ],
+  "homepage": "https://github.com/shershen08/vue-masonry",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
