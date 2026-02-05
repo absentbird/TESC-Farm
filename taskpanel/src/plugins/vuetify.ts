@@ -44,6 +44,19 @@ export default createVuetify({
           success: "#466860",
         },
       },
-    },
+    powderpuff: {
+        colors: {
+          background: "#f5c3ee",
+          "on-background": "#2a0824",
+          primary: "#8f288f",
+          secondary: "#684666",
+          accent: "#517dc4",
+          error: "#c051c4",
+          warning: "#493ab7",
+          info: "#8f284f",
+          success: "#466468",
+        }
+      }
+    }
   },
 });

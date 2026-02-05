@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/absentbird/TESC-Farm/internal/harvest"
 	"github.com/absentbird/TESC-Farm/internal/util"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -244,19 +245,44 @@ func DeleteWorker(c *gin.Context) {
 }
 
 func AddTask(c *gin.Context) {
-	record := Task{}
+	type NewTask struct {
+		Task
+		CropID uint `json:"crop_id,omitempty"`
+	}
+	record := NewTask{}
 	if err := c.ShouldBindJSON(&record); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 		return
 	}
-	for _, tag := range record.Tags {
+	task := record.Task
+	if record.CropID != 0 {
+		switch record.TypeID {
+		case 2: //harvest
+			h := harvest.Harvest{}
+			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
+				return
+			}
+			task.HarvestID = h.ID
+		case 1: //preharvest
+			ph := harvest.Planting{}
+			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
+				return
+			}
+			task.PlantingID = ph.ID
+		default:
+			c.JSON(http.StatusBadRequest, gin.H{"error:": "Invalid task type"})
+		}
+	}
+	for _, tag := range task.Tags {
 		if err := util.DB.FirstOrCreate(&tag, util.Tag{Name: tag.Name}).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 			return
 		}
 	}
-	util.DB.Create(&record)
-	c.JSON(http.StatusOK, record)
+	util.DB.Create(&task)
+	c.JSON(http.StatusOK, task)
 }
 
 func GetTask(c *gin.Context) {
@@ -275,6 +301,25 @@ func AllTasks(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, records)
+}
+
+func AllTaskTypes(c *gin.Context) {
+	records := []TaskType{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, records)
+}
+
+func AddTaskType(c *gin.Context) {
+	record := TaskType{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
 }
 
 func UpdateTask(c *gin.Context) {

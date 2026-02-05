@@ -3,21 +3,22 @@ import { ref } from 'vue'
 const drawer = ref(true)
 const items = ref([
   {
-    title: 'Dashboard',
+    title: 'Crops',
     prependIcon: 'mdi-view-dashboard-outline',
     link: true,
     to: '/',
   },
   {
-    title: 'Team',
+    title: 'Hours',
     prependIcon: 'mdi-account-group',
     link: true,
-    to: '/team',
+    to: '/hours',
   },
   {
-    title: 'Projects',
+    title: 'Tasks',
     prependIcon: 'mdi-briefcase-outline',
     link: true,
+    to: '/tasks',
   },
   {
     title: 'Calendar',
@@ -59,7 +60,7 @@ const items = ref([
       flat
     >
       <v-app-bar-nav-icon
-        v-if="$vuetify.display.smAndDown"
+        v-if="$vuetify.display.mdAndDown"
         @click="drawer = !drawer"
       />
       <slot name="search" />

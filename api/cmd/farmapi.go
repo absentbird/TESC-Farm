@@ -61,6 +61,8 @@ func main() {
 	auth.POST("/task/:id/update", labor.UpdateTask)
 	auth.POST("/task/:id/delete", labor.DeleteTask)
 	auth.POST("/task/new", labor.AddTask)
+	r.GET("/tasktypes", labor.AllTaskTypes)
+	auth.POST("/tasktype/new", labor.AddTaskType)
 	r.GET("/workers", labor.AllWorkers)
 	r.GET("/worker/:id", labor.GetWorker)
 	r.GET("/worker/:id/hours", labor.GetWorkerHours)
@@ -72,6 +74,7 @@ func main() {
 	// Harvest endpoints
 	r.GET("/areas", harvest.AllAreas)
 	r.GET("/areas/:id", harvest.GetArea)
+	auth.POST("/area/new", harvest.AddArea)
 	r.GET("/beds", harvest.AllBeds)
 	r.GET("/beds/:id", harvest.GetBed)
 	r.GET("/crops", harvest.AllCrops)
