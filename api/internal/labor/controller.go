@@ -12,8 +12,8 @@ import (
 	"time"
 )
 
-func hashANum(anum string) string {
-	bytenum := []byte(anum)
+func hashUid(uid string) string {
+	bytenum := []byte(uid)
 	hash := sha256.New()
 	hash.Write(bytenum)
 	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
@@ -70,13 +70,13 @@ func AddPunch(c *gin.Context) {
 	if punch.TaskID < 0 {
 		punch.TaskID = 0
 	}
-	anum := hashANum(punch.Barcode)
+	uid := hashUid(punch.Barcode)
 	last := Hours{}
 	newWorker := false
-	if err := util.DB.InnerJoins("Worker", util.DB.Where(&Worker{Barcode: anum})).Order("Start desc").First(&last).Error; err != nil {
+	if err := util.DB.InnerJoins("Worker", util.DB.Where(&Worker{Barcode: uid})).Order("Start desc").First(&last).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			worker := Worker{}
-			worker.Barcode = anum
+			worker.Barcode = uid
 			util.DB.Create(&worker)
 			last.WorkerID = worker.ID
 			newWorker = true
@@ -158,7 +158,7 @@ func LookupWorker(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	hashed_a_num := hashANum(lookup.Barcode)
+	hashed_a_num := hashUid(lookup.Barcode)
 	record := Worker{}
 	if err := util.DB.Where("Barcode = ?", hashed_a_num).First(&record).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -190,8 +190,7 @@ func AddWorker(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	//Hashes A number
-	//hashed_a_num := hashANum(record.Barcode)
+	hashed_uid := hashUid(record.Barcode)
 	record.Barcode = uuid.New()
 	while
 	util.DB.Create(&record)
