@@ -190,9 +190,11 @@ func AddWorker(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	hashed_uid := hashUid(record.Barcode)
-	record.Barcode = uuid.New()
-	while
+	if len(record.Barcode) > 0 {
+		record.Barcode = hashUid(record.Barcode)
+	} else {
+		record.Barcode = hashUid(base64.StdEncoding.EncodeToString(uuid.New()))
+	}
 	util.DB.Create(&record)
 	c.JSON(http.StatusOK, record)
 }
