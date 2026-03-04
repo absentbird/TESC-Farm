@@ -24,6 +24,14 @@ type Hours struct {
 	Notes      string    `json:"notes"`
 }
 
+type Team struct {
+	gorm.Model
+	Start   time.Time `json:"start"`
+	Count   uint      `json:"count"`
+	Hours   *Hours    `json:"hours,omitempty"`
+	HoursID uint      `json:"hours_id"`
+}
+
 type Task struct {
 	gorm.Model
 	Name        string            `json:"name"`

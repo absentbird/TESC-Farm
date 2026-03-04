@@ -19,6 +19,20 @@ func hashUid(uid string) string {
 	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
 }
 
+func getWorker(uid string) (worker Worker, last Hours) {
+	if err := util.DB.InnerJoins("Worker", util.DB.Where(&Worker{Barcode: uid})).Order("Start desc").First(&last).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			worker := Worker{}
+			worker.Barcode = uid
+			util.DB.Create(&worker)
+			last.WorkerID = worker.ID
+		} else {
+			return
+		}
+	}
+	return
+}
+
 // Hours
 func AllHours(c *gin.Context) {
 	records := []Hours{}
@@ -71,21 +85,8 @@ func AddPunch(c *gin.Context) {
 		punch.TaskID = 0
 	}
 	uid := hashUid(punch.Barcode)
-	last := Hours{}
-	newWorker := false
-	if err := util.DB.InnerJoins("Worker", util.DB.Where(&Worker{Barcode: uid})).Order("Start desc").First(&last).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			worker := Worker{}
-			worker.Barcode = uid
-			util.DB.Create(&worker)
-			last.WorkerID = worker.ID
-			newWorker = true
-		} else {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-	}
-	if last.Duration == 0 && !newWorker {
+	_, last := getWorker(uid)
+	if last.Duration == 0 {
 		last.Duration = time.Now().Sub(last.Start).Hours()
 		util.DB.Save(&last)
 	}
@@ -100,6 +101,52 @@ func AddPunch(c *gin.Context) {
 	record.TaskID = uint(punch.TaskID)
 	util.DB.Create(&record)
 	c.JSON(http.StatusOK, record)
+}
+
+func TeamPunch(c *gin.Context) {
+	type ScanPunch struct {
+		Barcode string `json:"barcode"`
+		Count   uint   `json:"count"`
+		TaskID  uint   `json:"task,omitempty"`
+	}
+	punch := ScanPunch{}
+	if err := c.ShouldBindJSON(&punch); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if punch.TaskID < 0 {
+		punch.TaskID = 0
+	}
+	uid := hashUid(punch.Barcode)
+	worker, last := getWorker(uid)
+
+	// if the task is the same, update the people working on it
+	if punch.TaskID == last.TaskID {
+		team := Team{}
+		team.Start = time.Now()
+		team.Count = punch.Count
+		team.HoursID = last.ID
+		util.DB.Create(&team)
+		c.JSON(http.StatusOK, team)
+		return
+		// If already tracking a task, stop it first
+	} else if last.Duration == 0 {
+		last.Duration = time.Now().Sub(last.Start).Hours()
+		util.DB.Save(&last)
+	}
+	// If punching in, create a new record for the new punch
+	hours := Hours{}
+	hours.Start = time.Now()
+	hours.Duration = 0
+	hours.WorkerID = worker.ID
+	hours.TaskID = uint(punch.TaskID)
+	util.DB.Create(&hours)
+	team := Team{}
+	team.Start = time.Now()
+	team.Count = punch.Count
+	team.HoursID = hours.ID
+	util.DB.Create(&team)
+	c.JSON(http.StatusOK, team)
 }
 
 func UpdateHours(c *gin.Context) {
@@ -193,7 +240,8 @@ func AddWorker(c *gin.Context) {
 	if len(record.Barcode) > 0 {
 		record.Barcode = hashUid(record.Barcode)
 	} else {
-		record.Barcode = hashUid(base64.StdEncoding.EncodeToString(uuid.New()))
+		uid := uuid.New()
+		record.Barcode = hashUid(base64.StdEncoding.EncodeToString(uid[:]))
 	}
 	util.DB.Create(&record)
 	c.JSON(http.StatusOK, record)

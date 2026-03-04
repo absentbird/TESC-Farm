@@ -29,8 +29,8 @@ func main() {
 	if conf.Mode == "development" {
 		r.Use(cors.New(cors.Config{
 			AllowOrigins:     []string{"http://localhost:3000"},
-			AllowMethods:     []string{"GET", "PUSH"},
-			AllowHeaders:     []string{"Origin"},
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+			AllowHeaders:     []string{"*"},
 			AllowCredentials: true,
 		}))
 	}
@@ -52,6 +52,7 @@ func main() {
 	auth.POST("/hours/:id/delete", labor.DeleteHours)
 	auth.POST("/hours/new", labor.AddHours)
 	auth.POST("/hours/punch", labor.AddPunch)
+	auth.POST("/hours/team/punch", labor.TeamPunch)
 	r.GET("/tasks", labor.AllTasks)
 	r.GET("/task/:id", labor.GetTask)
 	auth.POST("/task/:id/update", labor.UpdateTask)
