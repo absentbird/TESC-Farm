@@ -3,7 +3,6 @@
     <v-dialog v-model="settings">
       <v-card class="ma-auto w-100" max-width="400" prepend-icon="mdi-settings">
         <v-card-title>Settings</v-card-title>
-        <v-card-subtitle>Set your A# to track tasks</v-card-subtitle>
         <v-card-item>
           <v-text-field
             id="anum"
@@ -12,7 +11,7 @@
             v-model="anumber"
             @input="anumCheck"
             @keyup.enter="submitAnum"
-            hint="Enter a unique identifier"
+            hint="Enter a unique identifier (optional)"
             label="Unique ID"
           ></v-text-field>
         </v-card-item>
@@ -28,6 +27,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-row
+      v-if="leader"
+      id="team"
+      class="align-self-start d-flex w-100 flex-grow-0"
+    >
+      <v-number-input
+        v-model="team"
+        :reverse="false"
+        label="Team Size"
+        :hideInput="false"
+        :inset="false"
+        @change="updateTeam"
+      ></v-number-input>
+    </v-row>
     <v-row id="filters" class="align-self-start d-flex w-100 flex-grow-0">
       <v-col cols="9" sm="4" md="7">
         <v-text-field
@@ -127,6 +140,8 @@ definePage({
 const settings: Ref<boolean> = ref(false);
 const loading: Ref<boolean> = ref(false);
 const showall: Ref<boolean> = ref(false);
+const leader: Ref<boolean> = ref(false);
+const team: Ref<number> = ref(1);
 const selectedTags: Ref<Array<string>> = ref([]);
 const search: Ref<string> = ref("");
 const anumber: Ref<string> = ref("");
@@ -176,6 +191,10 @@ const selectTask = (taskID: number) => {
   } else {
     clockOff();
   }
+};
+const updateTeam = () => {
+  console.log(team.value);
+  return;
 };
 const getTasks = async () => {
   loading.value = true;
