@@ -149,6 +149,65 @@ func DeleteHours(c *gin.Context) {
 	c.JSON(http.StatusOK, record)
 }
 
+// Teams
+func AllTeams(c *gin.Context) {
+	records := []Team{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, records)
+
+}
+
+func GetTeam(c *gin.Context) {
+	record := Team{}
+	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, record)
+
+}
+
+func AddTeam(c *gin.Context) {
+	record := Team{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+func UpdateTeam(c *gin.Context) {
+	record := Team{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	record.ID = uint(id)
+	util.DB.Save(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+func DeleteTeam(c *gin.Context) {
+	record := Team{}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	record.ID = uint(id)
+	util.DB.Delete(&record)
+	c.JSON(http.StatusOK, record)
+}
+
 // Workers
 func AllWorkers(c *gin.Context) {
 	records := []Worker{}
