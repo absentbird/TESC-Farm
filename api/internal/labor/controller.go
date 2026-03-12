@@ -27,6 +27,7 @@ func AllHours(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	// TODO: Also get teams and multiply the hours
 	c.JSON(http.StatusOK, records)
 }
 
@@ -44,6 +45,25 @@ func GetWorking(c *gin.Context) {
 	if err := util.DB.Preload("Worker").Preload("Task").Preload("Task.Area").Preload("Task.Tags").Preload("Task.Planting").Preload("Task.Planting.Crop").Preload("Task.Planting.Bed").Preload("Task.Planting.Bed.Area").Preload("Task.Harvest").Preload("Task.Harvest.Crop").Preload("Task.Harvest.Bed").Preload("Task.Harvest.Bed.Area").Preload("Task.Process").Preload("Task.Process.Harvest").Preload("Task.Process.Harvest.Crop").Preload("Task.Process.Harvest.Bed").Preload("Task.Process.Harvest.Bed.Area").Preload("Task.Process.Product").Where("Duration = ?", 0).Find(&records).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+	// TODO: Add teams into return
+	teams := []Team{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	found := map[int]Hours{}
+	for _, r := range records {
+		found[r.ID] = r
+	}
+	for _, t := range teams {
+		if _, ok := found[t.HoursID]; ok {
+			for n := range t.Count {
+				h := found[t.HoursID]
+				h.Notes = "Team member #" + strconv.Itoa(n+1)
+				records = append(records, h)
+			}
+		}
 	}
 	c.JSON(http.StatusOK, records)
 }
