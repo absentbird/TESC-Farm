@@ -1,13 +1,18 @@
 package util
 
 import (
-	"gorm.io/gorm"
 	"log"
+
+	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-var WorkerToken string
-var WorkerHash string
+var (
+	DB          *gorm.DB
+	WorkerToken string
+	WorkerHash  string
+	AdminToken  string
+	AdminHash   string
+)
 
 // Create a shorthand function to check for errors
 func Check(e error, m string) {

@@ -22,6 +22,9 @@ func main() {
 	util.DB = db.ConnectDB(conf.DBConn)
 	util.WorkerToken = conf.WToken
 	util.WorkerHash = conf.WHash
+	util.AdminToken = conf.AToken
+	util.AdminHash = conf.AHash
+
 	if conf.Mode == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -45,6 +48,7 @@ func main() {
 	auth.GET("/auth", util.AuthTest)
 
 	// Labor endpoints
+	// - Hours
 	r.GET("/hours", labor.AllHours)
 	r.GET("/hours/:id", labor.GetHours)
 	r.GET("/hours/working", labor.GetWorking)
@@ -52,12 +56,22 @@ func main() {
 	auth.POST("/hours/:id/delete", labor.DeleteHours)
 	auth.POST("/hours/new", labor.AddHours)
 	auth.POST("/hours/punch", labor.AddPunch)
-	auth.POST("/hours/team/punch", labor.TeamPunch)
+	auth.GET("/hours/punchoutall", labor.PunchOutAll)
+	// - Teams
+	r.GET("/teams", labor.AllTeams)
+	r.GET("/team/:id", labor.GetTeam)
+	auth.POST("/team/:id/update", labor.UpdateTeam)
+	auth.POST("/team/:id/delete", labor.DeleteTeam)
+	auth.POST("/team/new", labor.AddTeam)
+	// - Tasks
 	r.GET("/tasks", labor.AllTasks)
 	r.GET("/task/:id", labor.GetTask)
 	auth.POST("/task/:id/update", labor.UpdateTask)
 	auth.POST("/task/:id/delete", labor.DeleteTask)
 	auth.POST("/task/new", labor.AddTask)
+	r.GET("/tasktypes", labor.AllTaskTypes)
+	auth.POST("/tasktype/new", labor.AddTaskType)
+	// - Workers
 	r.GET("/workers", labor.AllWorkers)
 	r.GET("/worker/:id", labor.GetWorker)
 	r.GET("/worker/:id/hours", labor.GetWorkerHours)
@@ -67,10 +81,14 @@ func main() {
 	auth.POST("/worker/new", labor.AddWorker)
 
 	// Harvest endpoints
+	// - Areas
 	r.GET("/areas", harvest.AllAreas)
 	r.GET("/areas/:id", harvest.GetArea)
+	auth.POST("/area/new", harvest.AddArea)
+	// - Beds
 	r.GET("/beds", harvest.AllBeds)
 	r.GET("/beds/:id", harvest.GetBed)
+	// - Crops
 	r.GET("/crops", harvest.AllCrops)
 	r.GET("/crop/:id", harvest.GetCrop)
 	r.GET("/crop/:id/plantings", harvest.GetCropPlantings)
@@ -79,17 +97,20 @@ func main() {
 	auth.POST("/crop/:id/update", harvest.UpdateCrop)
 	auth.POST("/crop/:id/delete", harvest.DeleteCrop)
 	auth.POST("/crop/new", harvest.AddCrop)
+	// - Plantings
 	r.GET("/plantings", harvest.AllPlantings)
 	r.GET("/planting/:id", harvest.GetPlanting)
 	auth.POST("/planting/:id/update", harvest.UpdatePlanting)
 	auth.POST("/planting/:id/delete", harvest.DeletePlanting)
 	auth.POST("/planting/new", harvest.AddPlanting)
+	// - Harvests
 	r.GET("/harvests", harvest.AllHarvests)
 	r.GET("/harvest/:id", harvest.GetHarvest)
 	r.GET("/harvest/:id/processing", harvest.GetHarvestProcessing)
 	auth.POST("/harvest/:id/update", harvest.UpdateHarvest)
 	auth.POST("/harvest/:id/delete", harvest.DeleteHarvest)
 	auth.POST("/harvest/new", harvest.AddHarvest)
+	// - Processing
 	r.GET("/processing", harvest.AllProcessing)
 	r.GET("/process/:id", harvest.GetProcessing)
 	auth.POST("/process/:id/update", harvest.UpdateProcessing)
@@ -98,12 +119,14 @@ func main() {
 	r.GET("/bin/:bin/harvest", harvest.GetBinHarvest)
 
 	// Sales Endpoints
+	// - Products
 	r.GET("/products", sales.AllProducts)
 	r.GET("/product/:id", sales.GetProduct)
 	r.GET("/product/:id/sales", sales.GetProductSales)
 	auth.POST("/product/:id/update", sales.UpdateProduct)
 	auth.POST("/product/:id/delete", sales.DeleteProduct)
 	auth.POST("/product/new", sales.AddProduct)
+	// - Sales
 	r.GET("/sales", sales.AllSales)
 	r.GET("/sale/:id", sales.GetSale)
 	auth.POST("/sale/:id/update", sales.UpdateSale)

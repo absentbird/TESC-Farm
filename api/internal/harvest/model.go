@@ -10,7 +10,6 @@ type Area struct {
 	gorm.Model
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Use         string `json:"use"`
 }
 
 type Bed struct {
@@ -60,4 +59,10 @@ type Process struct {
 	HarvestID  uint           `json:"harvest_id"`
 	Product    *sales.Product `json:"product,omitempty"`
 	ProductID  uint           `json:"product_id"`
+}
+
+type Postharvest struct {
+	gorm.Model
+	Harvest   *Harvest `json:"harvest,omitempty"`
+	HarvestID uint     `json:"harvest_id"`
 }

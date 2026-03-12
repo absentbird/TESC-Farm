@@ -1,11 +1,12 @@
 package util
 
 import (
-	"gopkg.in/yaml.v3"
-	"gorm.io/gorm"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v3"
+	"gorm.io/gorm"
 )
 
 type Config struct {
@@ -16,6 +17,8 @@ type Config struct {
 	DBConn string `yaml:"Database_Connection"`
 	WToken string `yaml:"Worker_Token"`
 	WHash  string `yaml:"Worker_Hash"`
+	AToken string `yaml:"Admin_Token"`
+	AHash  string `yaml:"Admin_Hash"`
 }
 
 func (s *Config) Load(prodconf string, devconf string) {

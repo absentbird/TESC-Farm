@@ -9,15 +9,16 @@ const items = ref([
     to: "/",
   },
   {
-    title: "Team",
-    prependIcon: "mdi-account-group",
+    title: 'Hours',
+    prependIcon: 'mdi-account-group',
     link: true,
-    to: "/team",
+    to: '/hours',
   },
   {
-    title: "Projects",
-    prependIcon: "mdi-briefcase-outline",
+    title: 'Tasks',
+    prependIcon: 'mdi-briefcase-outline',
     link: true,
+    to: '/tasks',
   },
   {
     title: "Calendar",
@@ -50,7 +51,7 @@ const items = ref([
 
     <v-app-bar border="b" class="ps-4" flat>
       <v-app-bar-nav-icon
-        v-if="$vuetify.display.smAndDown"
+        v-if="$vuetify.display.mdAndDown"
         @click="drawer = !drawer"
       />
       <slot name="search" />

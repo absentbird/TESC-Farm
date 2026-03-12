@@ -26,6 +26,16 @@ func GetArea(c *gin.Context) {
 	c.JSON(http.StatusOK, record)
 }
 
+func AddArea(c *gin.Context) {
+	record := Area{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
+}
+
 // Beds
 func AllBeds(c *gin.Context) {
 	records := []Bed{}

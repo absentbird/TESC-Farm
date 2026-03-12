@@ -1,7 +1,7 @@
 # TESC-Farm
 The Evergreen State College Organic Farm Computer Science Project
 
-![Top-down map of the farm with the wash station and farm hub highlighted](documents/src/Farm-Diagram.png)
+![Top-down map of the farm with the wash station and farm hub highlighted](documents/farm-project/Farm-Diagram.png)
 
 ## Collaborative Farm Proposal
 
@@ -359,13 +359,13 @@ data.
     charged.
 
 # Systems Overview
-![Diagram of the network showing how data flows through the system](documents/src/Network-Diagram.png)
+![Diagram of the network showing how data flows through the system](documents/farm-project/Network-Diagram.png)
 
 ## Database
-![Diagram of database including tables and their relationships](documents/src/Data-Diagram.png)
+![Diagram of database including tables and their relationships](documents/farm-project/Data-Diagram.png)
 
 ## Server
-![Diagram of server software and how it interacts](documents/src/Server-Diagram.png)
+![Diagram of server software and how it interacts](documents/farm-project/Server-Diagram.png)
 
 ## API
 Compiled API written in Go to collect data for labor, harvests, and sales.

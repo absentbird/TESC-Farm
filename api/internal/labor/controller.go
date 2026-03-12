@@ -10,6 +10,11 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/absentbird/TESC-Farm/internal/harvest"
+	"github.com/absentbird/TESC-Farm/internal/util"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func hashUid(uid string) string {
@@ -40,6 +45,7 @@ func AllHours(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	// TODO: Also get teams and multiply the hours
 	c.JSON(http.StatusOK, records)
 }
 
@@ -57,6 +63,25 @@ func GetWorking(c *gin.Context) {
 	if err := util.DB.Preload("Worker").Preload("Task").Preload("Task.Area").Preload("Task.Tags").Preload("Task.Planting").Preload("Task.Planting.Crop").Preload("Task.Planting.Bed").Preload("Task.Planting.Bed.Area").Preload("Task.Harvest").Preload("Task.Harvest.Crop").Preload("Task.Harvest.Bed").Preload("Task.Harvest.Bed.Area").Preload("Task.Process").Preload("Task.Process.Harvest").Preload("Task.Process.Harvest.Crop").Preload("Task.Process.Harvest.Bed").Preload("Task.Process.Harvest.Bed.Area").Preload("Task.Process.Product").Where("Duration = ?", 0).Find(&records).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+	// TODO: Add teams into return
+	teams := []Team{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	found := map[int]Hours{}
+	for _, r := range records {
+		found[r.ID] = r
+	}
+	for _, t := range teams {
+		if _, ok := found[t.HoursID]; ok {
+			for n := range t.Count {
+				h := found[t.HoursID]
+				h.Notes = "Team member #" + strconv.Itoa(n+1)
+				records = append(records, h)
+			}
+		}
 	}
 	c.JSON(http.StatusOK, records)
 }
@@ -103,6 +128,7 @@ func AddPunch(c *gin.Context) {
 	c.JSON(http.StatusOK, record)
 }
 
+<<<<<<< HEAD
 func TeamPunch(c *gin.Context) {
 	type ScanPunch struct {
 		Barcode string `json:"barcode"`
@@ -147,6 +173,24 @@ func TeamPunch(c *gin.Context) {
 	team.HoursID = hours.ID
 	util.DB.Create(&team)
 	c.JSON(http.StatusOK, team)
+=======
+func PunchOutAll(c *gin.Context) {
+	status, _ := c.Get("username")
+	if status != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Insufficient permissions"})
+		return
+	}
+	records := []Hours{}
+	if err := util.DB.Preload("Worker").Preload("Task").Preload("Task.Area").Preload("Task.Tags").Preload("Task.Planting").Preload("Task.Planting.Crop").Preload("Task.Planting.Bed").Preload("Task.Planting.Bed.Area").Preload("Task.Harvest").Preload("Task.Harvest.Crop").Preload("Task.Harvest.Bed").Preload("Task.Harvest.Bed.Area").Preload("Task.Process").Preload("Task.Process.Harvest").Preload("Task.Process.Harvest.Crop").Preload("Task.Process.Harvest.Bed").Preload("Task.Process.Harvest.Bed.Area").Preload("Task.Process.Product").Where("Duration = ?", 0).Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	for _, w := range records {
+		w.Duration = time.Now().Sub(w.Start).Hours()
+		util.DB.Save(&w)
+	}
+	c.JSON(http.StatusOK, records)
+>>>>>>> main
 }
 
 func UpdateHours(c *gin.Context) {
@@ -167,6 +211,65 @@ func UpdateHours(c *gin.Context) {
 
 func DeleteHours(c *gin.Context) {
 	record := Hours{}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	record.ID = uint(id)
+	util.DB.Delete(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+// Teams
+func AllTeams(c *gin.Context) {
+	records := []Team{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, records)
+
+}
+
+func GetTeam(c *gin.Context) {
+	record := Team{}
+	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, record)
+
+}
+
+func AddTeam(c *gin.Context) {
+	record := Team{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+func UpdateTeam(c *gin.Context) {
+	record := Team{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	record.ID = uint(id)
+	util.DB.Save(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+func DeleteTeam(c *gin.Context) {
+	record := Team{}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -276,19 +379,44 @@ func DeleteWorker(c *gin.Context) {
 }
 
 func AddTask(c *gin.Context) {
-	record := Task{}
+	type NewTask struct {
+		Task
+		CropID uint `json:"crop_id,omitempty"`
+	}
+	record := NewTask{}
 	if err := c.ShouldBindJSON(&record); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 		return
 	}
-	for _, tag := range record.Tags {
+	task := record.Task
+	if record.CropID != 0 {
+		switch record.TypeID {
+		case 2: //harvest
+			h := harvest.Harvest{}
+			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&h, harvest.Harvest{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
+				return
+			}
+			task.HarvestID = h.ID
+		case 1: //preharvest
+			ph := harvest.Planting{}
+			if err := util.DB.Preload("Bed").Order("created_at desc").FirstOrCreate(&ph, harvest.Planting{CropID: record.CropID, Bed: &harvest.Bed{AreaID: record.AreaID}}).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
+				return
+			}
+			task.PlantingID = ph.ID
+		default:
+			c.JSON(http.StatusBadRequest, gin.H{"error:": "Invalid task type"})
+		}
+	}
+	for _, tag := range task.Tags {
 		if err := util.DB.FirstOrCreate(&tag, util.Tag{Name: tag.Name}).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 			return
 		}
 	}
-	util.DB.Create(&record)
-	c.JSON(http.StatusOK, record)
+	util.DB.Create(&task)
+	c.JSON(http.StatusOK, task)
 }
 
 func GetTask(c *gin.Context) {
@@ -307,6 +435,25 @@ func AllTasks(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, records)
+}
+
+func AllTaskTypes(c *gin.Context) {
+	records := []TaskType{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, records)
+}
+
+func AddTaskType(c *gin.Context) {
+	record := TaskType{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
 }
 
 func UpdateTask(c *gin.Context) {

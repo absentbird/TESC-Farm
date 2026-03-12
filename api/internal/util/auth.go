@@ -1,9 +1,10 @@
 package util
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"net/http"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -19,7 +20,12 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "No token provided"})
 			return
 		}
-		if token != WorkerToken {
+		switch token {
+		case WorkerToken:
+			c.Set("username", "worker")
+		case AdminToken:
+			c.Set("username", "admin")
+		default:
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return
 		}
@@ -37,16 +43,28 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error parsing JSON"})
 		return
 	}
-	if input.Username != "worker" {
+	var token string
+	switch input.Username {
+	case "worker":
+		if err := bcrypt.CompareHashAndPassword([]byte(WorkerHash), []byte(input.Password)); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"result": "Invalid credentials"})
+			return
+		}
+		token = WorkerToken
+
+	case "admin":
+		if err := bcrypt.CompareHashAndPassword([]byte(AdminHash), []byte(input.Password)); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"result": "Invalid credentials"})
+			return
+		}
+		token = AdminToken
+
+	default:
 		c.JSON(http.StatusBadRequest, gin.H{"result": "Invalid credentials"})
 		return
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(WorkerHash), []byte(input.Password)); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"result": "Invalid credentials"})
-		return
-	}
-	c.SetCookie("token", WorkerToken, 6652800, "/", "", true, true)
-	c.JSON(http.StatusOK, gin.H{"token": WorkerToken})
+	c.SetCookie("token", token, 6652800, "/", "", true, true)
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 func Logout(c *gin.Context) {
@@ -55,5 +73,10 @@ func Logout(c *gin.Context) {
 }
 
 func AuthTest(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "Authorized"})
+	status, exists := c.Get("username")
+	if !exists {
+		status = "unauthorized"
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": status})
 }

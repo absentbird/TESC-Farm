@@ -130,176 +130,76 @@
 </template>
 
 <script lang="ts" setup>
-import focusFilter from "@/assets/tasklist.js";
+// Imports
+import { apicall } from "@/composables/apicall";
+import focusFilter from "@/assets/tasklist"
+import type { Task, Punch } from "@/types/apibinds";
+
+// Meta Information
 definePage({
   meta: {
     requiresAuth: "true",
   },
 });
 
-const settings: Ref<boolean> = ref(false);
-const loading: Ref<boolean> = ref(false);
-const showall: Ref<boolean> = ref(false);
-const leader: Ref<boolean> = ref(false);
-const team: Ref<number> = ref(1);
-const selectedTags: Ref<Array<string>> = ref([]);
-const search: Ref<string> = ref("");
-const anumber: Ref<string> = ref("");
-const hash: Ref<string> = ref("");
+// Routing
+const router = useRouter();
+const route = useRoute();
+
+// Refs
 const selected: Ref<number> = ref(0);
-const result: Ref<string> = ref("mdi-form-textbox");
-const snackbar: Ref<boolean> = ref(false);
-const snackcolor: Ref<string> = ref("error");
-const flash: Ref<string> = ref("");
-const taskdata = ref({});
-const workingdata = ref({});
-const tasktags = computed(() => {
-  const tags: Set<string> = new Set();
-  for (const task of Array.from(taskdata.value)) {
-    for (const tag of task.tags) {
-      tags.add(tag.name);
+const hash: Ref<string> = ref("");
+const anumber: Ref<string | any> = ref("");
+const taskData: Ref<Array<Task>> = ref(Array());
+
+// Functions
+const updateWorking = async () => {
+  const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
+  const workingData: { number: number } = {};
+  taskData.value.forEach((task) => {
+    workingData[task.ID] = 0;
+  });
+  jsondata.forEach((punch: Punch) => {
+    workingData[punch.task_id]++;
+    if (punch.worker.barcode == hash.value) {
+      selected.value = punch.task_id;
     }
-  }
-  return Array.from(tags);
-});
-const tasklist = computed(() => {
-  let tasks = Array.from(taskdata.value);
-  if (!showall.value) {
-    tasks = tasks.filter((task) => focusFilter.includes(task.ID));
-  }
-  if (selectedTags.value.length > 0) {
-    tasks = tasks.filter((task) =>
-      task.tags.some((tag) => selectedTags.value.includes(tag.name)),
-    );
-  }
-  if (search.value) {
-    tasks = tasks.filter((task) =>
-      (task.name + task.description)
-        .toUpperCase()
-        .includes(search.value.toUpperCase()),
-    );
-  }
-  return tasks;
-});
-const selectTask = (taskID: number) => {
+  });
+  taskData.value.forEach((task) => {
+    task.working = workingData[task.ID];
+    task.selected = task.ID == selected.value;
+  });
+};
+
+const getTasks = async () => {
+  taskData.value = Array.from(await apicall("/tasks"));
+  updateWorking();
+};
+
+const setHash = async () => {
+  const worker = await apicall("/worker/lookup", { barcode: anumber.value });
+  hash.value = worker.barcode;
+};
+
+const selectTask = async (taskID: number) => {
   if (selected.value == taskID) {
     return;
   }
   selected.value = taskID;
-  if (selected.value > 0) {
-    clockOn(selected.value);
-  } else {
-    clockOff();
-  }
+  await apicall("/hours/punch", { barcode: anumber, task: taskID });
+  updateWorking();
 };
-const updateTeam = () => {
-  console.log(team.value);
-  return;
-};
-const getTasks = async () => {
-  loading.value = true;
-  try {
-    const response = await fetch(import.meta.env.VITE_API + "/tasks");
-    if (!response.ok) {
-      console.log(response.status);
-    }
-    taskdata.value = await response.json();
-    taskdata.value.forEach((task) => {
-      workingdata.value[task.ID] = 0;
-    });
-  } catch (e) {
-    console.log(e);
-  } finally {
-    updateWorking();
-  }
-};
-const updateWorking = async () => {
-  loading.value = true;
-  try {
-    const response = await fetch(import.meta.env.VITE_API + "/hours/working");
-    if (!response.ok) {
-      console.log(response.status);
-    }
-    taskdata.value.forEach((task) => {
-      workingdata.value[task.ID] = 0;
-    });
-    const jsondata = await response.json();
-    jsondata.forEach((punch) => {
-      workingdata.value[punch.task_id]++;
-      if (punch.worker.barcode == hash.value) {
-        selected.value = punch.task_id;
-      }
-    });
-  } catch (e) {
-    console.log(e);
-  } finally {
-    loading.value = false;
-  }
-};
-const submitAnum = () => {
-  if (anumber.value == "") {
-    return;
-  }
-  localStorage.setItem("anumber", anumber.value);
-  settings.value = false;
+
+// Setup
+onBeforeMount(() => {
   setHash();
-};
-const anumCheck = () => {
-  if (anumber.value.length > 8) {
-    result.value = "mdi-check-circle";
-  } else {
-    result.value = "mdi-form-textbox";
-  }
-};
-const clockOn = async (taskID: number) => {
-  const data = { barcode: anumber.value, task: taskID };
-  const response = await fetch(import.meta.env.VITE_API + "/hours/punch", {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-  if (!response.ok) {
-    flash.value = response.statusText;
-    snackbar.value = true;
-    console.log(response);
-  }
-  updateWorking();
-};
-const clockOff = async () => {
-  const data = { barcode: anumber.value };
-  const response = await fetch(import.meta.env.VITE_API + "/hours/punch", {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-  if (!response.ok) {
-    flash.value = response.statusText;
-    snackbar.value = true;
-    console.log(response);
-  }
-  updateWorking();
-};
-const setHash = async () => {
-  const data = { barcode: anumber.value };
-  const response = await fetch(import.meta.env.VITE_API + "/worker/lookup", {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-  if (!response.ok) {
-    console.log(response);
-  }
-  const jsondata = await response.json();
-  hash.value = jsondata.barcode;
-};
-let intervalID;
+  getTasks();
+});
+
+let intervalID: number;
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
-  if (anumber.value) {
-    anumCheck();
-    setHash();
-  }
-  getTasks();
+>>>>>>> main
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {

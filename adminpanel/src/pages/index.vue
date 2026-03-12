@@ -3,7 +3,7 @@
     class="v-text-h1"
     style="text-align: center; padding: 20px"
   >
-    Farm Mock Data
+    Farm Data
   </h1>
   <v-text-field
     v-model="search"
@@ -17,7 +17,7 @@
   <v-data-table
     style="max-width: 90%; margin: auto; margin-bottom: 33px"
     :search="search"
-    :items="items"
+    :items="cropData"
     :headers="headers"
     hover
     show-select
@@ -26,29 +26,33 @@
 </template>
 
 <script setup lang="ts">
-import items from '@/assets/hours.json'
+
+import apicall from "@/composables/apicall";
+import type { Crop } from "@/types/apibinds";
+
+const cropData: Ref<Array<Crop>> = ref(Array());
+
+const getCrops = async () => {
+  cropData.value = await apicall("/crops");
+  console.log(cropData.value);
+};
+
 definePage({
   meta: {
-    title: 'Dashboard',
+    title: 'Crops',
   },
 })
 const search = ref('')
-for (const hours of items) {
-  hours.crop = 'N/A'
-  hours.worktype = 'Other'
-  if (hours.process) {
-    hours.crop = hours.process.harvest.crop.name
-    hours.worktype = 'Processing'
-  } else if (hours.harvest) {
-    hours.crop = hours.harvest.crop.name
-    hours.worktype = 'Harvesting'
-  }
-}
+
 const headers = [
-  { title: 'Crop', key: 'crop' },
-  { title: 'Work Type', key: 'worktype' },
-  { title: 'Name', key: 'worker.name' },
-  { title: 'Start', key: 'start' },
-  { title: 'Hours', key: 'duration' },
+  { title: 'ID', key: 'ID' },
+  { title: 'Crop', key: 'name', value: (crop)=>{
+    return crop.variety? crop.name+', '+crop.variety : crop.name
+  }},
+  { title: 'Variety', key: 'variety' },
 ]
+
+onMounted(() => {
+  getCrops();
+});
 </script>

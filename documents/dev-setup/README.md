@@ -10,14 +10,15 @@ It helps to have a local environment to test your code. This document is meant t
     - [Git](#git)
     - [API](#api)
     - [Yarn](#yarn)
-    - [Database](#database)
-    - [Configuration](#configuration)
 - [Launching](#launching)
     - [Viewing](#viewing)
     - [Closing](#closing)
+- [Compiling](#compiling)
+    - [Go](#go)
     - [Vite](#vite)
-    - [Compiling](#compiling)
 - [Advanced](#advanced)
+    - [Database](#database)
+    - [Configuration](#configuration)
     - [SOPS](#sops)
     - [Nginx](#nginx)
 
@@ -30,28 +31,28 @@ Once you have a terminal you can use it to install the required software:
 
 - Git: used for tracking and merging changes to the project files. It allows us to work collaboratively, combining our edits together and keeping a history of changes, like a shared folder with an undo feature.
 - Go (golang): Go is the programming language used to write the API that powers the backend. You need go installed in order to compile the api after making changes.
-- NodeJS: Node is used to generate the files that compose the frontend. It's needed run a test version of frontend sites locally.
+- NodeJS (npm): Node is used to generate the files that compose the frontend. It's needed run a test version of frontend sites locally.
 
 ### Linux
 Congratulations, Linux makes this simple. If you don't know how to open the terminal you can probably find it in your launcher menu by searching for `terminal`, there's usually also a hotkey to open the terminal: `Ctrl + Alt + t` works on many systems, including Ubuntu and Fedora.
 
-Use the terminal to install **git**, **golang**, and **nodejs**:
+Use the terminal to install **git**, **golang**, and **npm**:
 
 - Debian/Ubuntu: 
     ```
-    sudo apt install git golang nodejs
+    sudo apt install git golang npm
     ```
 - CentOS/RHEL:
     ```
-    sudo yum install git golang nodejs
+    sudo yum install git golang npm
     ```
 - Fedora:
     ```
-    sudo dnf -y install git go nodejs
+    sudo dnf -y install git go npm
     ```
 - Arch:
     ```
-    sudo pacman -S git go nodejs
+    sudo pacman -S git go npm
     ```
 
 ### Mac OS
@@ -67,19 +68,19 @@ Use the terminal to install **Homebrew**:
 
 (This uses the bash shell to download and run the install script)
 
-Once **Homebrew** is installed you can use it to install **git**, **golang**, and **nodejs**:
+Once **Homebrew** is installed you can use it to install **git**, **golang**, and **npm**:
 
 ```
-brew install git golang nodejs
+brew install git golang npm
 ```
 
 ### Android
 The **termux** app is perfectly suitable for running the development environment. Simply install it from the **Play Store** (or the **F-Droid** app if you're cool)
 
-Once **Termux** is installed, open the app and use the terminal to install **git**, **golang**, and **nodejs**:
+Once **Termux** is installed, open the app and use the terminal to install **git**, **golang**, and **npm**:
 
 ```
-pkg install git golang nodejs
+pkg install git golang npm
 ```
 
 ### Windows
@@ -102,21 +103,37 @@ Follow these steps to set up WSL, [you can find the official documentation here]
     ```
     sudo apt update && sudo apt upgrade
     ```
-7. Install **git**, **golang**, and **nodejs**:
+7. Install **git**, **golang**, and **npm**:
     ```
-    sudo apt install git golang nodejs
+    sudo apt install git golang npm
     ```
 
 ## Dev Environment
 
 ### Git
+To use git with GitHub we must first be authorized:
+
+1. Create an SSH keypair (if you don't already have one) by running:
+    ```
+    ssh-keygen -t ed25519
+    ```
+2. Follow the system defaults, you can leave the password blank.
+3. View your public key by running:
+    ```
+    cat ~/.ssh/id_ed25519.pub
+    ```
+4. Go to [your Keys page on GitHub](https://github.com/settings/keys) and click **New SSH Key**
+5. Paste your public key into the **Key** field, leave **Key Type** as "Authentication Key", and give it a descriptive **Title** like 'Laptop'
+
+If you run into any issues try consulting [GitHub's official documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+
 Navigate to your **home directory** (or wherever you want to put the code for the project): 
 
 ```
 cd ~
 ```
 
-(**c**hange **d**irectory to ~, which means **home**)
+(**c**hange **d**irectory to **~**, which means **home**)
 
 Next, copy the repository from GitHub:
 
@@ -150,16 +167,20 @@ git branch -r
 git checkout name
 ```
 
-Where 'name' is the name of the branch you'd like to move to.
+Where 'name' is the name of the branch you'd like to switch to.
 
 ### API
-API files are located in the **api** directory, to enter the directory from **TESC-Farm** simply run:
+The API is written in Go and is compiled into a binary to run on the server. Before you launch the API, make sure you have a recent version of the Go programming language installed by running this command from the **TESC-Farm** directory:
+
+```
+sudo ./scripts/install_go.sh
+```
+
+Source files for the API are located in the **api** directory, to enter the directory from **TESC-Farm** simply run:
 
 ```
 cd api
 ```
-
-The API is written in Go and is compiled into a binary to run on the server.
 
 To run in development mode you can launch the API with:
 
@@ -170,7 +191,7 @@ go run cmd/farmapi.go
 (you must be in the **api** directory to use this command)
 
 ### Yarn
-Important for frontend environments. Before using **yarn** it must be installed via NodeJS:
+Used for frontend environments. Before running **yarn** it must be installed via **npm**:
 
 ```
 sudo npm install --global yarn
@@ -192,23 +213,13 @@ yarn create vuetify
 
 From the **TESC-Farm** directory. Name the new directory, follow the recommended options, and use TypeScript.
 
-### Database
-You should not need to access the database directly.
-
-The development database is stored in **api/assets/data-dev.db** in SQLite3 format.
-
-To update the dev database you can run:
+Yarn is used in conjunction with vite to host the development version of frontend sites by running:
 
 ```
-cp api/assets/data.db api/assets/data-dev.db
+yarn vite
 ```
 
-(you must be in the **TESC-Farm** directory to run this command) this turns the development database into a copy of the production database.
-
-### Configuration
-You should not need to change the configuration settings.
-
-The development config file for the api is located at **api/configs/config-dev.yaml**. For frontend sites the dev variables are locates in **directory/.env.development** where **directory** is the directory name of the site.
+(you must be in the site's directory)
 
 ## Launching
 To launch the development environment you can run:
@@ -229,24 +240,9 @@ The frontend of the local dev environment is hosted at http://localhost:3000 whi
 Keep in mind that the local dev environment is only visible on your computer, no other devices on the network can see it or interact with it.
 
 ### Closing
-To close the development environment simple press `Ctrl + c`
+To close the development environment simply press `Ctrl + C`
 
-### Vite
-Vite is used to host the development version of frontend sites by running:
-
-```
-vite
-```
-
-(you must be in the site's directory)
-
-It's also used to build a static version of the site, which is then stored in **dist**, you can do so by running: 
-
-```
-vite build
-```
-
-### Compiling
+## Compiling
 Once the code is stable you can compile it by running:
 
 ```
@@ -255,9 +251,43 @@ make
 
 (you must be in the directory you want to compile)
 
-The **make** command executes commands from a file named **makefile** in the same directory.
+The **make** command executes commands from a file named **makefile** in the same directory. Code must be compiled before it will take effect on the production server.
+
+### Go
+To compile the API with go run the following command from the **api** directory:
+
+```
+go build -o farmapi cmd/farmapi.go
+```
+
+### Vite
+To compile a frontend site into static files, which are then stored in **dist**, you can run: 
+
+```
+yarn vite build
+```
+
+(you must be in the directory of the site you want to compile)
 
 ## Advanced
+
+### Database
+You should not need to access the database directly.
+
+The development database is stored in **api/assets/data-dev.db** in SQLite3 format.
+
+To update the dev database you can run:
+
+```
+cp api/assets/data.db api/assets/data-dev.db
+```
+
+(you must be in the **TESC-Farm** directory to run this command) this turns the development database into a copy of the production database.
+
+### Configuration
+You should not need to change the configuration settings.
+
+The development config file for the api is located at **api/configs/config-dev.yaml**. For frontend sites the dev variables are locates in **directory/.env.development** where **directory** is the directory name of the site.
 
 ### SOPS
 To modify secret values used in the production system you can use **sops**. To install **sops** follow the instructions here: https://github.com/getsops/sops/releases
