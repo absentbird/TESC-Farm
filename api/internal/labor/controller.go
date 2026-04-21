@@ -3,21 +3,35 @@ package labor
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 	"time"
-
 	"github.com/absentbird/TESC-Farm/internal/harvest"
 	"github.com/absentbird/TESC-Farm/internal/util"
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func hashANum(anum string) string {
-	bytenum := []byte(anum)
+func hashUid(uid string) string {
+	bytenum := []byte(uid)
 	hash := sha256.New()
 	hash.Write(bytenum)
 	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
+}
+
+func getWorker(uid string) (worker Worker, last Hours) {
+	if err := util.DB.InnerJoins("Worker", util.DB.Where(&Worker{Barcode: uid})).Order("Start desc").First(&last).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			worker := Worker{}
+			worker.Barcode = uid
+			util.DB.Create(&worker)
+			last.WorkerID = worker.ID
+		} else {
+			return
+		}
+	}
+	return
 }
 
 // Hours
@@ -27,6 +41,7 @@ func AllHours(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	// TODO: Also get teams and multiply the hours
 	c.JSON(http.StatusOK, records)
 }
 
@@ -44,6 +59,25 @@ func GetWorking(c *gin.Context) {
 	if err := util.DB.Preload("Worker").Preload("Task").Preload("Task.Area").Preload("Task.Tags").Preload("Task.Planting").Preload("Task.Planting.Crop").Preload("Task.Planting.Bed").Preload("Task.Planting.Bed.Area").Preload("Task.Harvest").Preload("Task.Harvest.Crop").Preload("Task.Harvest.Bed").Preload("Task.Harvest.Bed.Area").Preload("Task.Process").Preload("Task.Process.Harvest").Preload("Task.Process.Harvest.Crop").Preload("Task.Process.Harvest.Bed").Preload("Task.Process.Harvest.Bed.Area").Preload("Task.Process.Product").Where("Duration = ?", 0).Find(&records).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+	// TODO: Add teams into return
+	teams := []Team{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	found := map[int]Hours{}
+	for _, r := range records {
+		found[int(r.ID)] = r
+	}
+	for _, t := range teams {
+		if _, ok := found[int(t.HoursID)]; ok {
+			for n := range t.Count {
+				h := found[int(t.HoursID)]
+				h.Notes = "Team member #" + strconv.Itoa(int(n+1))
+				records = append(records, h)
+			}
+		}
 	}
 	c.JSON(http.StatusOK, records)
 }
@@ -71,22 +105,9 @@ func AddPunch(c *gin.Context) {
 	if punch.TaskID < 0 {
 		punch.TaskID = 0
 	}
-	anum := hashANum(punch.Barcode)
-	last := Hours{}
-	newWorker := false
-	if err := util.DB.InnerJoins("Worker", util.DB.Where(&Worker{Barcode: anum})).Order("Start desc").First(&last).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			worker := Worker{}
-			worker.Barcode = anum
-			util.DB.Create(&worker)
-			last.WorkerID = worker.ID
-			newWorker = true
-		} else {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-	}
-	if last.Duration == 0 && !newWorker {
+	uid := hashUid(punch.Barcode)
+	_, last := getWorker(uid)
+	if last.Duration == 0 {
 		last.Duration = time.Now().Sub(last.Start).Hours()
 		util.DB.Save(&last)
 	}
@@ -101,6 +122,52 @@ func AddPunch(c *gin.Context) {
 	record.TaskID = uint(punch.TaskID)
 	util.DB.Create(&record)
 	c.JSON(http.StatusOK, record)
+}
+
+func TeamPunch(c *gin.Context) {
+	type ScanPunch struct {
+		Barcode string `json:"barcode"`
+		Count   uint   `json:"count"`
+		TaskID  uint   `json:"task,omitempty"`
+	}
+	punch := ScanPunch{}
+	if err := c.ShouldBindJSON(&punch); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if punch.TaskID < 0 {
+		punch.TaskID = 0
+	}
+	uid := hashUid(punch.Barcode)
+	worker, last := getWorker(uid)
+
+	// if the task is the same, update the people working on it
+	if punch.TaskID == last.TaskID {
+		team := Team{}
+		team.Start = time.Now()
+		team.Count = punch.Count
+		team.HoursID = last.ID
+		util.DB.Create(&team)
+		c.JSON(http.StatusOK, team)
+		return
+		// If already tracking a task, stop it first
+	} else if last.Duration == 0 {
+		last.Duration = time.Now().Sub(last.Start).Hours()
+		util.DB.Save(&last)
+	}
+	// If punching in, create a new record for the new punch
+	hours := Hours{}
+	hours.Start = time.Now()
+	hours.Duration = 0
+	hours.WorkerID = worker.ID
+	hours.TaskID = uint(punch.TaskID)
+	util.DB.Create(&hours)
+	team := Team{}
+	team.Start = time.Now()
+	team.Count = punch.Count
+	team.HoursID = hours.ID
+	util.DB.Create(&team)
+	c.JSON(http.StatusOK, team)
 }
 
 func PunchOutAll(c *gin.Context) {
@@ -149,6 +216,65 @@ func DeleteHours(c *gin.Context) {
 	c.JSON(http.StatusOK, record)
 }
 
+// Teams
+func AllTeams(c *gin.Context) {
+	records := []Team{}
+	if err := util.DB.Find(&records).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, records)
+
+}
+
+func GetTeam(c *gin.Context) {
+	record := Team{}
+	if err := util.DB.First(&record, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, record)
+
+}
+
+func AddTeam(c *gin.Context) {
+	record := Team{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	util.DB.Create(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+func UpdateTeam(c *gin.Context) {
+	record := Team{}
+	if err := c.ShouldBindJSON(&record); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	record.ID = uint(id)
+	util.DB.Save(&record)
+	c.JSON(http.StatusOK, record)
+}
+
+func DeleteTeam(c *gin.Context) {
+	record := Team{}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	record.ID = uint(id)
+	util.DB.Delete(&record)
+	c.JSON(http.StatusOK, record)
+}
+
 // Workers
 func AllWorkers(c *gin.Context) {
 	records := []Worker{}
@@ -177,7 +303,7 @@ func LookupWorker(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	hashed_a_num := hashANum(lookup.Barcode)
+	hashed_a_num := hashUid(lookup.Barcode)
 	record := Worker{}
 	if err := util.DB.Where("Barcode = ?", hashed_a_num).First(&record).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -209,9 +335,12 @@ func AddWorker(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	//Hashes A number
-	hashed_a_num := hashANum(record.Barcode)
-	record.Barcode = hashed_a_num
+	if len(record.Barcode) > 0 {
+		record.Barcode = hashUid(record.Barcode)
+	} else {
+		uid := uuid.New()
+		record.Barcode = hashUid(base64.StdEncoding.EncodeToString(uid[:]))
+	}
 	util.DB.Create(&record)
 	c.JSON(http.StatusOK, record)
 }

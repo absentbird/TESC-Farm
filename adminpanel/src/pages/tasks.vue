@@ -20,9 +20,17 @@
     :items="taskData"
     :headers="headers"
     hover
-    show-select
     return-object
-  />
+  >
+      <template v-slot:item.selected="{ item }">
+        <v-checkbox v-model="item.selected" @change="toggleSelected(item)" />
+      </template>
+      <template v-slot:item.ID="{ value }">
+        <v-btn>Edit</v-btn>
+        <v-btn>Delete</v-btn>
+      </template>
+  </v-data-table>
+  <v-btn>Add Task</v-btn>
 </template>
 
 <script setup lang="ts">
@@ -44,12 +52,21 @@ definePage({
 })
 const search = ref('')
 
+const toggleSelected = (task) => {
+  task.selected = !task.selected;
+  updateTask(task);
+}
+
+const updateTask = async (task) => {
+  await apicall("/task/"+task.ID+"/update", task);
+}
+
 const headers = [
-  { title: 'ID', key: 'ID' },
   { title: 'Task', key: 'name'},
-  { title: 'Area ID', key: 'area_id' },
+  { title: 'Description', key: 'description'},
+  { title: 'Selected', key: 'selected'},
+  { title: '', key: 'ID'},
 ]
-//maybe make area id the name of the area
 
 onMounted(() => {
   getTasks();
