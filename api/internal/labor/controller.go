@@ -3,18 +3,14 @@ package labor
 import (
 	"crypto/sha256"
 	"encoding/base64"
-	"github.com/absentbird/TESC-Farm/internal/util"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 	"time"
-
 	"github.com/absentbird/TESC-Farm/internal/harvest"
 	"github.com/absentbird/TESC-Farm/internal/util"
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 func hashUid(uid string) string {
@@ -72,13 +68,13 @@ func GetWorking(c *gin.Context) {
 	}
 	found := map[int]Hours{}
 	for _, r := range records {
-		found[r.ID] = r
+		found[int(r.ID)] = r
 	}
 	for _, t := range teams {
-		if _, ok := found[t.HoursID]; ok {
+		if _, ok := found[int(t.HoursID)]; ok {
 			for n := range t.Count {
-				h := found[t.HoursID]
-				h.Notes = "Team member #" + strconv.Itoa(n+1)
+				h := found[int(t.HoursID)]
+				h.Notes = "Team member #" + strconv.Itoa(int(n+1))
 				records = append(records, h)
 			}
 		}
@@ -128,7 +124,6 @@ func AddPunch(c *gin.Context) {
 	c.JSON(http.StatusOK, record)
 }
 
-<<<<<<< HEAD
 func TeamPunch(c *gin.Context) {
 	type ScanPunch struct {
 		Barcode string `json:"barcode"`
@@ -173,7 +168,8 @@ func TeamPunch(c *gin.Context) {
 	team.HoursID = hours.ID
 	util.DB.Create(&team)
 	c.JSON(http.StatusOK, team)
-=======
+}
+
 func PunchOutAll(c *gin.Context) {
 	status, _ := c.Get("username")
 	if status != "admin" {
@@ -190,7 +186,6 @@ func PunchOutAll(c *gin.Context) {
 		util.DB.Save(&w)
 	}
 	c.JSON(http.StatusOK, records)
->>>>>>> main
 }
 
 func UpdateHours(c *gin.Context) {
