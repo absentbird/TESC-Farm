@@ -1,13 +1,30 @@
 <template>
   <v-col cols="12" sm="6" md="8">
-    <v-text-field id="search" v-model="search" clearable label="Search"
-      hint="Search for items by name or description"></v-text-field>
+    <v-text-field
+      id="search"
+      v-model="search"
+      clearable
+      label="Search"
+      hint="Search for items by name or description"
+    ></v-text-field>
   </v-col>
   <v-col v-if="itemTags" cols="6" sm="3" md="2">
-    <v-combobox clearable chips multiple label="Tags" v-model="selectedTags" :items="itemTags"></v-combobox>
+    <v-combobox
+      clearable
+      chips
+      multiple
+      label="Tags"
+      v-model="selectedTags"
+      :items="itemTags"
+    ></v-combobox>
   </v-col>
   <v-col v-if="focus" cols="6" sm="3" md="2" class="d-flex align-self-start">
-    <v-switch inset label="Show All" color="secondary" v-model="showall"></v-switch>
+    <v-switch
+      inset
+      label="Show All"
+      color="secondary"
+      v-model="showall"
+    ></v-switch>
   </v-col>
 </template>
 
@@ -46,8 +63,8 @@ const itemTags = computed(() => {
 
 const itemList = computed(() => {
   let items = props.items;
-  if (props.focus && !showall.value) {
-    items = items.filter((item) => props.focus.includes(item.ID));
+  if (!showall.value) {
+    items = items.filter((item) => item.selected);
     items.sort((a, b) => props.focus.indexOf(a.ID) - props.focus.indexOf(b.ID));
   } else {
     items.sort((a, b) => a.name.localeCompare(b.name));
