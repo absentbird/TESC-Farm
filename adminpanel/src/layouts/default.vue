@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import apicall from "@/composables/apicall";
 import { ref } from "vue";
 const drawer = ref(true);
 const items = ref([
@@ -9,28 +10,28 @@ const items = ref([
     to: "/",
   },
   {
-    title: 'Hours',
-    prependIcon: 'mdi-account-group',
+    title: "Hours",
+    prependIcon: "mdi-account-group",
     link: true,
-    to: '/hours',
+    to: "/hours",
   },
   {
-    title: 'Tasks',
-    prependIcon: 'mdi-briefcase-outline',
+    title: "Tasks",
+    prependIcon: "mdi-briefcase-outline",
     link: true,
-    to: '/tasks',
-  },
-  {
-    title: "Calendar",
-    prependIcon: "mdi-calendar",
-    link: true,
+    to: "/tasks",
   },
   {
     title: "Reports",
     prependIcon: "mdi-file-chart-outline",
     link: true,
+    to: "https://reports.tesc.farm/",
   },
 ]);
+
+if (true) {
+  apicall("/login", { username: "admin", password: "password" });
+}
 </script>
 
 <template>

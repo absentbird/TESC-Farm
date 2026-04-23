@@ -1,8 +1,5 @@
 <template>
-  <h1
-    class="v-text-h1"
-    style="text-align: center; padding: 20px"
-  >
+  <h1 class="v-text-h1" style="text-align: center; padding: 20px">
     Farm Tasks
   </h1>
   <v-text-field
@@ -22,19 +19,18 @@
     hover
     return-object
   >
-      <template v-slot:item.selected="{ item }">
-        <v-checkbox v-model="item.selected" @change="toggleSelected(item)" />
-      </template>
-      <template v-slot:item.ID="{ value }">
-        <v-btn>Edit</v-btn>
-        <v-btn>Delete</v-btn>
-      </template>
+    <template v-slot:item.selected="{ item }">
+      <v-checkbox v-model="item.selected" @change="toggleSelected(item)" />
+    </template>
+    <template v-slot:item.ID="{ value }">
+      <v-btn>Edit</v-btn>
+      <v-btn>Delete</v-btn>
+    </template>
   </v-data-table>
   <v-btn>Add Task</v-btn>
 </template>
 
 <script setup lang="ts">
-
 import apicall from "@/composables/apicall";
 import type { Crop } from "@/types/apibinds";
 
@@ -47,26 +43,30 @@ const getTasks = async () => {
 
 definePage({
   meta: {
-    title: 'Tasks',
+    title: "Tasks",
   },
-})
-const search = ref('')
+});
+const search = ref("");
 
 const toggleSelected = (task) => {
-  task.selected = !task.selected;
+  if (task.selected != true) {
+    task.selected = false;
+  } else {
+    task.selected = true;
+  }
   updateTask(task);
-}
+};
 
 const updateTask = async (task) => {
-  await apicall("/task/"+task.ID+"/update", task);
-}
+  await apicall("/task/" + task.ID + "/update", task);
+};
 
 const headers = [
-  { title: 'Task', key: 'name'},
-  { title: 'Description', key: 'description'},
-  { title: 'Selected', key: 'selected'},
-  { title: '', key: 'ID'},
-]
+  { title: "Task", key: "name" },
+  { title: "Description", key: "description" },
+  { title: "Selected", key: "selected" },
+  { title: "", key: "ID" },
+];
 
 onMounted(() => {
   getTasks();
