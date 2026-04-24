@@ -132,7 +132,6 @@
 <script lang="ts" setup>
 // Imports
 import { apicall } from "@/composables/apicall";
-import focusFilter from "@/assets/tasklist"
 import type { Task, Punch } from "@/types/apibinds";
 
 // Meta Information
@@ -199,7 +198,6 @@ onBeforeMount(() => {
 let intervalID: number;
 onMounted(() => {
   anumber.value = localStorage.getItem("anumber");
->>>>>>> main
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {

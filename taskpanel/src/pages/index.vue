@@ -4,7 +4,6 @@
     tracking
     withfloat
     :items="taskData"
-    :focus="focusFilter"
     @select="selectTask"
   ></CardSelector>
   <div id="anumfloat" class="align-self-end" v-if="selected">
@@ -25,7 +24,6 @@
 
 <script lang="ts" setup>
 // Imports
-import focusFilter from "@/assets/tasklist";
 import apicall from "@/composables/apicall";
 import type { Task } from "@/types/apibinds";
 

@@ -35,7 +35,7 @@
     "unplugin-auto-import": "^0.17.6",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.27.2",
-    "unplugin-vue-router": "^0.10.0",
+    "unplugin-vue-router": "^0.19.2",
     "vite": "^5.4.10",
     "vite-plugin-vue-layouts": "^0.11.0",
     "vite-plugin-vuetify": "^2.0.3",

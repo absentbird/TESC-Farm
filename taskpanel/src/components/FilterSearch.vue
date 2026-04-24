@@ -38,10 +38,6 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  focus: {
-    type: Array,
-    required: false,
-  },
 });
 
 const emit = defineEmits<{
@@ -65,7 +61,7 @@ const itemList = computed(() => {
   let items = props.items;
   if (!showall.value) {
     items = items.filter((item) => item.selected);
-    items.sort((a, b) => props.focus.indexOf(a.ID) - props.focus.indexOf(b.ID));
+    items.sort((a, b) => a.ID - b.ID);
   } else {
     items.sort((a, b) => a.name.localeCompare(b.name));
   }

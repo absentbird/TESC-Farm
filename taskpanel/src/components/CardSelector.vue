@@ -5,11 +5,7 @@
       id="filters"
       class="align-center d-flex w-100 flex-grow-0"
     >
-      <FilterSearch
-        :items="itemData"
-        :focus="focus"
-        @filter="filterItems"
-      ></FilterSearch>
+      <FilterSearch :items="itemData" @filter="filterItems"></FilterSearch>
     </v-row>
     <v-row
       id="main-content"
@@ -69,10 +65,6 @@ const props = defineProps({
   items: {
     type: Array<any>,
     required: true,
-  },
-  focus: {
-    type: Array<number>,
-    required: false,
   },
   newItem: {
     type: String,

@@ -49,6 +49,7 @@ type Task struct {
 	ProcessID     uint                 `json:"process_id,omitempty"`
 	Postharvest   *harvest.Postharvest `json:"postharvest,omitempty"`
 	PostharvestID uint                 `json:"postharvest_id,omitempty"`
+	Selected      bool                 `json:"selected"`
 	Tags          []*util.Tag          `json:"tags,omitempty" gorm:"many2many:task_tags"`
 }
 

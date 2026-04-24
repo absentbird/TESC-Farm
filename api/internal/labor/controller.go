@@ -3,14 +3,14 @@ package labor
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"github.com/absentbird/TESC-Farm/internal/harvest"
+	"github.com/absentbird/TESC-Farm/internal/util"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 	"time"
-	"github.com/absentbird/TESC-Farm/internal/harvest"
-	"github.com/absentbird/TESC-Farm/internal/util"
 )
 
 func hashUid(uid string) string {
