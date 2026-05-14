@@ -4,10 +4,16 @@ import { ref } from "vue";
 const drawer = ref(true);
 const items = ref([
   {
-    title: "Dashboard",
+    title: "Tasks",
+    prependIcon: "mdi-briefcase-outline",
+    link: true,
+    to: "/tasks",
+  },
+  {
+    title: "Crops",
     prependIcon: "mdi-view-dashboard-outline",
     link: true,
-    to: "/",
+    to: "/crops",
   },
   {
     title: "Hours",
@@ -16,16 +22,10 @@ const items = ref([
     to: "/hours",
   },
   {
-    title: "Tasks",
-    prependIcon: "mdi-briefcase-outline",
-    link: true,
-    to: "/tasks",
-  },
-  {
     title: "Reports",
     prependIcon: "mdi-file-chart-outline",
     link: true,
-    to: "https://reports.tesc.farm/",
+    href: "https://reports.tesc.farm/",
   },
 ]);
 
