@@ -38,4 +38,19 @@ router.isReady().then(() => {
   localStorage.removeItem("vuetify:dynamic-reload");
 });
 
+router.beforeResolve(async (to) => {
+  try {
+    const response = await fetch(import.meta.env.VITE_API + "/auth", {
+      credentials: "include",
+    });
+    const jsondata = await response.json();
+    to.meta.userstatus = jsondata.status;
+    if (!response.ok) {
+      throw response.statusText;
+    }
+  } catch (e: Error | any) {
+    return { path: "/login" };
+  }
+});
+
 export default router;

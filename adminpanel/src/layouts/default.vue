@@ -28,10 +28,6 @@ const items = ref([
     href: "https://reports.tesc.farm/",
   },
 ]);
-
-if (true) {
-  apicall("/login", { username: "admin", password: "password" });
-}
 </script>
 
 <template>

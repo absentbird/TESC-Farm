@@ -45,9 +45,6 @@
           <v-text-field v-model="atask.description" />
           <h3>Selected</h3>
           <v-checkbox v-model="atask.selected" />
-          <div v-if="edit" class="mt-4">
-            <v-btn color="error" @click="deleteDialog = true">Delete</v-btn>
-          </div>
         </v-card-text>
         <v-card-actions>
           <v-btn color="success" @click="saveActive">Save</v-btn>
