@@ -9,11 +9,6 @@ import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes";
 
-routes.push({
-  path: "/",
-  redirect: "/tasks",
-});
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
@@ -39,18 +34,25 @@ router.isReady().then(() => {
 });
 
 router.beforeResolve(async (to) => {
-  try {
-    const response = await fetch(import.meta.env.VITE_API + "/auth", {
-      credentials: "include",
-    });
-    const jsondata = await response.json();
-    to.meta.userstatus = jsondata.status;
-    if (!response.ok) {
-      throw response.statusText;
+  if (to.path != "/login") {
+    try {
+      const response = await fetch(import.meta.env.VITE_API + "/auth", {
+        credentials: "include",
+      });
+      const jsondata = await response.json();
+      to.meta.userstatus = jsondata.status;
+      if (!response.ok) {
+        throw response.statusText;
+      }
+    } catch (e: Error | any) {
+      return { path: "/login" };
     }
-  } catch (e: Error | any) {
-    return { path: "/login" };
   }
+});
+
+routes.push({
+  path: "/",
+  redirect: "/tasks",
 });
 
 export default router;
