@@ -51,7 +51,9 @@ const login = async () => {
     error.value = "Password must be 8 or more characters";
     return;
   }
-  apicall("/login", { username: username.value, password: password.value });
+  console.log(
+    apicall("/login", { username: username.value, password: password.value }),
+  );
   router.push({ path: "/" });
 };
 
