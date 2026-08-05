@@ -7,7 +7,7 @@
     >
       <v-card
         class="item-card d-flex flex-column text-center"
-        :class="{ selected: item.selected }"
+        :class="{ selected: item.focus }"
         variant="tonal"
       >
         <v-card-item>

@@ -8,10 +8,11 @@ export interface Item {
   description: string;
   working: number;
   selected: boolean;
+  focus: boolean;
   tags: Tag[];
 }
 export interface Area extends Item {
-  beds: Bed[]
+  beds: Bed[];
 }
 export interface Task extends Item {
   type: string;

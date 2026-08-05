@@ -53,10 +53,7 @@ const selectedName = computed(() => {
 const selectTask = (taskID: number) => {
   selected.value = taskID;
   taskData.value.forEach((task) => {
-    task.selected = task.ID == selected.value;
-  });
-  nextTick(() => {
-    anum.value?.focus();
+    task.focus = task.ID == selected.value;
   });
 };
 
@@ -79,7 +76,7 @@ const updateWorking = async () => {
   });
   taskData.value.forEach((task) => {
     task.working = workingData[task.ID];
-    task.selected = task.ID == selected.value;
+    task.focus = task.ID == selected.value;
   });
 };
 
