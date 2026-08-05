@@ -19,6 +19,8 @@
         :item="item"
         @select="$emit('select', item.ID)"
       ></ItemCard>
+      <!-- TODO: New Item for admins -->
+      <!--
       <v-col
         v-if="newItem"
         class="d-flex flex-column"
@@ -27,7 +29,6 @@
         md="3"
         lg="2"
       >
-        <!-- New Item for admins -->
         <a class="card-button" :href="newItem">
           <v-card
             class="item-card d-flex flex-column text-center"
@@ -40,7 +41,8 @@
           </v-card>
         </a>
       </v-col>
-      <v-col cols="12" v-if="tracking">
+      -->
+      <v-col cols="12">
         <v-btn
           class="bigbutton"
           :class="{ selected: selected == 0 }"

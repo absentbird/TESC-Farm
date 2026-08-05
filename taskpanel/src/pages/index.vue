@@ -1,25 +1,11 @@
 <template>
   <CardSelector
     search
-    tracking
-    withfloat
+    focus
+    selected
     :items="taskData"
     @select="selectTask"
   ></CardSelector>
-  <div id="anumfloat" class="align-self-end" v-if="selected">
-    <v-text-field
-      id="anum"
-      ref="anum"
-      :prepend-icon="result"
-      v-model="anumber"
-      @input="anumCheck"
-      @keyup.enter="submitAnum"
-      @keydown.esc="selectTask(0)"
-      hint="Enter the A# from your student ID"
-      :label="selectedName"
-      autocomplete="off"
-    ></v-text-field>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -98,25 +84,6 @@ const clockOff = async (anum: string) => {
     result.value = "mdi-form-textbox";
   }, 3000);
   updateWorking();
-};
-
-const submitAnum = () => {
-  if (anumber.value == "") {
-    return;
-  }
-  if (selected.value == -1) {
-    clockOff(anumber.value);
-  } else {
-    clockOn(anumber.value, selected.value);
-  }
-  anumber.value = "";
-};
-
-const anumCheck = (e: event) => {
-  if (anumber.value.length > 8) {
-    submitAnum();
-    e.target.focus();
-  }
 };
 
 // Setup
