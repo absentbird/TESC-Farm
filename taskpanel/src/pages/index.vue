@@ -11,7 +11,6 @@
 // Imports
 import apicall from "@/composables/apicall";
 import type { Task } from "@/types/apibinds";
-
 definePage({
   meta: {
     requiresAuth: "true",
@@ -23,6 +22,7 @@ const taskData: Ref<Array<Task>> = ref(Array());
 const result: Ref<string> = ref("");
 
 const anum = useTemplateRef("anum");
+const hash: Ref<string> = ref("");
 
 const selectedName = computed(() => {
   if (selected.value == 0) {
@@ -44,6 +44,13 @@ const selectTask = (taskID: number) => {
 const getTasks = async () => {
   taskData.value = await apicall("/tasks");
   updateWorking();
+};
+
+const setHash = async () => {
+  const worker = await apicall("/worker/lookup", {
+    barcode: localStorage.getItem("anumber"),
+  });
+  hash.value = worker.barcode;
 };
 
 const updateWorking = async () => {
@@ -86,8 +93,11 @@ const clockOff = async () => {
 
 // Setup
 let intervalID;
-onMounted(() => {
+onBeforeMount(() => {
+  setHash();
   getTasks();
+});
+onMounted(() => {
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {
