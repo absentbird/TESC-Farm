@@ -34,11 +34,13 @@ const selectedName = computed(() => {
   return taskData.value.find((task) => task.ID === selected.value).name;
 });
 
-const selectTask = (taskID: number) => {
+const selectTask = async (taskID: number) => {
+  if (selected.value == taskID) {
+    return;
+  }
   selected.value = taskID;
-  taskData.value.forEach((task) => {
-    task.focus = task.ID == selected.value;
-  });
+  await apicall("/hours/punch", { barcode: anumber, task: taskID });
+  updateWorking();
 };
 
 const getTasks = async () => {
