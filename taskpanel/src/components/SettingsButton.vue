@@ -64,10 +64,10 @@ import { apicall } from "@/composables/apicall.js";
 const route = useRoute();
 const theme = useTheme();
 
-const anumber: Ref<string> = ref("");
 const anumicon: Ref<string> = ref("mdi-form-textbox");
 const anum = useTemplateRef("anum");
 const hash: Ref<string> = ref("");
+const anumber: Ref<string> = ref("");
 const editAnum: Ref<boolean> = ref(false);
 const confirmPunchOut: Ref<boolean> = ref(false);
 
@@ -83,7 +83,7 @@ const punchOutAll = async () => {
 };
 
 const setHash = async () => {
-  const jsondata = await apicall("/worker/lookup", { barcode: anumber.value });
+  const jsondata = await apicall("/worker/lookup", { barcode: anum.value });
   hash.value = jsondata.barcode;
 };
 
@@ -92,8 +92,6 @@ const toggleTheme = () => {
   theme.global.name.value = themeval;
   localStorage.setItem("theme", themeval);
 };
-
-
 
 const settings = ref([
   {
@@ -148,12 +146,6 @@ const anumCheck = () => {
 };
 
 onMounted(() => {
-  anumber.value = localStorage.getItem("anumber");
-  if (!anumber.value) {
-    editAnum.value = true;
-  } else {
-    anumCheck();
-    setHash();
-  }
+  setHash();
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <CardSelector
     search
-    selected
+    :selected="selected"
     :items="taskData"
     @select="selectTask"
   ></CardSelector>
@@ -17,18 +17,18 @@ definePage({
   },
 });
 
-const selected: Ref<number> = ref(0);
+const selected: Ref<Number> = ref(0);
 const taskData: Ref<Array<Task>> = ref(Array());
 const result: Ref<string> = ref("");
 
-const anum = useTemplateRef("anum");
 const hash: Ref<string> = ref("");
+const anum = useTemplateRef("anum");
 
 const selectedName = computed(() => {
   if (selected.value == 0) {
     return "None";
   }
-  if (selected.value < 0) {
+  if (selected.value < 1) {
     return "Stop Tracking Time";
   }
   return taskData.value.find((task) => task.ID === selected.value).name;
@@ -48,23 +48,15 @@ const getTasks = async () => {
   updateWorking();
 };
 
-const setHash = async () => {
-  const worker = await apicall("/worker/lookup", {
-    barcode: localStorage.getItem("anumber"),
-  });
-  hash.value = worker.barcode;
-};
-
 const updateWorking = async () => {
   const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
   const workingData: { number: number } = {};
-  console.log(jsondata);
   taskData.value.forEach((task) => {
     workingData[task.ID] = 0;
   });
   jsondata.forEach((punch: Punch) => {
     workingData[punch.task_id]++;
-    if (punch.worker.barcode == hash.value) {
+    if (punch.worker.barcode == anum.value) {
       selected.value = punch.task_id;
     }
   });
@@ -94,13 +86,18 @@ const clockOff = async () => {
   updateWorking();
 };
 
+const setHash = async () => {
+  const jsondata = await apicall("/worker/lookup", { barcode: anum.value });
+  hash.value = jsondata.barcode;
+};
+
 // Setup
 let intervalID;
 onBeforeMount(() => {
-  setHash();
   getTasks();
 });
 onMounted(() => {
+  setHash();
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {

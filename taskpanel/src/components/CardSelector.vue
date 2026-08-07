@@ -53,11 +53,13 @@
         </v-btn>
       </v-col>
     </v-row>
+    <!--
     <v-menu v-model="showMenu" locationStrategy="connected" :target="cursor">
       <v-list>
         <v-list-item @click="$emit('delete', active)">Delete</v-list-item>
       </v-list>
     </v-menu>
+    -->
   </v-container>
 </template>
 
@@ -95,6 +97,7 @@ const itemData: Ref<Array<Item>> = ref(props.items);
 const itemList: Ref<Array<Item>> = ref(props.items);
 const active: Ref<number> = ref(0);
 
+/*
 const selected: Ref<number> = computed(() => {
   if (props.selected) {
     return props.selected;
@@ -102,6 +105,7 @@ const selected: Ref<number> = computed(() => {
   const i = itemData.value.find((item) => item.selected);
   return i ? i.ID : 0;
 });
+*/
 
 const showMenu: Ref<boolean> = ref(false);
 const cursor: Ref<Array<number>> = ref(Array());

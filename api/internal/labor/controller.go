@@ -61,24 +61,26 @@ func GetWorking(c *gin.Context) {
 		return
 	}
 	// TODO: Add teams into return
-	teams := []Team{}
-	if err := util.DB.Find(&records).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	found := map[int]Hours{}
-	for _, r := range records {
-		found[int(r.ID)] = r
-	}
-	for _, t := range teams {
-		if _, ok := found[int(t.HoursID)]; ok {
-			for n := range t.Count {
-				h := found[int(t.HoursID)]
-				h.Notes = "Team member #" + strconv.Itoa(int(n+1))
-				records = append(records, h)
+	/*
+		teams := []Team{}
+		if err := util.DB.Find(&records).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		found := map[int]Hours{}
+		for _, r := range records {
+			found[int(r.ID)] = r
+		}
+		for _, t := range teams {
+			if _, ok := found[int(t.HoursID)]; ok {
+				for n := range t.Count {
+					h := found[int(t.HoursID)]
+					h.Notes = "Team member #" + strconv.Itoa(int(n+1))
+					records = append(records, h)
+				}
 			}
 		}
-	}
+	*/
 	c.JSON(http.StatusOK, records)
 }
 
