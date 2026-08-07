@@ -58,6 +58,7 @@ const setHash = async () => {
 const updateWorking = async () => {
   const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
   const workingData: { number: number } = {};
+  console.log(jsondata);
   taskData.value.forEach((task) => {
     workingData[task.ID] = 0;
   });
