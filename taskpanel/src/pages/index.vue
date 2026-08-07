@@ -56,7 +56,7 @@ const updateWorking = async () => {
   });
   jsondata.forEach((punch: Punch) => {
     workingData[punch.task_id]++;
-    if (punch.worker.barcode == anum.value) {
+    if (punch.worker.barcode == hash.value) {
       selected.value = punch.task_id;
     }
   });
