@@ -18,7 +18,7 @@
       :items="itemTags"
     ></v-combobox>
   </v-col>
-  <v-col v-if="focus" cols="6" sm="3" md="2" class="d-flex align-self-start">
+  <v-col cols="6" sm="3" md="2" class="d-flex align-self-start">
     <v-switch
       inset
       label="Show All"

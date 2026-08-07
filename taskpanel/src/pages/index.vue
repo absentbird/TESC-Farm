@@ -1,7 +1,6 @@
 <template>
   <CardSelector
     search
-    focus
     selected
     :items="taskData"
     @select="selectTask"
@@ -20,7 +19,6 @@ definePage({
 });
 
 const selected: Ref<number> = ref(0);
-const anumber: Ref<string> = ref("");
 const taskData: Ref<Array<Task>> = ref(Array());
 const result: Ref<string> = ref("");
 
@@ -56,7 +54,7 @@ const updateWorking = async () => {
   });
   jsondata.forEach((punch: Punch) => {
     workingData[punch.task_id]++;
-    if (punch.worker.barcode == hash.value) {
+    if (anum.value == hash.value) {
       selected.value = punch.task_id;
     }
   });
@@ -66,8 +64,8 @@ const updateWorking = async () => {
   });
 };
 
-const clockOn = async (anum: string, taskID: number) => {
-  await apicall("/hours/punch", { barcode: anum, task: taskID });
+const clockOn = async (taskID: number) => {
+  await apicall("/hours/punch", { barcode: anum.value, task: taskID });
   result.value = "mdi-check-circle";
   setTimeout(() => {
     result.value = "mdi-form-textbox";
@@ -75,8 +73,8 @@ const clockOn = async (anum: string, taskID: number) => {
   updateWorking();
 };
 
-const clockOff = async (anum: string) => {
-  await apicall("/hours/punch", { barcode: anumber });
+const clockOff = async () => {
+  await apicall("/hours/punch", { barcode: anum.value });
   //flash.value = "Stopped Tracking Time!";
   //snackcolor.value = "success";
   result.value = "mdi-check-circle";
