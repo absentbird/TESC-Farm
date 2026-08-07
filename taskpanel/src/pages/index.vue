@@ -39,7 +39,7 @@ const selectTask = async (taskID: number) => {
     return;
   }
   selected.value = taskID;
-  await apicall("/hours/punch", { barcode: anumber, task: taskID });
+  await apicall("/hours/punch", { barcode: anum.value, task: taskID });
   updateWorking();
 };
 
@@ -63,7 +63,7 @@ const updateWorking = async () => {
   });
   jsondata.forEach((punch: Punch) => {
     workingData[punch.task_id]++;
-    if (anum.value == hash.value) {
+    if (punch.worker.barcode == hash.value) {
       selected.value = punch.task_id;
     }
   });
