@@ -3,6 +3,7 @@ The Evergreen State College Organic Farm Computer Science Project
 
 - **Backend System**: The API that powers the project can be found in the [api directory](api)
 - **Frontend Systems**: The websites that access the API can be found in the [frontend directory](frontend)
+- **Documentation**: Documentation for the project and deployment instructions are in the [docs directory](docs)
 - **Papers and Diagrams**: Documents, spreadsheets, and data visualizations can be found in the [papers directory](papers)
 
 ![Top-down map of the farm with the wash station and farm hub highlighted](papers/farm-project/Farm-Diagram.png)
