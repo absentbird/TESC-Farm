@@ -173,7 +173,7 @@ Where 'name' is the name of the branch you'd like to switch to.
 The API is written in Go and is compiled into a binary to run on the server. Before you launch the API, make sure you have a recent version of the Go programming language installed by running this command from the **TESC-Farm** directory:
 
 ```
-sudo ./scripts/install_go.sh
+sudo ./docs/dev-setup/install_go.sh
 ```
 
 Source files for the API are located in the **api** directory, to enter the directory from **TESC-Farm** simply run:
@@ -225,10 +225,10 @@ yarn vite
 To launch the development environment you can run:
 
 ```
-./scripts/launch.sh
+./docs/dev-setup/launch.sh
 ```
 
-(you must be in the **TESC-Farm** directory to run this command)
+(you must be in the **TESC-Farm/docs** directory to run this command)
 
 Select which frontend to launch and hit **return**.
 
