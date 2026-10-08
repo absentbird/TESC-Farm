@@ -1,1 +1,0 @@
-documentation-style-guide.md
