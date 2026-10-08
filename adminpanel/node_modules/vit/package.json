@@ -1,0 +1,24 @@
+{
+  "name": "vit",
+  "version": "0.0.1",
+  "description": "Web browser experiment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkup/vit.git"
+  },
+  "keywords": [
+    "web",
+    "browser",
+    "electron"
+  ],
+  "author": "Jon Kuperman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jkup/vit/issues"
+  },
+  "homepage": "https://github.com/jkup/vit#readme"
+}
