@@ -31,11 +31,12 @@ To execute the source code directly, e.g. during testing and development, you ca
 The API has two execution modes: production and development. There are several differences between them:
 
 - **Production Mode**: 
-    - Uses `configs/config.yml` for settings
+    - Uses `configs/config.yaml` for settings
+    - Requires SOPS to set secret variables
     - Only accepts requests from localhost
     - Conservative logging
 - **Development Mode**:
-    - Uses `configs/config-dev.yml` for settings
+    - Uses `configs/config-dev.yaml` for settings
     - Accepts all requests
     - Liberal CORS policy
     - Verbose logs for debugging
