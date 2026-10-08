@@ -20,5 +20,24 @@ The project is structured in accordance with best practices outlined in the [Go 
 - `tools`: extra helper scripts and scraps.
 
 ## Compiling
+To recreate the binary `farmapi` file from source code run `make`. You must have the Go programming language installed.
 
-- run `make`
+## Execution
+Simply run the `farmapi` executable to start the API. It will use settings from the `configs` directory.
+
+To execute the source code directly, e.g. during testing and development, you can use: `go run cmd/farmapi.go`
+
+### Execution Modes
+The API has two execution modes: production and development. There are several differences between them:
+
+- **Production Mode**: 
+    - Uses `configs/config.yml` for settings
+    - Only accepts requests from localhost
+    - Conservative logging
+- **Development Mode**:
+    - Uses `configs/config-dev.yml` for settings
+    - Accepts all requests
+    - Liberal CORS policy
+    - Verbose logs for debugging
+
+Development is the default mode. To run in production mode the `PRODUCTION` environmental variable must have a positive value, e.g. `true`
