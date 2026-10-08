@@ -228,7 +228,7 @@ To launch the development environment you can run:
 ./docs/dev-setup/launch.sh
 ```
 
-(you must be in the **TESC-Farm/docs** directory to run this command)
+(you must be in the **TESC-Farm** directory to run this command)
 
 Select which frontend to launch and hit **return**.
 
