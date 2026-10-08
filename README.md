@@ -1,9 +1,9 @@
 # TESC-Farm
 The Evergreen State College Organic Farm Computer Science Project
 
-- **Backend System**: The API that powers the project can be found in the [api](api) directory
-- **Frontend Systems**: The websites that access the API can be found in the [frontend](frontend) directory
-- **Papers and Diagrams**: Documents, spreadsheets, and data visualizations can be found in the [papers](papers) directory
+- **Backend System**: The API that powers the project can be found in the [api directory](api)
+- **Frontend Systems**: The websites that access the API can be found in the [frontend directory](frontend)
+- **Papers and Diagrams**: Documents, spreadsheets, and data visualizations can be found in the [papers directory](papers)
 
 ![Top-down map of the farm with the wash station and farm hub highlighted](papers/farm-project/Farm-Diagram.png)
 
