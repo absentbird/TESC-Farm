@@ -20,3 +20,5 @@ The project is structured in accordance with best practices outlined in the [Go 
 - `tools`: extra helper scripts and scraps.
 
 ## Compiling
+
+- run `make`
