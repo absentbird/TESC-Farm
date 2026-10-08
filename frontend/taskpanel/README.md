@@ -1,5 +1,5 @@
-# Report Panel
-The report panel is how users view the collected data.
+# Task Panel
+The task panel is how users log their time.
 
 ## Running
 To launch a development version of the site on your local system run `yarn vite dev`
