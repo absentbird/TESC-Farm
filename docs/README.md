@@ -1,3 +1,9 @@
+# Documentation
+
+Hardware documentation can be found in the [parts](parts) directory.
+
+Scripts and guides for configuring the development environment can be found in the [dev-setup](dev-setup) directory.
+
 # Farm Project Style Guide
 This document serves as a general outline of the way documentation should be written throughout this project. It extends into best practices for code, and includes guidance on how to write good documentation.
 

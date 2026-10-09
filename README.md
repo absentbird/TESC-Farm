@@ -6,6 +6,8 @@ The Evergreen State College Organic Farm Computer Science Project
 - **Documentation**: Documentation for the project and deployment instructions are in the [docs directory](docs)
 - **Papers and Diagrams**: Documents, spreadsheets, and data visualizations can be found in the [papers directory](papers)
 
+Instructions for setting up your development environment an be found in the [dev-setup directory](docs/devsetup)
+
 ![Top-down map of the farm with the wash station and farm hub highlighted](papers/farm-project/Farm-Diagram.png)
 
 ## Collaborative Farm Proposal
