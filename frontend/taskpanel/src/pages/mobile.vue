@@ -150,6 +150,7 @@ const selected: Ref<number> = ref(0);
 const hash: Ref<string> = ref("");
 const anumber: Ref<string | any> = ref("");
 const taskData: Ref<Array<Task>> = ref(Array());
+const leader: Ref<boolean> = ref(true);
 
 // Functions
 const updateWorking = async () => {
