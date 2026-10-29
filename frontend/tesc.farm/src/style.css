@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@theme {
+  --font-serif: "Lora", serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  --color-paper: #faf7f2;
+  --color-paperCard: #ffffff;
+
+  --color-earth-50: #fbf8f5;
+  --color-earth-100: #f6f0e8;
+  --color-earth-200: #ece0d0;
+  --color-earth-600: #a36d41;
+  --color-earth-700: #85512b;
+  --color-earth-800: #693e22;
+  --color-earth-900: #432613;
+
+  --color-leaf-50: #f3f7f4;
+  --color-leaf-100: #e3ebe4;
+  --color-leaf-600: #3b6e4d;
+  --color-leaf-700: #2d543a;
+  --color-leaf-800: #213e2b;
+  --color-leaf-900: #15291c;
+
+  --color-terracotta-500: #d96b43;
+  --color-terracotta-600: #c2532b;
+}
