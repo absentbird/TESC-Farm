@@ -228,22 +228,18 @@
       class="bg-leaf-800 text-stone-100 rounded-2xl p-8 sm:p-10 shadow-md relative overflow-hidden"
     >
       <div class="max-w-3xl space-y-4 relative z-10">
-        <span
-          class="text-xs uppercase tracking-widest text-emerald-300 font-semibold"
-          >Community Impact</span
-        >
         <h2 class="text-2xl sm:text-3xl font-serif font-bold text-white">
           Sharing the Bounty
         </h2>
         <p
           class="text-sm sm:text-base text-emerald-100/90 leading-relaxed font-serif"
         >
-          "Eating food grown by local farmers is great for sustainability,
+          Eating food grown by local farmers is great for sustainability,
           health, and economic stability. When farmers thrive, we all reap the
           benefits. As computing power has advanced, gains have been
           concentrated in large industrial farms. This project levels the
           playing field—producing a robust package of tools that allows small
-          farms to take advantage of the information age."
+          farms to take advantage of the information age.
         </p>
       </div>
     </section>
