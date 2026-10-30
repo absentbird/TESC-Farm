@@ -177,8 +177,8 @@
           </h3>
           <p class="text-sm text-slate-600 leading-relaxed">
             All of the code is freely available and under active maintenance and
-            development by the community. It will continue to improve and become
-            more stable as the project matures.
+            development. It will continue to improve and become more stable as
+            the project matures.
           </p>
         </div>
 
