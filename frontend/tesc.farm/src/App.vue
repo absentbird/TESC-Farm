@@ -141,7 +141,7 @@
             <i class="fa-solid fa-microchip"></i>
           </div>
           <h3 class="font-serif font-bold text-lg text-slate-900 mb-2">
-            Networking Scales &amp; GPIO
+            Networking Scales
           </h3>
           <p class="text-sm text-slate-600 leading-relaxed">
             Digital scales connect directly into Raspberry Pi servers through
@@ -213,7 +213,7 @@
             <i class="fa-solid fa-code-branch"></i>
           </div>
           <h3 class="font-serif font-bold text-lg text-slate-900 mb-2">
-            Containerized Stack (Go/Debian)
+            Containerized Stack
           </h3>
           <p class="text-sm text-slate-600 leading-relaxed">
             Built on Debian Linux, MariaDB, Nginx, and a Go API. Software is
