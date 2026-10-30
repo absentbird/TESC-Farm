@@ -186,7 +186,7 @@
           class="bg-paperCard p-6 rounded-2xl shadow-sm border border-earth-200/80 hover:border-leaf-600/50 transition"
         >
           <div
-            class="w-10 h-10 rounded-xl bg-leaf-100 text-terracotta-600 flex items-center justify-center mb-4 text-lg"
+            class="w-10 h-10 rounded-xl bg-leaf-100 text-amber-300 flex items-center justify-center mb-4 text-lg"
           >
             <i class="fa-solid fa-sun"></i>
           </div>
