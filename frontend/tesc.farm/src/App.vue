@@ -123,12 +123,11 @@
             <i class="fa-solid fa-barcode"></i>
           </div>
           <h3 class="font-serif font-bold text-lg text-slate-900 mb-2">
-            Barcodes From Seed to Sale
+            The Power of Barcodes
           </h3>
           <p class="text-sm text-slate-600 leading-relaxed">
-            Students scan barcodes at harvest. Produce is linked to harvest time
-            and area, allowing every batch to be tracked individually through
-            washing, packing, and market sales.
+            Using barcodes and QR codes on the farm allows for faster data entry
+            while increasing accuracy.
           </p>
         </div>
 
@@ -145,8 +144,7 @@
           </h3>
           <p class="text-sm text-slate-600 leading-relaxed">
             Digital scales connect directly into Raspberry Pi servers through
-            GPIO pins. Data synchronizes over wireless bridges to a central
-            MariaDB database.
+            GPIO pins. Data synchronizes to a central MariaDB database.
           </p>
         </div>
 
