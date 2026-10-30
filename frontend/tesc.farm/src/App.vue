@@ -135,7 +135,7 @@
           <div
             class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 text-lg"
           >
-            <i class="fa-solid fa-microchip"></i>
+            <i class="fa-solid fa-scale-unbalanced-flip"></i>
           </div>
           <h3 class="font-serif font-bold text-lg text-slate-900 mb-2">
             Networking Scales
