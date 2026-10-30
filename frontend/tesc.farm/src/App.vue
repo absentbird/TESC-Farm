@@ -93,10 +93,8 @@
           </p>
 
           <p class="text-sm sm:text-base text-slate-700 leading-relaxed mb-4">
-            While farming offers fundamental satisfaction from working outdoors,
-            it involves complex decision-making. By replacing paper logs with
-            automated data collection, we empower small farmers to prevent
-            frustrating losses and make data-driven decisions.
+            By replacing paper logs with automated data collection, we empower
+            small farmers to make data-driven decisions.
           </p>
         </div>
       </div>
