@@ -105,9 +105,12 @@
     <section class="space-y-6">
       <div class="text-center max-w-2xl mx-auto space-y-2">
         <h2 class="text-2xl sm:text-3xl font-serif font-bold text-earth-900">
-          Combining microcontrollers and containerized software to create
-          accessible systems for small farms
+          Simple Hardware &amp; Open Software
         </h2>
+        <p class="text-slate-600">
+          Combining low-power microcontrollers and containerized open-source
+          software to create accessible systems for small farms.
+        </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
