@@ -11,8 +11,18 @@
 
 <script setup lang="ts">
 const team: Ref<number> = ref(1);
+const emit = defineEmits<{
+  (e: "change", team: number): void;
+}>();
 
 const updateTeam = () => {
-  console.log(team.value);
-}
+  localStorage.setItem("team", team.value);
+  emit("change", team.value);
+};
+onBeforeMount(() => {
+  const t = Number(localStorage.getItem("team"));
+  if (t > 0) {
+    team.value = t;
+  }
+});
 </script>
