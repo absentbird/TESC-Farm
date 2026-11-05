@@ -60,27 +60,31 @@ func GetWorking(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	// TODO: Add teams into return
-	/*
-		teams := []Team{}
-		if err := util.DB.Find(&records).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
+	teams := []Team{}
+	if err := util.DB.Order("start DESC").Find(&teams).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	hmap := map[int]Hours{}
+	for _, r := range records {
+		hmap[int(r.ID)] = r
+	}
+	tmap := map[int]int{}
+	for _, t := range teams {
+		if _, ok := tmap[int(t.HoursID)]; ok {
+			continue
 		}
-		found := map[int]Hours{}
-		for _, r := range records {
-			found[int(r.ID)] = r
-		}
-		for _, t := range teams {
-			if _, ok := found[int(t.HoursID)]; ok {
-				for n := range t.Count {
-					h := found[int(t.HoursID)]
-					h.Notes = "Team member #" + strconv.Itoa(int(n+1))
-					records = append(records, h)
-				}
+		tmap[int(t.HoursID)] = int(t.Count)
+	}
+	for t, c := range tmap {
+		if _, ok := hmap[t]; ok {
+			for n := range c - 1 {
+				h := hmap[t]
+				h.Notes = "Team member " + strconv.Itoa(n+1)
+				records = append(records, h)
 			}
 		}
-	*/
+	}
 	c.JSON(http.StatusOK, records)
 }
 
@@ -137,11 +141,8 @@ func TeamPunch(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if punch.TaskID < 0 {
-		punch.TaskID = 0
-	}
 	uid := hashUid(punch.Barcode)
-	worker, last := getWorker(uid)
+	_, last := getWorker(uid)
 
 	// if the task is the same, update the people working on it
 	if punch.TaskID == last.TaskID {
@@ -152,8 +153,9 @@ func TeamPunch(c *gin.Context) {
 		util.DB.Create(&team)
 		c.JSON(http.StatusOK, team)
 		return
-		// If already tracking a task, stop it first
-	} else if last.Duration == 0 {
+	}
+	// If already tracking a task, stop it first
+	if last.Duration == 0 {
 		last.Duration = time.Now().Sub(last.Start).Hours()
 		util.DB.Save(&last)
 	}
@@ -161,7 +163,7 @@ func TeamPunch(c *gin.Context) {
 	hours := Hours{}
 	hours.Start = time.Now()
 	hours.Duration = 0
-	hours.WorkerID = worker.ID
+	hours.WorkerID = last.WorkerID
 	hours.TaskID = uint(punch.TaskID)
 	util.DB.Create(&hours)
 	team := Team{}
