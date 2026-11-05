@@ -8,6 +8,14 @@
       <FilterSearch :items="itemData" @filter="filterItems"></FilterSearch>
     </v-row>
     <v-row
+      v-if="team"
+      id="teamcount"
+      class="align-center d-flex w-100 flex-grow-0"
+      style="max-width: 300px"
+    >
+      <TeamCount @change="updateTeam"></TeamCount>
+    </v-row>
+    <v-row
       id="main-content"
       align="center"
       justify="center"
@@ -82,6 +90,10 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
+  team: {
+    type: Boolean,
+    required: false,
+  },
   tracking: {
     type: Boolean,
     required: false,
@@ -124,5 +136,9 @@ watch(props, () => {
 
 const filterItems = (items: Array<Item>) => {
   itemList.value = items;
+};
+
+const updateTeam = (team: number) => {
+  emit("select", props.selected);
 };
 </script>

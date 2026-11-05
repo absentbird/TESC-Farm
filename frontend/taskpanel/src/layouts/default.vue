@@ -1,5 +1,7 @@
 <template>
-  <a href="#main-content" class="screen-reader-text skip-to-main-content-link">Skip to main content</a>
+  <a href="#main-content" class="screen-reader-text skip-to-main-content-link"
+    >Skip to main content</a
+  >
   <v-main>
     <v-container fluid>
       <v-row class="pr-4 pl-4 pt-2">
@@ -12,7 +14,12 @@
       </v-row>
     </v-container>
     <RouterView />
-    <v-snackbar v-model="snackbar" timeout="2000" location="top" :color="snackcolor">
+    <v-snackbar
+      v-model="snackbar"
+      timeout="2000"
+      location="top"
+      :color="snackcolor"
+    >
       {{ flash }}
     </v-snackbar>
   </v-main>

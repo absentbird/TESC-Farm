@@ -1,5 +1,6 @@
 <template>
   <CardSelector
+    team
     search
     :selected="selected"
     :items="taskData"
@@ -35,17 +36,22 @@ const selectedName = computed(() => {
 });
 
 const selectTask = async (taskID: number) => {
-  if (selected.value == taskID) {
-    return;
-  }
   selected.value = taskID;
-  await apicall("/hours/punch", { barcode: anum.value, task: taskID });
+  const team = Number(localStorage.getItem("team"));
+  if (team > 1) {
+    const response = await apicall("/hours/teampunch", {
+      barcode: anum.value,
+      task: taskID,
+      count: team,
+    });
+  } else {
+    await apicall("/hours/punch", { barcode: anum.value, task: taskID });
+  }
   updateWorking();
 };
 
 const getTasks = async () => {
   taskData.value = await apicall("/tasks");
-  updateWorking();
 };
 
 const updateWorking = async () => {
@@ -89,6 +95,7 @@ const clockOff = async () => {
 const setHash = async () => {
   const jsondata = await apicall("/worker/lookup", { barcode: anum.value });
   hash.value = jsondata.barcode;
+  updateWorking();
 };
 
 // Setup

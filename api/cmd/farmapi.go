@@ -56,6 +56,7 @@ func main() {
 	auth.GET("/hours/:id/delete", labor.DeleteHours)
 	auth.POST("/hours/new", labor.AddHours)
 	auth.POST("/hours/punch", labor.AddPunch)
+	auth.POST("/hours/teampunch", labor.TeamPunch)
 	auth.GET("/hours/punchoutall", labor.PunchOutAll)
 	// - Teams
 	r.GET("/teams", labor.AllTeams)
