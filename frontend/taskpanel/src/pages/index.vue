@@ -55,6 +55,10 @@ const getTasks = async () => {
 };
 
 const updateWorking = async () => {
+  if (!navigator.onLine) {
+    console.log("Sync skipped, running in offline mode");
+    return;
+  }
   const jsondata: Array<Punch> = Array.from(await apicall("/hours/working"));
   const workingData: { number: number } = {};
   taskData.value.forEach((task) => {
@@ -95,6 +99,7 @@ const clockOff = async () => {
 const setHash = async () => {
   const jsondata = await apicall("/worker/lookup", { barcode: anum.value });
   hash.value = jsondata.barcode;
+  localStorage.setItem("hash", hash.value);
   updateWorking();
 };
 
@@ -104,7 +109,11 @@ onBeforeMount(() => {
   getTasks();
 });
 onMounted(() => {
-  setHash();
+  if (navigator.onLine) {
+    setHash();
+  } else {
+    hash.value = localStorage.getItem("hash");
+  }
   intervalID = setInterval(updateWorking, 60000);
 });
 onBeforeUnmount(() => {

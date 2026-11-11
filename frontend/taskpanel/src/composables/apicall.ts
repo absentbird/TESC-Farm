@@ -1,6 +1,8 @@
+import { offlineCall } from "./offline.ts";
+
 export async function apicall(url: String | any, options: Object = {}) {
   let jsondata: any = {};
-  const urlval: String = toValue(url)
+  const urlval: String = toValue(url);
   try {
     if (Object.keys(options).length != 0) {
       const response = await fetch(import.meta.env.VITE_API + urlval, {
@@ -25,10 +27,13 @@ export async function apicall(url: String | any, options: Object = {}) {
       }
     }
   } catch (e) {
+    if (!navigator.onLine) {
+      return offlineCall(url, options);
+    }
     console.log(e);
   } finally {
     return jsondata;
   }
 }
 
-export default apicall
+export default apicall;

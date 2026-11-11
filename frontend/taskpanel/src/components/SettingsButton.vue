@@ -23,7 +23,12 @@
           @click="editAnum = false"
         ></v-btn>
         <v-spacer></v-spacer>
-        <v-btn class="ms-auto" text="Save" @click="updateAnum"></v-btn>
+        <v-btn
+          class="ms-auto"
+          text="Save"
+          :disabled="!navigator.onLine"
+          @click="updateAnum"
+        ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -85,6 +90,7 @@ const punchOutAll = async () => {
 const setHash = async () => {
   const jsondata = await apicall("/worker/lookup", { barcode: anum.value });
   hash.value = jsondata.barcode;
+  localStorage.setItem("hash", hash.value);
 };
 
 const toggleTheme = () => {
@@ -146,6 +152,10 @@ const anumCheck = () => {
 };
 
 onMounted(() => {
-  setHash();
+  if (navigator.onLine) {
+    setHash();
+  } else {
+    hash.value = localStorage.getItem("hash");
+  }
 });
 </script>
